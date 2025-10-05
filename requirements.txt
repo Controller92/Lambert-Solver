@@ -6,3 +6,4 @@ spiceypy
 skyfield
 cupy-cuda12x
 requests
+scipy

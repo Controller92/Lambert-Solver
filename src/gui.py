@@ -4,8 +4,15 @@ from tkinter import ttk, messagebox
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import os
+import sys
+# Ensure the directory containing this script is on sys.path so local imports work
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, SCRIPT_DIR)
+
 import trajectory
-from trajectory import porkchop_data, porkchop_data_gravity_assist, porkchop_data_gravity_assist_enhanced
+from trajectory import porkchop_data, porkchop_data_enhanced, porkchop_data_gravity_assist, porkchop_data_gravity_assist_enhanced, extract_optimal_trajectory, plot_trajectory_3d
 import spice_interface
 from datetime import datetime, timedelta
 import skyfield.api as sf
@@ -13,6 +20,7 @@ from skyfield.api import load
 from astropy.time import Time
 import sys
 import os
+import threading
 
 def jd_to_date(jd):
     """Convert Julian Date to YYYY-MM-DD string"""
@@ -130,7 +138,8 @@ class DatePicker:
                 if day > 28:
                     day = 28
         
-        date_str = "04d"
+        # Format date as YYYY-MM-DD
+        date_str = f"{year:04d}-{month:02d}-{day:02d}"
         self.date_var.set(date_str)
         self.calendar_window.destroy()
         
@@ -357,6 +366,9 @@ class TrajectoryApp:
             self.kernels_loaded = False
             print("❌ [DEBUG] Kernels failed to load, kernels_loaded = False")
         
+        # Set up Horizons confirmation callback
+        self.setup_horizons_callback()
+        
         # Create tabbed interface for main controls
         self.notebook = ttk.Notebook(root)
         self.notebook.grid(row=1, column=0, columnspan=2, sticky="ew", padx=10, pady=5)
@@ -372,6 +384,9 @@ class TrajectoryApp:
         # Research Optimization Tab
         self.research_tab = ttk.Frame(self.notebook, padding="10")
         self.notebook.add(self.research_tab, text="Research Mode")
+        
+        # Initialize solve type variable
+        self.solve_type_var = tk.StringVar(value="high")
         
         # Initialize body_ids dictionary for caching body lookups
         self.body_ids = {}
@@ -472,9 +487,27 @@ class TrajectoryApp:
         tk.Label(self.params_tab, text="Grid Resolution:", font=("Arial", 10, "bold")).grid(row=2, column=0, sticky="w")
         self.resolution = tk.Entry(self.params_tab, width=20)
         self.resolution.grid(row=2, column=1, padx=5, pady=2)
-        self.resolution.insert(0, "20")
+        self.resolution.insert(0, "5")
         self.resolution.bind("<KeyRelease>", self.on_resolution_change)
         ToolTip(self.resolution, "Number of grid points for calculation (higher = more accurate but slower). Start with 20-50.")
+        
+        # Solve Type Selection
+        tk.Label(self.params_tab, text="Solve Type:", font=("Arial", 10, "bold")).grid(row=3, column=0, sticky="w", pady=(10, 0))
+        
+        solve_type_frame = ttk.Frame(self.params_tab)
+        solve_type_frame.grid(row=3, column=1, padx=5, pady=(10, 2), sticky="w")
+        
+        ttk.Radiobutton(solve_type_frame, text="Rough Estimate", variable=self.solve_type_var, 
+                       value="rough", command=self.on_solve_type_change).grid(row=0, column=0, sticky="w")
+        ttk.Radiobutton(solve_type_frame, text="High Confidence", variable=self.solve_type_var, 
+                       value="high", command=self.on_solve_type_change).grid(row=0, column=1, sticky="w", padx=(10, 0))
+        
+        ToolTip(ttk.Radiobutton(solve_type_frame, text="Rough Estimate", variable=self.solve_type_var, 
+                               value="rough", command=self.on_solve_type_change), 
+               "Fast calculation with lower resolution for quick trajectory assessment")
+        ToolTip(ttk.Radiobutton(solve_type_frame, text="High Confidence", variable=self.solve_type_var, 
+                               value="high", command=self.on_solve_type_change), 
+               "Detailed calculation with higher resolution and enhanced algorithms for mission planning")
         
         # Research Optimization Section (research tab)
         tk.Label(self.research_tab, text="Research Mode:", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 10))
@@ -547,8 +580,8 @@ class TrajectoryApp:
         ttk.Button(button_frame, text="Generate Porkchop Plot", command=self.start_porkchop).grid(row=0, column=1, padx=5)
         ToolTip(ttk.Button(button_frame, text="Generate Porkchop Plot", command=self.start_porkchop), "Create the trajectory plot showing fuel requirements for different departure/arrival times")
         
-        ttk.Button(button_frame, text="Show Animation", command=self.show_animation).grid(row=0, column=2, padx=5)
-        ToolTip(ttk.Button(button_frame, text="Show Animation", command=self.show_animation), "Display an animated view of the optimal trajectory (coming soon)")
+        ttk.Button(button_frame, text="Plot Optimal Trajectory", command=self.plot_optimal_trajectory).grid(row=0, column=2, padx=5)
+        ToolTip(ttk.Button(button_frame, text="Plot Optimal Trajectory", command=self.plot_optimal_trajectory), "Display 3D visualization of the optimal trajectory path through space")
         
         ttk.Button(self.controls_frame, text="Update SPICE Kernels", command=self.update_kernels).grid(row=1, column=0, pady=5)
         ToolTip(ttk.Button(self.controls_frame, text="Update SPICE Kernels", command=self.update_kernels), "Download latest astronomical data for accurate calculations")
@@ -606,6 +639,29 @@ class TrajectoryApp:
         # Apply initial preset
         self.apply_preset()
 
+    def _fmt_num(self, x, fmt):
+        """Safely format a numeric-like value for display.
+
+        If x is a numpy scalar or 0-d array this returns a formatted string.
+        If x is an array with multiple elements, return a short str() representation.
+        If conversion fails, fall back to str(x).
+        """
+        try:
+            arr = np.asarray(x)
+            # 0-d or scalar-like
+            if arr.shape == ():
+                return format(float(arr.item()), fmt)
+            # 1-D or multi-element: try to take first element
+            try:
+                return format(float(arr.ravel()[0]), fmt)
+            except Exception:
+                return str(arr)
+        except Exception:
+            try:
+                return format(float(x), fmt)
+            except Exception:
+                return str(x)
+
     def toggle_gravity_assist(self):
         """Enable or disable gravity assist options"""
         state = "normal" if self.gravity_assist_var.get() else "disabled"
@@ -619,6 +675,54 @@ class TrajectoryApp:
                     if isinstance(widget, ttk.Button) and widget.cget("text") == "🔍":
                         widget.config(state=state)
                         break
+
+    def emergency_exit(self):
+        """Emergency exit function for frozen GUI"""
+        try:
+            self.root.quit()
+            self.root.destroy()
+        except:
+            pass
+        import sys
+        sys.exit(0)
+
+    def setup_horizons_callback(self):
+        """Set up the callback for Horizons confirmation dialogs."""
+        import skyfield_interface
+        skyfield_interface.set_horizons_confirmation_callback(self.confirm_horizons_usage)
+
+    def confirm_horizons_usage(self, body_name, utc_time):
+        """Show a confirmation dialog for using JPL Horizons data.
+        
+        Returns True if user approves, False if they cancel.
+        This method is called from background threads, so we need to use after() to show the dialog.
+        """
+        # Use a threading event to wait for the dialog result
+        import threading
+        result_event = threading.Event()
+        result = [False]  # Use list to allow modification in nested function
+        
+        def show_dialog():
+            try:
+                message = f"The system needs to download ephemeris data for {body_name} at {utc_time} from JPL Horizons.\n\n"
+                message += "This requires an internet connection and may take a few seconds.\n\n"
+                message += "Do you want to proceed?"
+                
+                user_choice = messagebox.askyesno("JPL Horizons Data Required", message, icon='question')
+                result[0] = user_choice
+            except Exception as e:
+                print(f"Error showing Horizons confirmation dialog: {e}")
+                result[0] = False  # Default to cancel on error
+            finally:
+                result_event.set()
+        
+        # Show dialog on main thread
+        self.root.after(0, show_dialog)
+        
+        # Wait for the dialog to complete (with timeout)
+        result_event.wait(timeout=60)  # Wait up to 60 seconds
+        
+        return result[0]
 
     def zoom_recalculate(self):
         """Recalculate with higher resolution based on current zoom level"""
@@ -839,6 +943,33 @@ class TrajectoryApp:
         
         self.progress_label.config(text="Ready to calculate - Click 'Generate Porkchop Plot' to start", fg="black")
         return True
+    
+    def on_solve_type_change(self):
+        """Update calculation parameters based on solve type selection"""
+        solve_type = self.solve_type_var.get()
+        
+        if solve_type == "rough":
+            # Rough estimate: lower resolution, faster calculation
+            new_resolution = "20"
+            tooltip_text = "Rough Estimate: Fast calculation (20×20 grid) for quick trajectory assessment"
+        else:  # high confidence
+            # High confidence: higher resolution, more detailed calculation
+            new_resolution = "50"
+            tooltip_text = "High Confidence: Detailed calculation (50×50 grid) for mission planning"
+        
+        # Update resolution field
+        self.resolution.delete(0, tk.END)
+        self.resolution.insert(0, new_resolution)
+        
+        # Update tooltip for resolution field
+        # Note: We can't easily update existing tooltips, but the user will see the change in the field
+        
+        # Validate the new resolution
+        self.on_resolution_change()
+        
+        # Update progress label to reflect solve type
+        solve_name = "Rough Estimate" if solve_type == "rough" else "High Confidence"
+        self.progress_label.config(text=f"{solve_name} mode selected - Click 'Generate Porkchop Plot' to start", fg="black")
 
     def get_body_list(self):
         print(f"[DEBUG] get_body_list called - kernels_loaded: {getattr(self, 'kernels_loaded', 'NOT SET')}")
@@ -895,6 +1026,150 @@ class TrajectoryApp:
             self.kernels_loaded = False
             self.kernel_status.config(text="SPICE kernels: Failed", foreground="red")
             messagebox.showerror("Update Failed", f"Could not download the latest astronomical data.\n\nYou can still use the program with existing data, but calculations may be less accurate.\n\nError: {str(e)}")
+
+    def plot_optimal_trajectory(self):
+        """Plot 3D visualization of the optimal trajectory."""
+        try:
+            # Check if porkchop data exists
+            if not hasattr(self, 'dates') or self.dates is None:
+                messagebox.showerror("No Data", "Please generate a porkchop plot first to identify the optimal trajectory.")
+                return
+
+            # Get current body selections
+            dep_body_common = self.dep_body.get().strip()
+            arr_body_common = self.arr_body.get().strip()
+            
+            # Convert common names to SPICE names
+            dep_body = self.body_name_map.get(dep_body_common, dep_body_common)
+            arr_body = self.body_name_map.get(arr_body_common, arr_body_common)
+            
+            flyby_body = None
+            if self.use_gravity_assist:
+                flyby_body_common = self.flyby_body.get().strip()
+                flyby_body = self.body_name_map.get(flyby_body_common, flyby_body_common)
+
+            # Extract optimal trajectory
+            trajectory_data = extract_optimal_trajectory(
+                self.dates, self.times, self.dv, dep_body, flyby_body, arr_body
+            )
+
+            # Create 3D plot
+            fig = plot_trajectory_3d(trajectory_data, dep_body_common, 
+                                   flyby_body_common if flyby_body else None, 
+                                   arr_body_common)
+
+            if fig is None:
+                messagebox.showerror("Plot Error", "Could not create trajectory plot. Please ensure matplotlib is installed.")
+                return
+
+            # Clear current plot and show trajectory
+            # Clear the entire figure to remove any 2D plot elements and color bars
+            self.fig.clear()
+            self.ax = self.fig.add_subplot(111, projection='3d')  # Create 3D axes
+            
+            # Plot trajectory
+            if trajectory_data['trajectory_positions'] is not None:
+                traj_pos = trajectory_data['trajectory_positions']
+                self.ax.plot(traj_pos[:, 0], traj_pos[:, 1], traj_pos[:, 2],
+                           'b-', linewidth=2, alpha=0.8, label='Spacecraft Trajectory')
+
+            # Plot celestial bodies
+            body_colors = {
+                'Sun': 'yellow',
+                'Mercury': 'gray',
+                'Venus': 'orange',
+                'Earth': 'blue',
+                'Mars': 'red',
+                'Jupiter': 'orange',
+                'Saturn': 'goldenrod',
+                'Uranus': 'lightblue',
+                'Neptune': 'blue',
+                'Ceres': 'gray',
+                'Vesta': 'gray',
+                'Pallas': 'gray'
+            }
+
+            # Plot departure body
+            if trajectory_data['dep_pos'] is not None:
+                color = body_colors.get(dep_body_common, 'gray')
+                self.ax.scatter(trajectory_data['dep_pos'][0], trajectory_data['dep_pos'][1],
+                               trajectory_data['dep_pos'][2], c=color, s=100, label=f'{dep_body_common} (Departure)')
+
+            # Plot flyby body
+            if flyby_body and trajectory_data['flyby_pos'] is not None:
+                color = body_colors.get(flyby_body_common, 'gray')
+                self.ax.scatter(trajectory_data['flyby_pos'][0], trajectory_data['flyby_pos'][1],
+                               trajectory_data['flyby_pos'][2], c=color, s=100, label=f'{flyby_body_common} (Flyby)')
+
+            # Plot arrival body
+            if trajectory_data['arr_pos'] is not None:
+                color = body_colors.get(arr_body_common, 'gray')
+                self.ax.scatter(trajectory_data['arr_pos'][0], trajectory_data['arr_pos'][1],
+                               trajectory_data['arr_pos'][2], c=color, s=100, label=f'{arr_body_common} (Arrival)')
+
+            # Plot Sun at origin
+            self.ax.scatter(0, 0, 0, c='yellow', s=200, marker='*', label='Sun')
+
+            # Formatting
+            self.ax.set_xlabel('X (km)')
+            self.ax.set_ylabel('Y (km)')
+            self.ax.set_zlabel('Z (km)')
+
+            # Set equal aspect ratio
+            max_range = 0
+            for pos in [trajectory_data['dep_pos'], trajectory_data['arr_pos']]:
+                if pos is not None:
+                    max_range = max(max_range, np.max(np.abs(pos)))
+            if flyby_body and trajectory_data['flyby_pos'] is not None:
+                max_range = max(max_range, np.max(np.abs(trajectory_data['flyby_pos'])))
+
+            self.ax.set_xlim([-max_range*1.1, max_range*1.1])
+            self.ax.set_ylim([-max_range*1.1, max_range*1.1])
+            self.ax.set_zlim([-max_range*1.1, max_range*1.1])
+
+            # Title
+            title = f"Optimal Trajectory: {dep_body_common}"
+            if flyby_body:
+                title += f" → {flyby_body_common} → {arr_body_common}"
+            else:
+                title += f" → {arr_body_common}"
+            # Safely format numeric values which might be numpy types
+            dv_min_val = trajectory_data.get('dv_min', None)
+            tof_val = trajectory_data.get('tof_days', None)
+            dv_min_str = self._fmt_num(dv_min_val/1000 if dv_min_val is not None else dv_min_val, '.2f')
+            tof_str = self._fmt_num(tof_val, '.1f')
+            title += f"\nΔV: {dv_min_str} km/s, TOF: {tof_str} days"
+            self.ax.set_title(title)
+
+            self.ax.legend()
+            self.ax.grid(True, alpha=0.3)
+
+            # Update the navigation toolbar for 3D plotting
+            self.toolbar.update()
+            
+            # Update canvas
+            self.canvas.draw()
+
+            # Show trajectory details
+            dep_date = jd_to_date(trajectory_data['dep_jd'])
+            arr_date = jd_to_date(trajectory_data['arr_jd'])
+
+            details = f"Optimal Trajectory Details:\n\n"
+            details += f"Departure: {dep_date} from {dep_body_common}\n"
+            if flyby_body:
+                flyby_date = jd_to_date(trajectory_data['flyby_jd'])
+                details += f"Flyby: {flyby_date} at {flyby_body_common}\n"
+            details += f"Arrival: {arr_date} at {arr_body_common}\n"
+            # Use safe formatting for numeric values that might be numpy types
+            tof_days_str = self._fmt_num(trajectory_data.get('tof_days', None), '.1f')
+            dv_required_str = self._fmt_num(trajectory_data.get('dv_min', None)/1000 if trajectory_data.get('dv_min', None) is not None else None, '.2f')
+            details += f"Time of Flight: {tof_days_str} days\n"
+            details += f"\u0394V Required: {dv_required_str} km/s\n"
+
+            messagebox.showinfo("Trajectory Plotted", details)
+
+        except Exception as e:
+            messagebox.showerror("Plot Error", f"Could not plot trajectory: {str(e)}")
 
     def search_departure_body(self):
         """Open search dialog for departure body selection."""
@@ -968,7 +1243,137 @@ class TrajectoryApp:
         except ValueError:
             messagebox.showerror("Invalid Input", "Please enter a valid number for resolution (e.g., 20, 50, 100).")
 
+    def _run_porkchop_calculation(self, start, end, min_t, max_t, res, dep_body, arr_body, 
+                                  use_gravity_assist, flyby_body, solve_type):
+        """Run porkchop calculation in background thread."""
+        try:
+            # Choose calculation method based on solve type and gravity assist
+            if use_gravity_assist:
+                if solve_type == "high":
+                    # High confidence: use enhanced gravity assist optimization
+                    self.dates, self.times, self.dv = porkchop_data_gravity_assist_enhanced(
+                        start, end, min_t, max_t, res, dep_body, flyby_body, arr_body, update_callback=self.update_progress
+                    )
+                else:
+                    # Rough estimate: use standard gravity assist
+                    self.dates, self.times, self.dv = porkchop_data_gravity_assist(
+                        start, end, min_t, max_t, res, dep_body, flyby_body, arr_body, update_callback=self.update_progress
+                    )
+            else:
+                # No gravity assist: use standard porkchop
+                self.dates, self.times, self.dv = porkchop_data(
+                    start, end, min_t, max_t, res, dep_body, arr_body, update_callback=self.update_progress
+                )
+            
+            # Store original data for zoom operations
+            self.original_dates = self.dates.copy()
+            self.original_times = self.times.copy()
+            self.original_dv = self.dv.copy()
+            
+            # Schedule final plot update on main thread
+            self.root.after(0, self._finalize_plot, use_gravity_assist, flyby_body, solve_type, dep_body, arr_body)
+            print("[DEBUG] Calculation completed successfully, scheduled plot update")
+            
+        except Exception as e:
+            # Schedule error display on main thread
+            self.root.after(0, lambda: messagebox.showerror("Calculation Error", f"Something went wrong during calculation: {str(e)}"))
+            print(f"[DEBUG] Calculation failed with error: {e}")
+
+    def _finalize_plot(self, use_gravity_assist, flyby_body, solve_type, dep_body, arr_body):
+        """Finalize the plot display after calculation completes."""
+        print("[DEBUG] _finalize_plot called!")
+        self.progress_var.set(100)
+        self.progress_label.config(text="Plotting complete! Lower Δv values (darker blue) indicate more efficient trajectories.")
+
+        # Debug: Check data before plotting
+        print(f"[DEBUG] Plot data shapes: dates={self.dates.shape}, times={self.times.shape}, dv={self.dv.shape}")
+        print(f"[DEBUG] DV data range: min={float(np.nanmin(self.dv)):.2f}, max={float(np.nanmax(self.dv)):.2f}")
+        print(f"[DEBUG] NaN count: {np.isnan(self.dv).sum()} out of {self.dv.size}")
+        print(f"[DEBUG] Sample DV values: {self.dv[0, :5]}")
+
+        # Clear the entire figure to remove any leftover color bars
+        self.fig.clear()
+        self.ax = self.fig.add_subplot(111)  # Recreate 2D axes
+
+        # Handle NaN values by replacing them with a high value for visualization
+        dv_plot = np.where(np.isnan(self.dv), np.nanmax(self.dv) * 1.1, self.dv)
+
+        # Ensure we have valid data range
+        dv_min = np.nanmin(dv_plot)
+        dv_max = np.nanmax(dv_plot)
+        if dv_min == dv_max:
+            # All values are the same, create a small range for visualization
+            dv_max = dv_min + 1000  # Add 1 km/s range
+
+        # Create contour levels
+        levels = np.linspace(dv_min, dv_max, 50)
+
+        # Debug: Print vmin and vmax values for colormap
+        print(f"[DEBUG] Colormap vmin={dv_min:.2f}, vmax={dv_max:.2f}")
+
+        # Define vmin and vmax based on dv_min and dv_max
+        vmin = dv_min ** 2
+        vmax = dv_max ** 2
+
+        # Create final plot
+        try:
+            pcm = self.ax.contourf(self.dates, self.times, dv_plot, levels=levels, cmap="viridis", extend='both')
+            print(f"[DEBUG] Contour plot created successfully with {len(levels)} levels")
+        except Exception as e:
+            print(f"[DEBUG] Contour plot failed: {e}")
+            # Fallback: plot as image
+            pcm = self.ax.imshow(dv_plot, extent=[self.dates[0], self.dates[-1], self.times[0], self.times[-1]],
+                               origin='lower', cmap="viridis", aspect='auto')
+
+        # Only create color bar for gravity assist plots
+        if use_gravity_assist:
+            # Remove any existing color bars before creating new one
+            for cbar in self.fig.get_children():
+                if hasattr(cbar, 'colorbar'):
+                    try:
+                        cbar.remove()
+                    except:
+                        pass
+
+            # Create the color bar
+            cbar = self.fig.colorbar(pcm, ax=self.ax, label="Fuel Required (Δv in m/s)")
+            cbar.ax.tick_params(labelsize=8)  # Make color bar text smaller
+        
+        # Convert JD to readable dates for x-axis
+        import matplotlib.dates as mdates
+        from matplotlib.ticker import FuncFormatter
+        
+        # Create date ticks - sample every ~30 days
+        jd_range = self.dates[-1] - self.dates[0]
+        num_ticks = min(8, max(3, int(jd_range / 30)))  # Adaptive number of ticks
+        
+        tick_jds = []
+        tick_labels = []
+        for i in range(num_ticks):
+            jd_val = self.dates[0] + (jd_range * i / (num_ticks - 1))
+            tick_jds.append(jd_val)
+            tick_labels.append(jd_to_date(jd_val))
+        
+        self.ax.set_xticks(tick_jds)
+        self.ax.set_xticklabels(tick_labels, rotation=45, ha='right')
+        
+        self.ax.set_xlabel("Departure Date")
+        self.ax.set_ylabel("Travel Time (days)")
+        dep_body_name = [k for k, v in self.body_name_map.items() if v == dep_body][0] if dep_body in self.body_name_map.values() else dep_body
+        arr_body_name = [k for k, v in self.body_name_map.items() if v == arr_body][0] if arr_body in self.body_name_map.values() else arr_body
+        solve_name = "Rough Estimate" if solve_type == "rough" else "High Confidence"
+        title = f"{solve_name}: {dep_body_name} → {arr_body_name}"
+        if use_gravity_assist:
+            flyby_body_name = [k for k, v in self.body_name_map.items() if v == flyby_body][0] if flyby_body in self.body_name_map.values() else flyby_body
+            title += f" (via {flyby_body_name})"
+        self.ax.set_title(title)
+        self.canvas.draw()
+        
+        # Update the navigation toolbar for 2D plotting
+        self.toolbar.update()
+
     def update_progress(self, progress, dv, eta, dep_jds, tof_days):
+        """Update progress bar and status during calculation."""
         percent = progress * 100
         self.progress_var.set(percent)
         if percent < 100:
@@ -977,42 +1382,11 @@ class TrajectoryApp:
         else:
             self.progress_label.config(text="Calculation complete! Plotting results...")
         
-        if percent % 5 < 0.1 or percent > 99.9:
-            self.ax.clear()
-            pcm = self.ax.contourf(dep_jds, tof_days, dv, levels=50, cmap="viridis")
-            self.fig.colorbar(pcm, ax=self.ax, label="Fuel Required (Δv in m/s)")
-            
-            # Convert JD to readable dates for x-axis
-            import matplotlib.dates as mdates
-            from matplotlib.ticker import FuncFormatter
-            
-            # Create date ticks - sample every ~30 days
-            jd_range = dep_jds[-1] - dep_jds[0]
-            num_ticks = min(8, max(3, int(jd_range / 30)))  # Adaptive number of ticks
-            
-            tick_jds = []
-            tick_labels = []
-            for i in range(num_ticks):
-                jd_val = dep_jds[0] + (jd_range * i / (num_ticks - 1))
-                tick_jds.append(jd_val)
-                tick_labels.append(jd_to_date(jd_val))
-            
-            self.ax.set_xticks(tick_jds)
-            self.ax.set_xticklabels(tick_labels, rotation=45, ha='right')
-            
-            self.ax.set_xlabel("Departure Date")
-            self.ax.set_ylabel("Travel Time (days)")
-            dep_body_name = self.dep_body.get()
-            arr_body_name = self.arr_body.get()
-            title = f"Mission Trajectories: {dep_body_name} → {arr_body_name}"
-            if hasattr(self, 'use_gravity_assist') and self.use_gravity_assist:
-                flyby_body_name = self.flyby_body.get()
-                title += f" (via {flyby_body_name})"
-            self.ax.set_title(title)
-            self.canvas.draw()
+        # No longer update plot during progress - wait for final plot
         self.root.update_idletasks()
 
-    def start_porkchop(self):
+    def start_porkchop(self, skip_confirmation=False):
+        print(f"[DEBUG] start_porkchop called with skip_confirmation={skip_confirmation}")
         try:
             start = self.start_date_picker.get()
             end = self.end_date_picker.get()
@@ -1056,8 +1430,13 @@ class TrajectoryApp:
             accel_msg = "GPU acceleration for fast computation" if self.gpu_available else "CPU computation (GPU not available)"
             message += f"{accel_msg}."
             
-            if not messagebox.askyesno("Start Trajectory Calculation", message):
+            if not skip_confirmation and not messagebox.askyesno("Start Trajectory Calculation", message):
                 return
+            
+            # Get solve type for calculation approach
+            solve_type = self.solve_type_var.get()
+            solve_name = "Rough Estimate" if solve_type == "rough" else "High Confidence"
+            message += f"Solve type: {solve_name}\n"
             
             # Check if gravity assist is enabled
             use_gravity_assist = self.gravity_assist_var.get()
@@ -1076,23 +1455,17 @@ class TrajectoryApp:
             self.progress_label.config(text=accel_init)
             self.root.update_idletasks()
             
-            if use_gravity_assist:
-                self.dates, self.times, self.dv = porkchop_data_gravity_assist(
-                    start, end, min_t, max_t, res, dep_body, flyby_body, arr_body, update_callback=self.update_progress
-                )
-                title_suffix = f" (via {flyby_body_common})"
-            else:
-                self.dates, self.times, self.dv = porkchop_data(
-                    start, end, min_t, max_t, res, dep_body, arr_body, update_callback=self.update_progress
-                )
-                title_suffix = ""
+            # Store parameters for use in background thread
+            self.use_gravity_assist = use_gravity_assist
             
-            # Store original data for zoom operations
-            self.original_dates = self.dates.copy()
-            self.original_times = self.times.copy()
-            self.original_dv = self.dv.copy()
-            
-            self.progress_label.config(text="Plotting complete! Lower Δv values (darker blue) indicate more efficient trajectories.")
+            # Start calculation in background thread
+            calc_thread = threading.Thread(
+                target=self._run_porkchop_calculation,
+                args=(start, end, min_t, max_t, res, dep_body, arr_body, 
+                      use_gravity_assist, flyby_body, solve_type),
+                daemon=True
+            )
+            calc_thread.start()
             
         except ValueError as e:
             if "time data" in str(e).lower():
@@ -1101,6 +1474,180 @@ class TrajectoryApp:
                 messagebox.showerror("Input Error", f"Please check your inputs: {str(e)}")
         except Exception as e:
             messagebox.showerror("Calculation Error", f"Something went wrong during calculation. Please check your inputs and try again.\n\nError: {str(e)}")
+            
+        except ValueError as e:
+            if "time data" in str(e).lower():
+                messagebox.showerror("Date Format Error", "Please enter dates in YYYY-MM-DD format (e.g., 2035-01-01).")
+            else:
+                messagebox.showerror("Input Error", f"Please check your inputs: {str(e)}")
+        except Exception as e:
+            messagebox.showerror("Calculation Error", f"Something went wrong during calculation. Please check your inputs and try again.\n\nError: {str(e)}")
+
+    def _run_porkchop_calculation(self, start, end, min_t, max_t, res, dep_body, arr_body, 
+                                 use_gravity_assist, flyby_body, solve_type):
+        """Run the porkchop plot calculation in a background thread."""
+        try:
+            # Choose which calculation method to use based on solve_type and gravity assist
+            if use_gravity_assist:
+                if solve_type == "high":
+                    # Use enhanced gravity assist method
+                    self.dates, self.times, self.dv = porkchop_data_gravity_assist_enhanced(
+                        start, end, min_t, max_t, res, dep_body, flyby_body, arr_body,
+                        update_callback=self.update_progress
+                    )
+                else:
+                    # Use standard gravity assist method
+                    self.dates, self.times, self.dv = porkchop_data_gravity_assist(
+                        start, end, min_t, max_t, res, dep_body, flyby_body, arr_body,
+                        update_callback=self.update_progress
+                    )
+            else:
+                if solve_type == "high":
+                    # Use enhanced direct transfer method
+                    self.dates, self.times, self.dv = porkchop_data_enhanced(
+                        start, end, min_t, max_t, res, dep_body, arr_body,
+                        update_callback=self.update_progress
+                    )
+                else:
+                    # Use standard direct transfer method
+                    self.dates, self.times, self.dv = porkchop_data(
+                        start, end, min_t, max_t, res, dep_body, arr_body,
+                        update_callback=self.update_progress
+                    )
+            
+            # Store data for zoom operations
+            self.original_dates = self.dates
+            self.original_times = self.times  
+            self.original_dv = self.dv
+            
+            # Update GUI on main thread
+            self.root.after(0, self._plot_porkchop_results)
+            
+        except Exception as e:
+            # Update GUI on main thread with error
+            error_msg = str(e)
+            self.root.after(0, lambda: messagebox.showerror("Calculation Error", f"Calculation failed: {error_msg}"))
+
+    def _plot_porkchop_results(self):
+        """Plot the porkchop plot results on the main thread."""
+        print("[DEBUG] _finalize_plot called!")
+        try:
+            # Clear any existing plot
+            self.fig.clear()
+            self.ax = self.fig.add_subplot(111)
+            
+            # Create porkchop plot in Julian date format with C3 colorbar
+            if self.dates is not None and self.times is not None and self.dv is not None:
+                # Departure Julian dates (1D array)
+                dep_jd = np.array(self.dates)
+                # Time-of-flight (1D array)
+                tof_days = np.array(self.times)
+                
+                # Create 2D meshgrids for plotting
+                # DEP_GRID[i,j] = dep_jd[i], TOF_GRID[i,j] = tof_days[j]
+                DEP_GRID, TOF_GRID = np.meshgrid(dep_jd, tof_days, indexing='ij')
+                # Arrival JD = Departure JD + TOF
+                ARR_GRID = DEP_GRID + TOF_GRID
+                
+                # For pcolormesh, use the 2D grids
+                DEPARTURE = DEP_GRID
+                ARRIVAL = ARR_GRID
+
+                # Prepare C3 grid (km^2/s^2) -- ensure dv is in km/s
+                dv_plot = np.array(self.dv, dtype=float)
+                print(f"[DEBUG] Raw DV stats: min={np.nanmin(dv_plot):.2f}, max={np.nanmax(dv_plot):.2f}, mean={np.nanmean(dv_plot):.2f}")
+                
+                # If dv is in m/s, convert to km/s
+                if np.nanmax(dv_plot) > 100:  # likely m/s
+                    print("[DEBUG] Converting DV from m/s to km/s")
+                    dv_plot = dv_plot / 1000.0
+                else:
+                    print("[DEBUG] DV appears to already be in km/s")
+                    
+                dv_plot[~np.isfinite(dv_plot)] = np.nan
+                # Sanity cap: any dv > 50 km/s is likely numerical junk; mark as NaN
+                dv_plot = np.where(np.abs(dv_plot) > 50.0, np.nan, dv_plot)
+                C3_plot = dv_plot ** 2
+                print(f"[DEBUG] C3 stats after conversion: min={np.nanmin(C3_plot):.2f}, max={np.nanmax(C3_plot):.2f}, mean={np.nanmean(C3_plot):.2f}")
+
+                # Ensure orientation matches meshgrid
+                expected_shape = (len(dep_jd), len(self.times))
+                if C3_plot.shape != expected_shape:
+                    if C3_plot.shape == (len(self.times), len(dep_jd)):
+                        C3_plot = C3_plot.T
+                
+                # Debug: Print raw ΔV and C3 values for sample indices
+                sample_indices = [(0, 0), (len(dep_jd)//2, len(tof_days)//2), (-1, -1)]
+                for idx in sample_indices:
+                    try:
+                        dep_sample = dep_jd[idx[0]]
+                        tof_sample = tof_days[idx[1]]
+                        dv_sample = dv_plot[idx]
+                        c3_sample = C3_plot[idx]
+                        print(f"[DEBUG] Sample at dep_jd={dep_sample:.2f}, tof={tof_sample:.1f}: ΔV={dv_sample:.3f} km/s, C3={c3_sample:.3f} km^2/s^2")
+                    except IndexError:
+                        print(f"[DEBUG] Sample index {idx} out of bounds")
+
+                # Define vmin and vmax for colormap based on C3 values
+                vmin = np.nanmin(C3_plot)
+                vmax = np.nanmax(C3_plot)
+                
+                # Use colormap where low values (good transfers) are green and high values (bad) are red
+                # 'RdYlGn' = Green (low C3, good) -> Yellow -> Red (high C3, bad)
+                im = self.ax.pcolormesh(DEPARTURE, ARRIVAL, C3_plot, shading='auto', cmap='RdYlGn', vmin=vmin, vmax=vmax)
+                cbar = self.fig.colorbar(im, ax=self.ax, label='C3 (km²/s²)')
+
+                # Overlay time-of-flight lines (100, 200, 300, ... days)
+                for tof in range(100, 401, 100):
+                    self.ax.plot(dep_jd, dep_jd + tof, color='black', linestyle='--', linewidth=1)
+                    self.ax.text(float(dep_jd[0]), float(dep_jd[0] + tof), f'{tof} Days', color='black', fontsize=8, va='bottom')
+
+                self.ax.set_xlabel('Departure Julian Date')
+                self.ax.set_ylabel('Arrival Julian Date')
+                self.ax.set_title('C3 Plot for Earth-Mars transfer in 2035')
+                self.ax.set_xlim(float(dep_jd.min()), float(dep_jd.max()))
+                self.ax.set_ylim(float((dep_jd + tof_days.min()).min()), float((dep_jd + tof_days.max()).max()))
+
+                self.toolbar.update()
+                self.canvas.draw()
+                self.progress_var.set(100)
+                self.progress_label.config(text="Calculation complete! Plotting finished.", fg="green")
+                self._show_optimal_trajectory_info()
+            else:
+                self.progress_label.config(text="No data to plot", fg="red")
+        except Exception as e:
+            import traceback
+            tb = traceback.format_exc()
+            print(f"[ERROR] Plotting failed with traceback:\n{tb}")
+            self.progress_label.config(text=f"Plotting failed: {str(e)}", fg="red")
+            messagebox.showerror("Plot Error", f"Could not create porkchop plot: {str(e)}")
+
+    def _show_optimal_trajectory_info(self):
+        """Show information about the optimal trajectory."""
+        if self.dates is None or self.times is None or self.dv is None:
+            return
+            
+        # Find minimum ΔV
+        min_idx = np.unravel_index(np.argmin(self.dv), self.dv.shape)
+        min_dv = self.dv[min_idx] / 1000  # Convert to km/s
+        dep_date = jd_to_date(self.dates[min_idx[0]])
+        tof_days = self.times[min_idx[1]]
+        
+        # Calculate arrival date
+        arr_jd = self.dates[min_idx[0]] + tof_days
+        arr_date = jd_to_date(arr_jd)
+        
+        info = f"Optimal Trajectory Found:\n\n"
+        info += f"Departure: {dep_date}\n"
+        info += f"Arrival: {arr_date}\n"
+        # Safe formatting for numeric values
+        tof_days_str = self._fmt_num(tof_days, '.1f')
+        min_dv_str = self._fmt_num(min_dv, '.2f')
+        info += f"Time of Flight: {tof_days_str} days\n"
+        info += f"\u0394V Required: {min_dv_str} km/s\n\n"
+        info += "Click 'Plot Optimal Trajectory' for 3D visualization."
+
+        messagebox.showinfo("Optimal Trajectory", info)
 
     def start_research_optimization(self):
         """Start enhanced research optimization for publishable results."""
@@ -1247,3 +1794,9 @@ class TrajectoryApp:
                 
         except Exception as e:
             messagebox.showerror("Save Error", f"Error saving results: {str(e)}")
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = TrajectoryApp(root)
+    root.mainloop()
