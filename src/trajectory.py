@@ -397,11 +397,14 @@ def gravity_assist_velocity_change(v_infinity_in, planet_mu, rp_min, deflection_
     v_inf_in = np.linalg.norm(v_infinity_in)
 
     if deflection_angle is None:
-        # Calculate deflection angle from periapsis radius
+        # Calculate deflection angle from periapsis radius using hyperbolic orbit formula
         # For hyperbolic orbit: e = 1 + (rp * v_inf²) / mu
-        # Deflection angle θ = 2 * arcsin(1/e)
+        # Deflection angle θ = π - 2 * arcsin(1/e)
         e = 1 + (rp_min * v_inf_in**2) / planet_mu
-        deflection_angle = 2 * np.arcsin(1/e) if e > 1 else np.pi
+        if e > 1:
+            deflection_angle = np.pi - 2 * np.arcsin(1/e)
+        else:
+            deflection_angle = np.pi  # Maximum deflection for parabolic
 
     # For gravity assist, the velocity change is perpendicular to v_infinity_in
     # The magnitude of delta_v is 2 * v_inf_in * sin(θ/2)
@@ -442,11 +445,11 @@ def multi_arc_trajectory(r1, r2, r_flyby, tof_total, mu_sun, planet_mu, rp_min=5
         flyby_body: Flyby body name
 
     Returns:
-        v1: Initial velocity vector (m/s)
+        v1: Initial velocity vector (m/s) - this is the ΔV required at departure
         v_flyby_in: Incoming velocity at flyby (m/s)
         v_flyby_out: Outgoing velocity after flyby (m/s)
         v2: Final velocity vector (m/s)
-        total_dv: Total delta-V required (m/s)
+        total_dv: Total propellant ΔV required (m/s) - only departure burn
     """
     # Split total time of flight between two arcs
     # For simplicity, use equal time for each arc
@@ -469,13 +472,15 @@ def multi_arc_trajectory(r1, r2, r_flyby, tof_total, mu_sun, planet_mu, rp_min=5
     # Initial velocity for second arc is the outgoing velocity from gravity assist
     v_flyby_out = v_infinity_out  # Approximation
 
+    # For the second arc, we need to solve Lambert's problem with the gravity assist velocity
+    # But this is complex - for now, use the original Lambert solution and note the limitation
     v2_dummy, v2 = lambert_izzo_gpu(r_flyby, r2, tof2, mu_sun)
 
-    # For multi-arc, we need to match the velocities at the flyby point
-    # This is a simplified version - full optimization would be more complex
-    total_dv = np.linalg.norm(v1) + np.linalg.norm(delta_v_ga)
+    # For multi-arc with gravity assist, the total propellant ΔV is just the departure burn
+    # The gravity assist changes the velocity for free (no propellant required)
+    total_propellant_dv = np.linalg.norm(v1)
 
-    return v1, v_flyby_in, v_flyby_out, v2, total_dv
+    return v1, v_flyby_in, v_flyby_out, v2, total_propellant_dv
 
 
 def porkchop_data_gravity_assist(start_date, end_date, min_tof_days, max_tof_days, resolution,

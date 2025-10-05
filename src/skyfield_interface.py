@@ -149,9 +149,15 @@ def get_position(body_name, utc_time):
     print(f"\nRetrieving position for {body_name} at {utc_time}...", flush=True)
 
     try:
-        # Parse time
-        t = _timescale.utc(int(utc_time[:4]), int(utc_time[5:7]), int(utc_time[8:10]),
-                          int(utc_time[11:13]), int(utc_time[14:16]), int(utc_time[17:19]))
+        # Parse time - handle both date-only and full datetime strings
+        if len(utc_time) >= 19:  # Full datetime with time
+            t = _timescale.utc(int(utc_time[:4]), int(utc_time[5:7]), int(utc_time[8:10]),
+                              int(utc_time[11:13]), int(utc_time[14:16]), int(utc_time[17:19]))
+        elif len(utc_time) >= 10:  # Date only
+            t = _timescale.utc(int(utc_time[:4]), int(utc_time[5:7]), int(utc_time[8:10]))
+        else:
+            print(f"❌ ERROR: Invalid time format: {utc_time}")
+            return None
 
         # Get body object
         body_name_clean = body_name.upper().replace(" BARYCENTER", "").replace(" ", "")
