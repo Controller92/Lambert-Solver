@@ -1,0 +1,7 @@
+tkinter
+numpy
+matplotlib
+astropy
+spiceypy
+skyfield
+cupy-cuda12x
