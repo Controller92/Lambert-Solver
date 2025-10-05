@@ -5,3 +5,4 @@ astropy
 spiceypy
 skyfield
 cupy-cuda12x
+requests

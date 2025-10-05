@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import trajectory
-from trajectory import porkchop_data, porkchop_data_gravity_assist
+from trajectory import porkchop_data, porkchop_data_gravity_assist, porkchop_data_gravity_assist_enhanced
 import spice_interface
 from datetime import datetime, timedelta
 import skyfield.api as sf
@@ -369,6 +369,10 @@ class TrajectoryApp:
         self.params_tab = ttk.Frame(self.notebook, padding="10")
         self.notebook.add(self.params_tab, text="Calculation Parameters")
         
+        # Research Optimization Tab
+        self.research_tab = ttk.Frame(self.notebook, padding="10")
+        self.notebook.add(self.research_tab, text="Research Mode")
+        
         # Initialize body_ids dictionary for caching body lookups
         self.body_ids = {}
         
@@ -471,6 +475,54 @@ class TrajectoryApp:
         self.resolution.insert(0, "20")
         self.resolution.bind("<KeyRelease>", self.on_resolution_change)
         ToolTip(self.resolution, "Number of grid points for calculation (higher = more accurate but slower). Start with 20-50.")
+        
+        # Research Optimization Section (research tab)
+        tk.Label(self.research_tab, text="Research Mode:", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 10))
+        tk.Label(self.research_tab, text="Enhanced optimization for publishable results", font=("Arial", 9)).grid(row=1, column=0, columnspan=2, sticky="w", pady=(0, 15))
+        
+        tk.Label(self.research_tab, text="Time Splits to Test:", font=("Arial", 10, "bold")).grid(row=2, column=0, sticky="w")
+        self.time_splits_entry = tk.Entry(self.research_tab, width=30)
+        self.time_splits_entry.grid(row=2, column=1, padx=5, pady=2)
+        self.time_splits_entry.insert(0, "0.3,0.4,0.5,0.6,0.7")
+        ToolTip(self.time_splits_entry, "Comma-separated fractions of total time in first trajectory arc (0.3 = 30% in first arc)")
+        
+        tk.Label(self.research_tab, text="Flyby Altitudes (km):", font=("Arial", 10, "bold")).grid(row=3, column=0, sticky="w")
+        self.flyby_altitudes_entry = tk.Entry(self.research_tab, width=30)
+        self.flyby_altitudes_entry.grid(row=3, column=1, padx=5, pady=2)
+        self.flyby_altitudes_entry.insert(0, "300,500,750,1000,1500,2000")
+        ToolTip(self.flyby_altitudes_entry, "Comma-separated flyby altitudes in km to test for optimal ΔV")
+        
+        tk.Label(self.research_tab, text="Research Resolution:", font=("Arial", 10, "bold")).grid(row=4, column=0, sticky="w")
+        self.research_resolution = tk.Entry(self.research_tab, width=20)
+        self.research_resolution.grid(row=4, column=1, padx=5, pady=2, sticky="w")
+        self.research_resolution.insert(0, "50")
+        ToolTip(self.research_resolution, "Grid resolution for research optimization (higher = more accurate but much slower)")
+        
+        tk.Label(self.research_tab, text="Max Runtime (hours):", font=("Arial", 10, "bold")).grid(row=5, column=0, sticky="w")
+        self.max_runtime = tk.Entry(self.research_tab, width=20)
+        self.max_runtime.grid(row=5, column=1, padx=5, pady=2, sticky="w")
+        self.max_runtime.insert(0, "24")
+        ToolTip(self.max_runtime, "Maximum computation time in hours (can resume later if interrupted)")
+        
+        # Research mode controls
+        research_controls_frame = ttk.Frame(self.research_tab)
+        research_controls_frame.grid(row=6, column=0, columnspan=2, pady=15)
+        
+        ttk.Button(research_controls_frame, text="Start Research Optimization", 
+                  command=self.start_research_optimization).grid(row=0, column=0, padx=5)
+        ToolTip(ttk.Button(research_controls_frame, text="Start Research Optimization", 
+                          command=self.start_research_optimization), 
+               "Run enhanced optimization for publishable research results (may take days)")
+        
+        ttk.Button(research_controls_frame, text="Save Results", 
+                  command=self.save_research_results).grid(row=0, column=1, padx=5)
+        ToolTip(ttk.Button(research_controls_frame, text="Save Results", 
+                          command=self.save_research_results), 
+               "Save optimization results to file for analysis")
+        
+        # Research results display
+        self.research_results_text = tk.Text(self.research_tab, height=15, width=60, font=("Courier", 9))
+        self.research_results_text.grid(row=7, column=0, columnspan=2, pady=10, sticky="ew")
         
         # Progress & Results Section (left side)
         self.progress_frame = ttk.LabelFrame(root, text="Progress & Results", padding="10")
@@ -1050,620 +1102,148 @@ class TrajectoryApp:
         except Exception as e:
             messagebox.showerror("Calculation Error", f"Something went wrong during calculation. Please check your inputs and try again.\n\nError: {str(e)}")
 
-    def emergency_exit(self):
-        """Emergency exit function for when GUI gets stuck. Can be triggered by Ctrl+Q, Ctrl+X, or Alt+F4."""
-        print("🚨 Emergency exit activated! Force closing application...")
+    def start_research_optimization(self):
+        """Start enhanced research optimization for publishable results."""
         try:
-            self.root.quit()
-            self.root.destroy()
-        except:
-            # Force exit if normal methods fail
-            import os
-            os._exit(0)
-
-    def show_animation(self):
-        messagebox.showinfo("Animation", "Animation not yet implemented.")
-
-def run_tests():
-    """Run basic functionality tests without opening GUI"""
-    print("🧪 Running Lambert Solver Tests...")
-    print("=" * 50)
-    
-    # Test imports
-    print("✅ Testing imports...")
-    try:
-        import trajectory
-        import spice_interface
-        import skyfield.api as sf
-        print("✅ All imports successful")
-    except Exception as e:
-        print(f"❌ Import error: {e}")
-        return False
-    
-    # Test GPU/CuPy status
-    print("\n🔍 Checking GPU acceleration...")
-    try:
-        import cupy as cp
-        print("✅ CuPy available - GPU acceleration enabled")
-        gpu_available = True
-    except ImportError:
-        print("⚠️  CuPy not available - CPU only mode")
-        gpu_available = False
-    
-    # Test SPICE kernels
-    print("\n🌌 Testing SPICE kernels...")
-    try:
-        spice_interface.load_all_kernels()
-        print("✅ SPICE kernels loaded successfully")
-    except Exception as e:
-        print(f"❌ SPICE kernel error: {e}")
-        return False
-    
-    # Test body list functionality
-    print("\n🪐 Testing celestial body list...")
-    try:
-        # Create a minimal app instance to test body list
-        root = tk.Tk()
-        root.withdraw()  # Hide the window
-        app = TrajectoryApp(root)
-        
-        body_list = app.get_body_list()
-        print(f"✅ Body list loaded: {len(body_list)} bodies available")
-        print(f"   Available bodies: {', '.join(body_list[:5])}{'...' if len(body_list) > 5 else ''}")
-        
-        root.destroy()  # Clean up
-    except Exception as e:
-        print(f"❌ Body list error: {e}")
-        return False
-    
-    # Test basic trajectory calculation
-    print("\n🚀 Testing basic trajectory calculation...")
-    try:
-        # Simple test case: Earth to Mars
-        r1 = np.array([1.0, 0.0, 0.0]) * 149597870.7  # Earth position (AU to km)
-        r2 = np.array([1.5, 0.0, 0.0]) * 149597870.7  # Mars position (AU to km)
-        tof = 200 * 24 * 3600  # 200 days in seconds
-        mu = 1.327e20  # Sun's gravitational parameter
-        
-        v1, v2 = trajectory.lambert_izzo_gpu(r1, r2, tof, mu)
-        print(f"✅ Trajectory calculation successful: v1={v1}, v2={v2}")
-    except Exception as e:
-        print(f"❌ Trajectory calculation error: {e}")
-        return False
-    
-    # Test porkchop data generation
-    print("\n📊 Testing porkchop data generation...")
-    try:
-        # Small test case
-        dates, times, dv = porkchop_data(
-            "2035-01-01", "2035-01-02",  # 1 day date range
-            100, 101,  # 1 day time range  
-            2,  # 2x2 grid (very small for testing)
-            "EARTH", "MARS BARYCENTER"
-        )
-        print(f"✅ Porkchop data generated: {dates.shape} dates, {times.shape} times, {dv.shape} delta-v values")
-    except Exception as e:
-        print(f"❌ Porkchop data error: {e}")
-        return False
-    
-    print("\n🎉 All tests passed! The Lambert solver is working correctly.")
-    print(f"   GPU Acceleration: {'Enabled' if gpu_available else 'Disabled (CPU only)'}")
-    return True
-
-def test_body_list_functions():
-    """Test body list creation functions without GUI"""
-    print("🧪 Testing Body List Functions...")
-    print("=" * 40)
-    
-    try:
-        # Test 1: Import required modules
-        print("📦 Testing imports...")
-        import spice_interface
-        import skyfield_interface as sf
-        print("✅ Imports successful")
-        
-        # Test 2: Load kernels
-        print("\n🌌 Testing kernel loading...")
-        spice_interface.load_all_kernels()
-        print("✅ Kernels loaded")
-        
-        # Test 3: Test spice_interface functions
-        print("\n🔍 Testing spice_interface functions...")
-        
-        # Test search_celestial_body function
-        test_bodies = ["EARTH", "MARS BARYCENTER", "VENUS BARYCENTER", "SUN"]
-        for body in test_bodies:
-            try:
-                result = spice_interface.search_celestial_body(body)
-                print(f"  search_celestial_body('{body}') = {result}")
-            except Exception as e:
-                print(f"  ❌ search_celestial_body('{body}') failed: {e}")
-        
-        # Test 4: Create TrajectoryApp instance (but don't show GUI)
-        print("\n🏗️  Testing TrajectoryApp initialization (no GUI)...")
-        import tkinter as tk
-        root = tk.Tk()
-        root.withdraw()  # Hide the window immediately
-        
-        app = TrajectoryApp(root)
-        print("✅ TrajectoryApp instance created")
-        
-        # Test 5: Test body_name_map
-        print("\n🗺️  Testing body name mappings...")
-        print(f"  body_name_map has {len(app.body_name_map)} entries:")
-        for common, spice in app.body_name_map.items():
-            print(f"    {common} -> {spice}")
-        
-        print(f"  spice_to_common has {len(app.spice_to_common)} entries")
-        
-        # Test 6: Test get_body_list method
-        print("\n📋 Testing get_body_list method...")
-        body_list = app.get_body_list()
-        print(f"✅ get_body_list returned {len(body_list)} bodies:")
-        for i, body in enumerate(body_list):
-            print(f"    {i+1:2d}. {body}")
-        
-        # Test 7: Test body_ids population
-        print("\n🆔 Testing body_ids population...")
-        print(f"  body_ids has {len(app.body_ids)} entries:")
-        for spice_name, body_id in app.body_ids.items():
-            print(f"    {spice_name} -> ID: {body_id}")
-        
-        # Test 8: Test individual body lookups
-        print("\n🔎 Testing individual body lookups...")
-        for common_name in ["Earth", "Mars", "Venus", "Sun"]:
-            spice_name = app.body_name_map.get(common_name)
-            if spice_name:
-                body_id = app.body_ids.get(spice_name)
-                print(f"  {common_name} -> {spice_name} -> ID: {body_id}")
-            else:
-                print(f"  ❌ {common_name} not found in body_name_map")
-        
-        # Clean up
-        root.destroy()
-        print("\n✅ All body list function tests passed!")
-        return True
-        
-    except Exception as e:
-        print(f"\n❌ Body list function test failed: {e}")
-        import traceback
-        traceback.print_exc()
-        return False
-
-def test_gui_components():
-    """Test GUI component initialization without showing window"""
-    print("🧪 Testing GUI Components...")
-    print("=" * 35)
-    
-    try:
-        import tkinter as tk
-        from tkinter import ttk
-        import matplotlib.pyplot as plt
-        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-        
-        # Test 1: Basic Tkinter
-        print("🖼️  Testing Tkinter initialization...")
-        root = tk.Tk()
-        root.withdraw()
-        print("✅ Tkinter root created")
-        
-        # Test 2: DatePicker widget
-        print("\n📅 Testing DatePicker widget...")
-        try:
-            date_picker = DatePicker(root, "2035-01-01")
-            print("✅ DatePicker created")
+            # Get parameters
+            start = self.start_date_picker.get()
+            end = self.end_date_picker.get()
+            min_t = float(self.min_time.get())
+            max_t = float(self.max_time.get())
+            res = int(self.research_resolution.get())
+            max_hours = float(self.max_runtime.get())
+            
+            # Parse time splits
+            time_splits_str = self.time_splits_entry.get()
+            time_splits = [float(x.strip()) for x in time_splits_str.split(',')]
+            
+            # Parse flyby altitudes
+            altitudes_str = self.flyby_altitudes_entry.get()
+            flyby_altitudes = [float(x.strip()) * 1000 for x in altitudes_str.split(',')]  # Convert km to m
+            
+            dep_body_common = self.dep_body.get().strip()
+            arr_body_common = self.arr_body.get().strip()
+            
+            # Convert common names to SPICE names
+            dep_body = self.body_name_map.get(dep_body_common, dep_body_common)
+            arr_body = self.body_name_map.get(arr_body_common, arr_body_common)
+            
+            if not dep_body or not arr_body:
+                messagebox.showerror("Selection Required", "Please select both a departure planet and destination planet.")
+                return
+            
+            # Check if gravity assist is enabled
+            use_gravity_assist = self.gravity_assist_var.get()
+            if not use_gravity_assist:
+                messagebox.showerror("Gravity Assist Required", "Research optimization requires gravity assist mode to be enabled.")
+                return
+                
+            flyby_body_common = self.flyby_body.get().strip()
+            flyby_body = self.body_name_map.get(flyby_body_common, flyby_body_common)
+            
+            # Calculate total evaluations
+            total_evaluations = len(time_splits) * len(flyby_altitudes) * res * res
+            
+            # Confirm with user
+            message = f"🧪 RESEARCH OPTIMIZATION MODE\\n\\n"
+            message += f"Mission: {dep_body_common} → {flyby_body_common} → {arr_body_common}\\n"
+            message += f"Date range: {start} to {end}\\n"
+            message += f"Time splits: {len(time_splits)} variations\\n"
+            message += f"Flyby altitudes: {len(flyby_altitudes)} variations\\n"
+            message += f"Grid resolution: {res}×{res}\\n"
+            message += f"Total evaluations: {total_evaluations:,}\\n"
+            message += f"Estimated time: {max_hours} hours maximum\\n\\n"
+            message += f"GPU acceleration: {'Available' if self.gpu_available else 'Not available'}\\n\\n"
+            message += "This will run for an extended period. Results will be publishable quality!"
+            
+            if not messagebox.askyesno("Start Research Optimization", message):
+                return
+            
+            # Clear results display
+            self.research_results_text.delete(1.0, tk.END)
+            self.research_results_text.insert(tk.END, "🚀 Starting research optimization...\\n\\n")
+            self.root.update()
+            
+            # Start optimization
+            self.research_results = porkchop_data_gravity_assist_enhanced(
+                start, end, min_t, max_t, res, dep_body, flyby_body, arr_body,
+                time_splits=time_splits, flyby_altitudes=flyby_altitudes,
+                update_callback=self.update_research_progress, max_runtime_hours=max_hours
+            )
+            
+            # Display results
+            self.display_research_results()
+            
+        except ValueError as e:
+            messagebox.showerror("Input Error", f"Please check your inputs: {str(e)}")
         except Exception as e:
-            print(f"❌ DatePicker failed: {e}")
-            root.destroy()
-            return False
+            messagebox.showerror("Research Error", f"Error during research optimization: {str(e)}")
+    
+    def update_research_progress(self, progress, dv_grid, eta, dep_jds, tof_days):
+        """Update progress during research optimization."""
+        percent = progress * 100
+        eta_str = f"{eta/3600:.1f} hours" if eta > 0 else "unknown"
         
-        # Test 3: TrajectoryApp initialization (step by step)
-        print("\n🏗️  Testing TrajectoryApp components...")
-        
-        # Create app instance
-        app = TrajectoryApp(root)
-        print("✅ TrajectoryApp instance created")
-        
-        # Test GUI frames exist
-        print("  Checking GUI frames...")
-        if hasattr(app, 'setup_frame') and app.setup_frame:
-            print("    ✅ setup_frame exists")
-        else:
-            print("    ❌ setup_frame missing")
+        progress_msg = f"Progress: {percent:.1f}% (ETA: {eta_str})\\n"
+        self.research_results_text.insert(tk.END, progress_msg)
+        self.research_results_text.see(tk.END)
+        self.root.update()
+    
+    def display_research_results(self):
+        """Display the research optimization results."""
+        if not hasattr(self, 'research_results'):
+            return
             
-        if hasattr(app, 'params_frame') and app.params_frame:
-            print("    ✅ params_frame exists")
-        else:
-            print("    ❌ params_frame missing")
-            
-        if hasattr(app, 'control_frame') and app.control_frame:
-            print("    ✅ control_frame exists")
-        else:
-            print("    ❌ control_frame missing")
-            
-        if hasattr(app, 'plot_frame') and app.plot_frame:
-            print("    ✅ plot_frame exists")
-        else:
-            print("    ❌ plot_frame missing")
+        results = self.research_results
+        stats = results['statistics']
         
-        # Test matplotlib components
-        print("  Checking matplotlib components...")
-        if hasattr(app, 'fig') and app.fig:
-            print("    ✅ matplotlib figure exists")
-        else:
-            print("    ❌ matplotlib figure missing")
+        self.research_results_text.delete(1.0, tk.END)
+        self.research_results_text.insert(tk.END, "🎯 RESEARCH OPTIMIZATION COMPLETE\\n")
+        self.research_results_text.insert(tk.END, "=" * 50 + "\\n\\n")
+        
+        self.research_results_text.insert(tk.END, f"📊 STATISTICS:\\n")
+        self.research_results_text.insert(tk.END, f"Total evaluations: {stats['total_evaluations']:,}\\n")
+        self.research_results_text.insert(tk.END, f"Best ΔV: {stats['best_dv']/1000:.2f} km/s\\n")
+        self.research_results_text.insert(tk.END, f"Mean ΔV: {stats['mean_dv']/1000:.2f} km/s\\n")
+        self.research_results_text.insert(tk.END, f"Computation time: {stats['computation_time']/3600:.1f} hours\\n\\n")
+        
+        self.research_results_text.insert(tk.END, f"🏆 TOP 5 TRAJECTORIES:\\n")
+        for i, traj in enumerate(results['best_trajectories'][:5], 1):
+            self.research_results_text.insert(tk.END, 
+                f"{i}. {traj['departure_date']} → {traj['arrival_date']} "
+                f"({traj['total_tof_days']:.0f} days, {traj['dv_km_s']:.2f} km/s ΔV)\\n"
+                f"   Time split: {traj['time_split']:.1f}, Altitude: {traj['flyby_altitude']/1000:.0f} km\\n\\n")
+        
+        self.research_results_text.insert(tk.END, "💾 Use 'Save Results' to export data for publication\\n")
+    
+    def save_research_results(self):
+        """Save research optimization results to file."""
+        if not hasattr(self, 'research_results'):
+            messagebox.showerror("No Results", "Please run research optimization first.")
+            return
             
-        if hasattr(app, 'ax') and app.ax:
-            print("    ✅ matplotlib axes exists")
-        else:
-            print("    ❌ matplotlib axes missing")
-            
-        if hasattr(app, 'canvas') and app.canvas:
-            print("    ✅ canvas exists")
-        else:
-            print("    ❌ canvas missing")
-        
-        # Test GUI widgets
-        print("  Checking GUI widgets...")
-        widgets_to_check = [
-            ('mission_preset', 'mission preset combobox'),
-            ('dep_body', 'departure body combobox'),
-            ('arr_body', 'arrival body combobox'),
-            ('calc_button', 'calculate button'),
-            ('porkchop_button', 'porkchop button'),
-            ('clear_button', 'clear button')
-        ]
-        
-        for attr_name, description in widgets_to_check:
-            if hasattr(app, attr_name) and getattr(app, attr_name):
-                print(f"    ✅ {description} exists")
-            else:
-                print(f"    ❌ {description} missing")
-        
-        # Test preset application
-        print("  Testing preset application...")
         try:
-            app.mission_preset.set("Earth → Mars")
-            app.apply_preset(None)
-            print("    ✅ Preset application works")
+            from tkinter import filedialog
+            import json
+            
+            filename = filedialog.asksaveasfilename(
+                defaultextension=".json",
+                filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+                title="Save Research Results"
+            )
+            
+            if filename:
+                # Convert numpy arrays to lists for JSON serialization
+                results_copy = self.research_results.copy()
+                for result in results_copy['all_results']:
+                    result['dep_jds'] = result['dep_jds'].tolist()
+                    result['tof_days'] = result['tof_days'].tolist()
+                    result['dv_grid'] = result['dv_grid'].tolist()
+                
+                with open(filename, 'w') as f:
+                    json.dump(results_copy, f, indent=2)
+                
+                messagebox.showinfo("Saved", f"Research results saved to {filename}")
+                
         except Exception as e:
-            print(f"    ❌ Preset application failed: {e}")
-        
-        # Clean up
-        root.destroy()
-        print("\n✅ All GUI component tests passed!")
-        return True
-        
-    except Exception as e:
-        print(f"\n❌ GUI component test failed: {e}")
-        import traceback
-        traceback.print_exc()
-        return False
-
-def test_gui_initialization_step_by_step():
-    """Test GUI initialization step by step without main loop"""
-    print("🧪 Testing GUI Initialization Step by Step...")
-    print("=" * 50)
-    
-    try:
-        import tkinter as tk
-        from tkinter import ttk
-        import matplotlib.pyplot as plt
-        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-        
-        # Step 1: Basic Tkinter
-        print("🔧 Step 1: Creating Tkinter root...")
-        root = tk.Tk()
-        root.withdraw()  # Don't show the window
-        print("✅ Tkinter root created")
-        
-        # Step 2: Basic TrajectoryApp attributes
-        print("📋 Step 2: Setting basic attributes...")
-        app = object.__new__(TrajectoryApp)  # Create without calling __init__
-        app.root = root
-        app.gpu_available = False
-        app.kernels_loaded = False
-        app.body_ids = {}
-        print("✅ Basic attributes set")
-        
-        # Step 3: Body name mappings
-        print("🗺️  Step 3: Setting up body mappings...")
-        app.body_name_map = {
-            "Mercury": "MERCURY BARYCENTER",
-            "Venus": "VENUS BARYCENTER", 
-            "Earth": "EARTH",
-            "Mars": "MARS BARYCENTER",
-            "Jupiter": "JUPITER BARYCENTER",
-            "Saturn": "SATURN BARYCENTER",
-            "Uranus": "URANUS BARYCENTER",
-            "Neptune": "NEPTUNE BARYCENTER",
-            "Pluto": "PLUTO BARYCENTER",
-            "Sun": "SUN"
-        }
-        app.spice_to_common = {v: k for k, v in app.body_name_map.items()}
-        print("✅ Body mappings created")
-        
-        # Step 4: GPU check
-        print("🔍 Step 4: GPU detection...")
-        try:
-            import cupy as cp
-            app.gpu_available = True
-            print("✅ GPU available")
-        except ImportError:
-            app.gpu_available = False
-            print("⚠️  GPU not available")
-        
-        # Step 5: Kernel loading
-        print("🌌 Step 5: Loading kernels...")
-        try:
-            spice_interface.load_all_kernels()
-            app.kernels_loaded = True
-            print("✅ Kernels loaded")
-        except Exception as e:
-            print(f"❌ Kernel loading failed: {e}")
-            app.kernels_loaded = False
-        
-        # Step 6: Test get_body_list
-        print("📋 Step 6: Testing get_body_list...")
-        try:
-            body_list = app.get_body_list()
-            print(f"✅ Body list: {len(body_list)} bodies")
-        except Exception as e:
-            print(f"❌ get_body_list failed: {e}")
-            import traceback
-            traceback.print_exc()
-        
-        # Step 7: Create frames
-        print("🎨 Step 7: Creating GUI frames...")
-        try:
-            app.setup_frame = ttk.LabelFrame(root, text="Mission Setup", padding="10")
-            app.status_frame = ttk.Frame(root, padding="5")
-            app.params_frame = ttk.LabelFrame(root, text="Calculation Parameters", padding="10")
-            app.control_frame = ttk.LabelFrame(root, text="Controls", padding="10")
-            app.plot_frame = ttk.LabelFrame(root, text="Trajectory Plot", padding="10")
-            print("✅ Frames created")
-        except Exception as e:
-            print(f"❌ Frame creation failed: {e}")
-            import traceback
-            traceback.print_exc()
-        
-        # Step 8: Create basic widgets
-        print("🏗️  Step 8: Creating basic widgets...")
-        try:
-            # Status labels
-            app.status_label = ttk.Label(app.status_frame, text="GPU status", font=("Arial", 9))
-            app.kernel_status = ttk.Label(app.status_frame, text="Kernel status", font=("Arial", 9))
-            
-            # Mission preset
-            app.mission_preset = ttk.Combobox(app.setup_frame, values=["Test"], state="readonly", width=18)
-            
-            # Date pickers (this might be where it fails)
-            print("  Creating date pickers...")
-            app.start_date_picker = DatePicker(app.setup_frame, "2035-01-01")
-            app.end_date_picker = DatePicker(app.setup_frame, "2035-12-31")
-            print("  ✅ Date pickers created")
-            
-            # Body comboboxes
-            print("  Creating body comboboxes...")
-            app.dep_body = ttk.Combobox(app.setup_frame, values=["Earth"], state="normal", width=18)
-            app.arr_body = ttk.Combobox(app.setup_frame, values=["Mars"], state="normal", width=18)
-            print("  ✅ Body comboboxes created")
-            
-            # Gravity assist combobox (initially disabled)
-            app.flyby_body = ttk.Combobox(app.setup_frame, values=[], state="disabled", width=18)
-            
-            print("✅ Basic widgets created")
-        except Exception as e:
-            print(f"❌ Widget creation failed: {e}")
-            import traceback
-            traceback.print_exc()
-        
-        # Step 9: Matplotlib setup
-        print("📊 Step 9: Setting up matplotlib...")
-        try:
-            app.fig = plt.Figure(figsize=(10, 6))
-            app.ax = app.fig.add_subplot(111)
-            app.canvas = FigureCanvasTkAgg(app.fig, master=app.plot_frame)
-            app.toolbar = NavigationToolbar2Tk(app.canvas, app.plot_frame)
-            print("✅ Matplotlib setup complete")
-        except Exception as e:
-            print(f"❌ Matplotlib setup failed: {e}")
-            import traceback
-            traceback.print_exc()
-        
-        # Clean up
-        root.destroy()
-        print("\n✅ All GUI initialization steps completed successfully!")
-        return True
-        
-    except Exception as e:
-        print(f"\n💥 CRITICAL ERROR during step-by-step testing: {e}")
-        import traceback
-        traceback.print_exc()
-        return False
-
-def test_gui_with_timeout():
-    """Test GUI by showing it briefly with a timeout to catch errors"""
-    print("🧪 Testing GUI with Timeout...")
-    print("=" * 35)
-    
-    import threading
-    import time
-    
-    error_occurred = [False]
-    error_message = [""]
-    
-    def run_gui():
-        try:
-            print("🚀 Starting GUI in background thread...")
-            root = tk.Tk()
-            app = TrajectoryApp(root)
-            print("✅ GUI initialized, starting main loop...")
-            root.mainloop()
-        except Exception as e:
-            error_occurred[0] = True
-            error_message[0] = str(e)
-            print(f"❌ GUI error: {e}")
-            import traceback
-            traceback.print_exc()
-    
-    def timeout_check():
-        time.sleep(3)  # Wait 3 seconds
-        if not error_occurred[0]:
-            print("⏰ Timeout reached - GUI appears to be running normally")
-            print("💡 If you see this, the GUI loaded successfully but may have runtime issues")
-        else:
-            print(f"💥 Error detected: {error_message[0]}")
-    
-    # Start GUI in background thread
-    gui_thread = threading.Thread(target=run_gui, daemon=True)
-    gui_thread.start()
-    
-    # Start timeout check
-    timeout_check()
-    
-    # Try to join the thread with a timeout
-    gui_thread.join(timeout=1)
-    
-    if gui_thread.is_alive():
-        print("⚠️  GUI thread is still running (this is expected)")
-        return True  # GUI is running, no initialization error
-    else:
-        print("✅ GUI thread completed")
-        return not error_occurred[0]
-
-def run_debug():
-    """Run with comprehensive debug output and error handling"""
-    print("🐛 Debug mode - comprehensive error tracking enabled")
-    print("=" * 60)
-    
-    # Enable debug logging
-    import logging
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-    
-    try:
-        print("🔧 Step 1: Creating Tkinter root window...")
-        root = tk.Tk()
-        print("✅ Root window created successfully")
-        
-        print("🏗️  Step 2: Initializing TrajectoryApp...")
-        app = TrajectoryApp(root)
-        print("✅ TrajectoryApp initialized successfully")
-        
-        print("🎯 Step 3: Setting up error handling for GUI events...")
-        
-        # Add error handling to key methods
-        original_start_porkchop = app.start_porkchop
-        def debug_start_porkchop():
-            try:
-                print("🚀 Starting porkchop plot generation...")
-                return original_start_porkchop()
-            except Exception as e:
-                print(f"❌ Error in start_porkchop: {e}")
-                import traceback
-                traceback.print_exc()
-                messagebox.showerror("Porkchop Error", f"Failed to generate porkchop plot: {e}")
-        
-        app.start_porkchop = debug_start_porkchop
-        
-        # Add error handling to estimate_time
-        original_estimate_time = app.estimate_time
-        def debug_estimate_time():
-            try:
-                print("⏱️  Estimating calculation time...")
-                return original_estimate_time()
-            except Exception as e:
-                print(f"❌ Error in estimate_time: {e}")
-                import traceback
-                traceback.print_exc()
-                messagebox.showerror("Time Estimation Error", f"Failed to estimate time: {e}")
-        
-        app.estimate_time = debug_estimate_time
-        
-        # Add error handling to apply_preset
-        original_apply_preset = app.apply_preset
-        def debug_apply_preset(event):
-            try:
-                print("🎛️  Applying mission preset...")
-                return original_apply_preset(event)
-            except Exception as e:
-                print(f"❌ Error in apply_preset: {e}")
-                import traceback
-                traceback.print_exc()
-                messagebox.showerror("Preset Error", f"Failed to apply preset: {e}")
-        
-        app.apply_preset = debug_apply_preset
-        
-        print("✅ Error handling wrappers installed")
-        
-        print("🎉 Step 4: Starting GUI main loop...")
-        print("💡 GUI is now running. Watch for error messages above.")
-        print("💡 If you see errors, they will be logged with full stack traces.")
-        
-        root.mainloop()
-        
-    except Exception as e:
-        print(f"💥 CRITICAL ERROR during GUI initialization: {e}")
-        import traceback
-        traceback.print_exc()
-        
-        try:
-            if 'root' in locals():
-                root.destroy()
-        except:
-            pass
-            
-        print("❌ GUI failed to start. Check the error details above.")
-        return False
-
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        command = sys.argv[1].lower()
-        
-        if command in ['--test', '-t', 'test']:
-            success = run_tests()
-            sys.exit(0 if success else 1)
-            
-        elif command in ['--body-test', '-bt', 'body-test']:
-            success = test_body_list_functions()
-            sys.exit(0 if success else 1)
-            
-        elif command in ['--gui-test', '-gt', 'gui-test']:
-            success = test_gui_components()
-            sys.exit(0 if success else 1)
-            
-        elif command in ['--init-test', '-it', 'init-test']:
-            success = test_gui_initialization_step_by_step()
-            sys.exit(0 if success else 1)
-            
-        elif command in ['--timeout-test', '-tt', 'timeout-test']:
-            success = test_gui_with_timeout()
-            sys.exit(0 if success else 1)
-            
-        elif command in ['--debug', '-d', 'debug']:
-            run_debug()
-            
-        elif command in ['--help', '-h', 'help']:
-            print("Lambert Solver GUI")
-            print("=" * 20)
-            print("Usage:")
-            print("  python gui.py              # Run GUI (default)")
-            print("  python gui.py --test       # Run functionality tests")
-            print("  python gui.py --body-test  # Test body list functions only")
-            print("  python gui.py --gui-test   # Test GUI components only")
-            print("  python gui.py --init-test  # Test GUI initialization step by step")
-            print("  python gui.py --timeout-test # Test GUI with timeout")
-            print("  python gui.py --debug      # Run GUI with debug output")
-            print("  python gui.py --help       # Show this help")
-            sys.exit(0)
-            
-        else:
-            print(f"Unknown command: {command}")
-            print("Use 'python gui.py --help' for usage information")
-            sys.exit(1)
-    
-    else:
-        # Default: run GUI
-        root = tk.Tk()
-        app = TrajectoryApp(root)
-        root.mainloop()
+            messagebox.showerror("Save Error", f"Error saving results: {str(e)}")
