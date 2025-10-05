@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import trajectory
-from trajectory import porkchop_data
+from trajectory import porkchop_data, porkchop_data_gravity_assist
 import spice_interface
 from datetime import datetime, timedelta
 import skyfield.api as sf
@@ -425,6 +425,31 @@ class TrajectoryApp:
         
         ToolTip(self.arr_body, "Choose the celestial body you're traveling to (Mars is a common destination)")
         
+        # Gravity Assist Section
+        tk.Label(self.setup_tab, text="Gravity Assist:", font=("Arial", 10, "bold")).grid(row=5, column=0, sticky="w")
+        self.gravity_assist_var = tk.BooleanVar(value=False)
+        self.gravity_assist_check = ttk.Checkbutton(self.setup_tab, text="Enable Gravity Assist", 
+                                                   variable=self.gravity_assist_var, 
+                                                   command=self.toggle_gravity_assist)
+        self.gravity_assist_check.grid(row=5, column=1, padx=5, pady=2, sticky="w")
+        ToolTip(self.gravity_assist_check, "Enable multi-body trajectory with planetary gravity assist for more efficient transfers")
+        
+        tk.Label(self.setup_tab, text="Flyby Body:", font=("Arial", 10, "bold")).grid(row=6, column=0, sticky="w")
+        
+        # Flyby body frame with combobox and search button
+        flyby_body_frame = ttk.Frame(self.setup_tab)
+        flyby_body_frame.grid(row=6, column=1, padx=5, pady=2, sticky="ew")
+        
+        self.flyby_body = ttk.Combobox(flyby_body_frame, values=self.get_body_list(), width=15, state="disabled")
+        self.flyby_body.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self.flyby_body.set("Mars")
+        
+        flyby_search_btn = ttk.Button(flyby_body_frame, text="🔍", width=3, command=self.search_flyby_body, state="disabled")
+        flyby_search_btn.pack(side=tk.LEFT, padx=(2, 0))
+        ToolTip(flyby_search_btn, "Search for other celestial bodies for gravity assist (asteroids, minor planets, etc.)")
+        
+        ToolTip(self.flyby_body, "Choose the celestial body for gravity assist flyby (typically a planet like Mars or Venus)")
+        
         # Calculation Parameters Section (moved to tab)
         tk.Label(self.params_tab, text="Min Transit Time (days):", font=("Arial", 10, "bold")).grid(row=0, column=0, sticky="w")
         self.min_time = tk.Entry(self.params_tab, width=20)
@@ -528,6 +553,20 @@ class TrajectoryApp:
         
         # Apply initial preset
         self.apply_preset()
+
+    def toggle_gravity_assist(self):
+        """Enable or disable gravity assist options"""
+        state = "normal" if self.gravity_assist_var.get() else "disabled"
+        self.flyby_body.config(state=state)
+        self.flyby_body.set("Mars" if state == "normal" else "")
+        
+        # Find and enable/disable the flyby search button
+        for child in self.setup_tab.winfo_children():
+            if isinstance(child, ttk.Frame):  # flyby_body_frame
+                for widget in child.winfo_children():
+                    if isinstance(widget, ttk.Button) and widget.cget("text") == "🔍":
+                        widget.config(state=state)
+                        break
 
     def zoom_recalculate(self):
         """Recalculate with higher resolution based on current zoom level"""
@@ -835,6 +874,21 @@ class TrajectoryApp:
         
         BodySearchDialog(self.root, on_body_selected)
 
+    def search_flyby_body(self):
+        """Open search dialog for flyby body selection."""
+        def on_body_selected(body_name, body_id):
+            # Update the combobox with the selected body
+            current_values = list(self.flyby_body['values'])
+            if body_name not in current_values:
+                current_values.append(body_name)
+                self.flyby_body['values'] = current_values
+            self.flyby_body.set(body_name)
+            # Store the body ID for later use
+            spice_name = body_name.upper().replace(" ", "")
+            self.body_ids[spice_name] = body_id
+        
+        BodySearchDialog(self.root, on_body_selected)
+
     def estimate_time(self):
         try:
             res = int(self.resolution.get())
@@ -898,7 +952,11 @@ class TrajectoryApp:
             self.ax.set_ylabel("Travel Time (days)")
             dep_body_name = self.dep_body.get()
             arr_body_name = self.arr_body.get()
-            self.ax.set_title(f"Mission Trajectories: {dep_body_name} → {arr_body_name}")
+            title = f"Mission Trajectories: {dep_body_name} → {arr_body_name}"
+            if hasattr(self, 'use_gravity_assist') and self.use_gravity_assist:
+                flyby_body_name = self.flyby_body.get()
+                title += f" (via {flyby_body_name})"
+            self.ax.set_title(title)
             self.canvas.draw()
         self.root.update_idletasks()
 
@@ -949,14 +1007,33 @@ class TrajectoryApp:
             if not messagebox.askyesno("Start Trajectory Calculation", message):
                 return
             
+            # Check if gravity assist is enabled
+            use_gravity_assist = self.gravity_assist_var.get()
+            self.use_gravity_assist = use_gravity_assist  # Store for plotting
+            flyby_body = None
+            if use_gravity_assist:
+                flyby_body_common = self.flyby_body.get().strip()
+                flyby_body = self.body_name_map.get(flyby_body_common, flyby_body_common)
+                if not flyby_body:
+                    messagebox.showerror("Flyby Body Required", "Please select a flyby body for gravity assist.")
+                    return
+                message += f"Gravity assist via: {flyby_body_common}\n"
+            
             accel_init = "Initializing GPU acceleration..." if self.gpu_available else "Initializing calculation..."
             self.progress_var.set(0)
             self.progress_label.config(text=accel_init)
             self.root.update_idletasks()
             
-            self.dates, self.times, self.dv = porkchop_data(
-                start, end, min_t, max_t, res, dep_body, arr_body, update_callback=self.update_progress
-            )
+            if use_gravity_assist:
+                self.dates, self.times, self.dv = porkchop_data_gravity_assist(
+                    start, end, min_t, max_t, res, dep_body, flyby_body, arr_body, update_callback=self.update_progress
+                )
+                title_suffix = f" (via {flyby_body_common})"
+            else:
+                self.dates, self.times, self.dv = porkchop_data(
+                    start, end, min_t, max_t, res, dep_body, arr_body, update_callback=self.update_progress
+                )
+                title_suffix = ""
             
             # Store original data for zoom operations
             self.original_dates = self.dates.copy()
@@ -1368,9 +1445,12 @@ def test_gui_initialization_step_by_step():
             
             # Body comboboxes
             print("  Creating body comboboxes...")
-            app.dep_body = ttk.Combobox(app.setup_frame, values=body_list, state="normal", width=18)
-            app.arr_body = ttk.Combobox(app.setup_frame, values=body_list, state="normal", width=18)
+            app.dep_body = ttk.Combobox(app.setup_frame, values=["Earth"], state="normal", width=18)
+            app.arr_body = ttk.Combobox(app.setup_frame, values=["Mars"], state="normal", width=18)
             print("  ✅ Body comboboxes created")
+            
+            # Gravity assist combobox (initially disabled)
+            app.flyby_body = ttk.Combobox(app.setup_frame, values=[], state="disabled", width=18)
             
             print("✅ Basic widgets created")
         except Exception as e:

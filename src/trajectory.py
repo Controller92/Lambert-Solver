@@ -380,6 +380,208 @@ def porkchop_data(start_date, end_date, min_tof_days, max_tof_days, resolution,
     return dep_jds, tof_days, dv_grid
 
 
+def gravity_assist_velocity_change(v_infinity_in, planet_mu, rp_min, deflection_angle=None):
+    """
+    Calculate velocity change during a gravity assist maneuver.
+
+    Args:
+        v_infinity_in: Incoming hyperbolic velocity vector relative to planet (m/s)
+        planet_mu: Gravitational parameter of the flyby planet (m³/s²)
+        rp_min: Minimum periapsis radius (m) - determines how close the flyby is
+        deflection_angle: Desired deflection angle (radians). If None, calculated from rp_min.
+
+    Returns:
+        v_infinity_out: Outgoing hyperbolic velocity vector (m/s)
+        delta_v: Velocity change vector (m/s)
+    """
+    v_inf_in = np.linalg.norm(v_infinity_in)
+
+    if deflection_angle is None:
+        # Calculate deflection angle from periapsis radius
+        # For hyperbolic orbit: e = 1 + (rp * v_inf²) / mu
+        # Deflection angle θ = 2 * arcsin(1/e)
+        e = 1 + (rp_min * v_inf_in**2) / planet_mu
+        deflection_angle = 2 * np.arcsin(1/e) if e > 1 else np.pi
+
+    # For gravity assist, the velocity change is perpendicular to v_infinity_in
+    # The magnitude of delta_v is 2 * v_inf_in * sin(θ/2)
+    delta_v_magnitude = 2 * v_inf_in * np.sin(deflection_angle / 2)
+
+    # Direction of delta_v is perpendicular to v_infinity_in
+    # For maximum efficiency, we want delta_v in the plane of the trajectory
+    v_inf_unit = v_infinity_in / v_inf_in
+
+    # Create a perpendicular vector (rotate 90 degrees in xy plane)
+    perp_vector = np.array([-v_inf_unit[1], v_inf_unit[0], 0])
+    perp_vector = perp_vector / np.linalg.norm(perp_vector)
+
+    # Delta_v points in the direction that gives the desired deflection
+    delta_v = delta_v_magnitude * perp_vector
+
+    # Outgoing velocity
+    v_infinity_out = v_infinity_in + delta_v
+
+    return v_infinity_out, delta_v
+
+
+def multi_arc_trajectory(r1, r2, r_flyby, tof_total, mu_sun, planet_mu, rp_min=500000,
+                        dep_body='Earth', arr_body='Mars', flyby_body='Mars'):
+    """
+    Calculate multi-arc trajectory with gravity assist.
+
+    Args:
+        r1: Departure position vector (m)
+        r2: Arrival position vector (m)
+        r_flyby: Flyby planet position vector at flyby time (m)
+        tof_total: Total time of flight (seconds)
+        mu_sun: Solar gravitational parameter (m³/s²)
+        planet_mu: Flyby planet gravitational parameter (m³/s²)
+        rp_min: Minimum periapsis radius for flyby (m)
+        dep_body: Departure body name
+        arr_body: Arrival body name
+        flyby_body: Flyby body name
+
+    Returns:
+        v1: Initial velocity vector (m/s)
+        v_flyby_in: Incoming velocity at flyby (m/s)
+        v_flyby_out: Outgoing velocity after flyby (m/s)
+        v2: Final velocity vector (m/s)
+        total_dv: Total delta-V required (m/s)
+    """
+    # Split total time of flight between two arcs
+    # For simplicity, use equal time for each arc
+    tof1 = tof_total / 2
+    tof2 = tof_total / 2
+
+    # First arc: departure to flyby
+    v1, v_flyby_in = lambert_izzo_gpu(r1, r_flyby, tof1, mu_sun)
+
+    # Calculate gravity assist
+    # v_infinity_in is the hyperbolic velocity relative to the flyby planet
+    # For simplicity, assume flyby planet velocity is small compared to v_flyby_in
+    v_infinity_in = v_flyby_in  # Approximation
+
+    v_infinity_out, delta_v_ga = gravity_assist_velocity_change(
+        v_infinity_in, planet_mu, rp_min
+    )
+
+    # Second arc: flyby to arrival
+    # Initial velocity for second arc is the outgoing velocity from gravity assist
+    v_flyby_out = v_infinity_out  # Approximation
+
+    v2_dummy, v2 = lambert_izzo_gpu(r_flyby, r2, tof2, mu_sun)
+
+    # For multi-arc, we need to match the velocities at the flyby point
+    # This is a simplified version - full optimization would be more complex
+    total_dv = np.linalg.norm(v1) + np.linalg.norm(delta_v_ga)
+
+    return v1, v_flyby_in, v_flyby_out, v2, total_dv
+
+
+def porkchop_data_gravity_assist(start_date, end_date, min_tof_days, max_tof_days, resolution,
+                                 dep_body, flyby_body, arr_body, update_callback=None):
+    """
+    Generate porkchop plot data for gravity assist trajectories.
+
+    Args:
+        start_date: Start date (YYYY-MM-DD string)
+        end_date: End date (YYYY-MM-DD string)
+        min_tof_days: Minimum total transit time (days)
+        max_tof_days: Maximum total transit time (days)
+        resolution: Grid resolution (points per dimension)
+        dep_body: Departure celestial body name
+        flyby_body: Flyby celestial body name
+        arr_body: Arrival celestial body name
+        update_callback: Optional callback for progress updates
+
+    Returns:
+        dep_jds: Departure dates (Julian Day)
+        tof_days: Total transit times (days)
+        dv: Delta-V matrix (m/s)
+    """
+    import numpy as np
+    from astropy.time import Time
+
+    # Load ephemeris if not already loaded
+    try:
+        spice_interface.load_all_kernels()
+    except Exception as e:
+        print(f"Warning: Could not load ephemeris: {e}. Using approximate positions.")
+
+    # Convert dates to Julian Days
+    start_jd = Time(start_date).jd
+    end_jd = Time(end_date).jd
+
+    # Create grids
+    dep_jds = np.linspace(start_jd, end_jd, resolution)
+    tof_days = np.linspace(min_tof_days, max_tof_days, resolution)
+
+    # Create meshgrid for all combinations
+    DEP_JDS, TOF_DAYS = np.meshgrid(dep_jds, tof_days, indexing='ij')
+
+    # Flatten for batch processing
+    total_problems = resolution * resolution
+    dep_jds_flat = DEP_JDS.flatten()
+    tof_days_flat = TOF_DAYS.flatten()
+    tof_seconds = tof_days_flat * 24 * 3600  # Convert to seconds
+
+    # Gravitational parameters
+    mu_sun = 1.32712440018e20  # Sun's gravitational parameter (m³/s²)
+    mu_earth = 3.986004418e14  # Earth's gravitational parameter (m³/s²)
+
+    # Initialize delta-V array
+    dv = np.zeros(total_problems)
+
+    # Process each trajectory
+    for i in range(total_problems):
+        dep_jd = dep_jds_flat[i]
+        tof_total_sec = tof_seconds[i]
+
+        try:
+            # Get departure position
+            dep_time = Time(dep_jd, format='jd')
+            dep_time_str = dep_time.iso
+            r1 = spice_interface.get_position(dep_body, dep_time_str)
+
+            # Get arrival position
+            arr_jd = dep_jd + tof_days_flat[i]
+            arr_time = Time(arr_jd, format='jd')
+            arr_time_str = arr_time.iso
+            r2 = spice_interface.get_position(arr_body, arr_time_str)
+
+            # Estimate flyby time (midpoint for simplicity)
+            flyby_jd = dep_jd + tof_days_flat[i] / 2
+            flyby_time = Time(flyby_jd, format='jd')
+            flyby_time_str = flyby_time.iso
+            r_flyby = spice_interface.get_position(flyby_body, flyby_time_str)
+
+            # Calculate multi-arc trajectory
+            v1, v_flyby_in, v_flyby_out, v2, total_dv = multi_arc_trajectory(
+                r1, r2, r_flyby, tof_total_sec, mu_sun, mu_earth,
+                dep_body=dep_body, arr_body=arr_body, flyby_body=flyby_body
+            )
+
+            dv[i] = total_dv
+
+        except Exception as e:
+            # Use fallback calculation
+            dv[i] = 10000  # High delta-V for failed calculations
+
+        # Update progress
+        if update_callback and (i % 100 == 0 or i == total_problems - 1):
+            progress = (i + 1) / total_problems
+            eta = estimate_time(resolution) * (1 - progress)
+            # Create temporary grid for progress callback
+            dv_temp = dv.copy()
+            dv_temp = dv_temp.reshape(resolution, resolution)
+            update_callback(progress, dv_temp, eta, dep_jds, tof_days)
+
+    # Reshape dv back to grid
+    dv_grid = dv.reshape(resolution, resolution)
+
+    return dep_jds, tof_days, dv_grid
+
+
 if __name__ == "__main__":
     print("🚀 Lambert Trajectory Solver Module")
     print("=" * 40)
