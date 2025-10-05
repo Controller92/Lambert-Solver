@@ -47,6 +47,9 @@ kernels/*.tpc
 kernels/*.tls
 kernels/*.html
 
+# Ignore kernels directory entirely (ephemeris, large binaries)
+kernels/
+
 # Logs
 *.log
 logs/
@@ -54,3 +57,7 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+
+# Local scripts and test artifacts
+scripts/
+test_porkchop.png
