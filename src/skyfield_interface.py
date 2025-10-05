@@ -626,7 +626,7 @@ def get_ceres_position_jpl_horizons(utc_time):
             'EPHEM_TYPE': 'VECTORS',
             'CENTER': '500@10',  # Solar System Barycenter
             'START_TIME': horizons_time,
-            'STOP_TIME': horizons_time,
+            'STOP_TIME': stop_time,
             'STEP_SIZE': '1',
             'VEC_TABLE': '1',
             'VEC_CORR': 'NONE',
@@ -649,25 +649,37 @@ def get_ceres_position_jpl_horizons(utc_time):
         ephem_data = data.get('result', '')
         lines = ephem_data.split('\n')
 
-        # Find the data line (contains X, Y, Z positions)
+        # Find the data between $$SOE and $$EOE
+        in_data_section = False
         for line in lines:
-            if line.strip().startswith('20'):  # Date line
-                # Next line should contain the vector data
+            line = line.strip()
+            if line == '$$SOE':
+                in_data_section = True
                 continue
-            elif 'X =' in line and 'Y =' in line and 'Z =' in line:
-                # Parse vector components
+            elif line == '$$EOE':
+                break
+            elif in_data_section and line.startswith('246'):  # JD date line
+                # Next line should contain the X Y Z data
+                continue
+            elif in_data_section and not line.startswith('246') and line and not line.startswith('$$'):
+                # This should be the position data line
                 parts = line.split()
-                x_km = float(parts[2])  # X position in km
-                y_km = float(parts[5])  # Y position in km
-                z_km = float(parts[8])  # Z position in km
+                if len(parts) >= 3:
+                    try:
+                        x_km = float(parts[0])
+                        y_km = float(parts[1])
+                        z_km = float(parts[2])
 
-                # Convert km to meters
-                position_m = np.array([x_km, y_km, z_km]) * 1000.0
+                        # Convert km to meters
+                        position_m = np.array([x_km, y_km, z_km]) * 1000.0
 
-                print(f"✅ JPL Horizons position for Ceres: {position_m} meters", flush=True)
-                print("🏦 BANKABLE DATA: Using official JPL ephemeris for publication-quality accuracy", flush=True)
+                        print(f"✅ JPL Horizons position for Ceres: {position_m} meters", flush=True)
+                        print("🏦 BANKABLE DATA: Using official JPL ephemeris for publication-quality accuracy", flush=True)
 
-                return position_m
+                        return position_m
+                    except (ValueError, IndexError) as e:
+                        print(f"❌ Error parsing position data: {e}")
+                        continue
 
         print("❌ Could not parse JPL Horizons response")
         return None
@@ -689,15 +701,13 @@ def get_ceres_state_jpl_horizons(utc_time):
         # JPL Horizons API endpoint
         url = "https://ssd.jpl.nasa.gov/api/horizons.api"
 
-        # Format time for Horizons - use proper calendar format
-        from datetime import datetime
-        dt = datetime.fromisoformat(utc_time.replace(' ', 'T'))
-        month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        horizons_time = f"{dt.year}-{month_names[dt.month-1]:3}-{dt.day:02d} {dt.hour:02d}:{dt.minute:02d}:{dt.second:02d}"
+        # Format time for Horizons - use ISO format
+        horizons_time = utc_time.replace(' ', 'T')
         # Add 1 minute for stop time
-        dt_stop = dt.replace(minute=dt.minute + 1)
-        stop_time = f"{dt_stop.year}-{month_names[dt_stop.month-1]:3}-{dt_stop.day:02d} {dt_stop.hour:02d}:{dt_stop.minute:02d}:{dt_stop.second:02d}"
+        from datetime import datetime, timedelta
+        dt = datetime.fromisoformat(utc_time.replace(' ', 'T'))
+        dt_stop = dt + timedelta(minutes=1)
+        stop_time = dt_stop.isoformat()
 
         # Parameters for Ceres with velocity data
         params = {
@@ -709,7 +719,7 @@ def get_ceres_state_jpl_horizons(utc_time):
             'CENTER': '500@10',  # Solar System Barycenter
             'START_TIME': horizons_time,
             'STOP_TIME': stop_time,
-            'STEP_SIZE': '1s',
+            'STEP_SIZE': '1',
             'VEC_TABLE': '2',  # Include velocity vectors
             'VEC_CORR': 'NONE',
             'OUT_UNITS': 'KM-S',
@@ -733,29 +743,43 @@ def get_ceres_state_jpl_horizons(utc_time):
         position_m = None
         velocity_m_s = None
 
+        # Find the data between $$SOE and $$EOE
+        in_data_section = False
         i = 0
         while i < len(lines):
             line = lines[i].strip()
-            if line.startswith('20'):  # Date line
-                # Position data should be in next line
+            if line == '$$SOE':
+                in_data_section = True
+                i += 1
+                continue
+            elif line == '$$EOE':
+                break
+            elif in_data_section and line.startswith('246'):  # JD date line
+                # Next line should be position data
                 if i + 1 < len(lines):
                     pos_line = lines[i + 1].strip()
-                    if 'X =' in pos_line and 'Y =' in pos_line and 'Z =' in pos_line:
-                        parts = pos_line.split()
-                        x_km = float(parts[2])
-                        y_km = float(parts[5])
-                        z_km = float(parts[8])
-                        position_m = np.array([x_km, y_km, z_km]) * 1000.0
+                    parts = pos_line.split()
+                    if len(parts) >= 3:
+                        try:
+                            x_km = float(parts[0])
+                            y_km = float(parts[1])
+                            z_km = float(parts[2])
+                            position_m = np.array([x_km, y_km, z_km]) * 1000.0
+                        except (ValueError, IndexError):
+                            pass
 
-                # Velocity data should be in the line after position
+                # Line after position should be velocity data
                 if i + 2 < len(lines):
                     vel_line = lines[i + 2].strip()
-                    if 'VX=' in vel_line and 'VY=' in vel_line and 'VZ=' in vel_line:
-                        parts = vel_line.split()
-                        vx_km_s = float(parts[2])
-                        vy_km_s = float(parts[5])
-                        vz_km_s = float(parts[8])
-                        velocity_m_s = np.array([vx_km_s, vy_km_s, vz_km_s]) * 1000.0
+                    parts = vel_line.split()
+                    if len(parts) >= 3:
+                        try:
+                            vx_km_s = float(parts[0])
+                            vy_km_s = float(parts[1])
+                            vz_km_s = float(parts[2])
+                            velocity_m_s = np.array([vx_km_s, vy_km_s, vz_km_s]) * 1000.0
+                        except (ValueError, IndexError):
+                            pass
 
                 if position_m is not None and velocity_m_s is not None:
                     print(f"✅ JPL Horizons state for Ceres: position = {position_m} meters, velocity = {velocity_m_s} m/s", flush=True)
