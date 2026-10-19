@@ -1,12 +1,19 @@
 # Lamberts-Problem Documentation
 
+The custom engine now runs in **CUDA C++**, with a shared C++ CPU path and
+NumPy batch bindings in `src/lambert_native.py`. See the
+[native engine walkthrough](docs/seventh-increment.md) for build instructions,
+API examples, independent accuracy checks and measured GPU performance.
+The Python mathematical implementation remains the independently validated
+reference. Multirevolution solutions and legacy GUI integration are still separate work.
+
 The current custom CPU entry point is `src.lambert_solver.solve_zero_rev`.
 It returns both endpoint velocities, explicit statuses and root diagnostics.
 The [sixth increment](docs/sixth-increment.md) fixes tiny-arc precision through
 the complete calculation and validates arbitrary 3D planes. The
 [Mars 2020 comparison](docs/mars2020-validation.md) exercises cached JPL Horizons
 states. The custom mathematical runtime uses only Python's standard library.
-CUDA C++ implementation and profiling are the next milestone.
+The native port is documented in the seventh increment.
 
 The isolated CPU geometry reference and explicit input contract are in
 `src/lambert_geometry.py`. See [the first increment and branch audit](docs/first-increment.md)
@@ -33,7 +40,7 @@ arrival velocities for zero-revolution transfers. See [the fifth increment](docs
 for the API, analytical/Gooding/propagation validation and precision warnings.
 This isolated CPU solver is separate from the legacy GUI. Retained `q=c/s`
 preserves tiny-arc shape information; inspect the root conditioning diagnostics.
-CUDA and multirevolution support remain subsequent work.
+Multirevolution support remains subsequent work.
 
 ## Interplanetary Trajectory Calculator
 

@@ -1,0 +1,12 @@
+C++ independent TOF cases=3541, max_relative_error=2.2476580063929847e-15
+C++ independent roots: {'count': 3541, 'max_scaled_x_error': 6.466636699827054e-12, 'max_forward_ulps': 14.396115386798886, 'precision_warnings': 26, 'precision_unknown': 88}
+C++ independent derivative cases=1411, max_relative_errors=[7.733281152269507e-15, 6.782276898460409e-14, 6.259133295093756e-13]
+CUDA resources: {'name': 'NVIDIA RTX PRO 2000 Blackwell Generation Laptop GPU', 'major': 12, 'minor': 0, 'driver': 13040, 'runtime': 12080, 'multiprocessors': 26, 'registers': 196, 'local_bytes': 32, 'active_blocks': 2, 'threads_per_sm': 1536, 'max_threads_per_block': 256, 'predicted_occupancy': 0.16666666666666666}
+cpp: full transfers=440 (conic=248, actual-input=144, extreme=48), precision_warnings=1, unknown=6; maxima={'known_velocity': np.float64(2.6221877770023727e-13), 'actual_input_velocity': 6.671697701359188e-16, 'gooding_velocity': np.float64(1.1346640478111006e-13), 'energy': np.float64(1.4494008915122865e-15), 'angular_momentum': np.float64(1.4853771724010076e-15), 'propagated_position': np.float64(4.3992163510618647e-11), 'propagated_velocity': np.float64(3.251826406556484e-11), 'python_velocity': np.float64(1.5298008022013067e-15), 'forward_ulps': 6.76192559689106}
+cuda: full transfers=440 (conic=248, actual-input=144, extreme=48), precision_warnings=1, unknown=6; maxima={'known_velocity': np.float64(2.622193824335041e-13), 'actual_input_velocity': 9.550945674313218e-16, 'gooding_velocity': np.float64(1.135588435784797e-13), 'energy': np.float64(1.3807901984229476e-15), 'angular_momentum': np.float64(1.072098405376252e-15), 'propagated_position': np.float64(4.454350441395627e-11), 'propagated_velocity': np.float64(3.2302034601244434e-11), 'python_velocity': np.float64(3.1839458829139123e-14), 'forward_ulps': 6.76192559689106}
+earth: Target body name: Earth (399)                     {source: DE441}; rows=10
+mars: Target body name: Mars (499)                      {source: mar099}; rows=10
+spacecraft: Target body name: Mars2020 (spacecraft) (-168)    {source: Mars2020_merged}; rows=9
+cpp Mars 2020: 3 boundary problems; max Gooding difference=2.0219772678306287e-11 m/s; max propagated closure=0.00069385552082896985 m, 7.6173158021619975e-11 m/s
+cuda Mars 2020: 3 boundary problems; max Gooding difference=1.8582499104576865e-11 m/s; max propagated closure=0.00066844079111938394 m, 8.4095046690278223e-11 m/s
+All requested native validation passed. CUDA was executed.

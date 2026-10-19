@@ -1,5 +1,9 @@
 # Sixth increment: preserve tiny arcs throughout the CPU solve
 
+The subsequent [seventh increment](seventh-increment.md) implements the shared
+C++ CPU/CUDA engine and batch interface. The Python mathematics described here
+remains its independent reference.
+
 This increment fixes the precision limit identified at `8acc65f` and cleans
 up shared mathematical operations before CUDA translation. It preserves the
 metre/second contract, central-body frame, short/long arc convention, M=0 scope,
