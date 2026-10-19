@@ -19,7 +19,13 @@ limitations. These preparation routines produce no roots or velocities.
 `src/lambert_root.py` now provides safeguarded zero-revolution root inversion,
 with residuals, iteration counts and conditioning diagnostics. See
 [the fourth increment](docs/fourth-increment.md) for validation and limitations.
-Velocity reconstruction and CUDA remain subsequent work.
+
+`src/lambert_solver.py` connects those layers and reconstructs departure and
+arrival velocities for zero-revolution transfers. See [the fifth increment](docs/fifth-increment.md)
+for the API, analytical/Gooding/propagation validation and precision warnings.
+This isolated CPU solver is separate from the legacy GUI. Very small short arcs
+can lose accuracy through rounded geometry; inspect both geometry and root
+diagnostics. CUDA and multirevolution support remain subsequent work.
 
 ## Interplanetary Trajectory Calculator
 
