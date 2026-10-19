@@ -9,6 +9,11 @@ search kernel time by 17.9% and includes a reproducible baseline comparison.
 The Python mathematical implementation remains the independently validated
 reference. Multirevolution solutions and legacy GUI integration are still separate work.
 
+The [multi-revolution preparation increment](docs/ninth-increment.md) adds Python
+TOF/derivatives, minimum-time detection and explicit feasibility diagnostics.
+It includes a cached Horizons Juno case around Jupiter. Full M>0 roots and
+velocities are the next increment; the existing complete solvers still reject them.
+
 The current custom CPU entry point is `src.lambert_solver.solve_zero_rev`.
 It returns both endpoint velocities, explicit statuses and root diagnostics.
 The [sixth increment](docs/sixth-increment.md) fixes tiny-arc precision through

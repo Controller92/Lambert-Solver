@@ -1,0 +1,68 @@
+{
+  "mission": "Juno",
+  "target": -61,
+  "center": 599,
+  "frame": "ICRF",
+  "time_scale": "TDB",
+  "start": "2017-02-10 00:00:00",
+  "stop": "2017-04-15 00:00:00",
+  "duration_days": 64.0,
+  "mu_m3_s2": 1.266865319e+17,
+  "coarse_samples": 1537,
+  "refined_samples": 97,
+  "unique_samples": 1625,
+  "observed_projected_sweep_degrees": 364.8384847656005,
+  "observed_revolutions": 1,
+  "maximum_sample_angle_degrees": 13.318996490044126,
+  "minimum_projection_ratio": 0.9999663359640382,
+  "feasibility": [
+    {
+      "M": 1,
+      "status": "TWO_SOLUTIONS",
+      "x_min": 0.14179691473843037,
+      "minimum_days": 62.703263506074094,
+      "estimated_minimum_time_error_seconds": 2.1175710976196933e-08
+    },
+    {
+      "M": 2,
+      "status": "NO_SOLUTION",
+      "x_min": 0.0843026496839413,
+      "minimum_days": 111.74104428075128,
+      "estimated_minimum_time_error_seconds": 2.1175710976196933e-08
+    },
+    {
+      "M": 3,
+      "status": "NO_SOLUTION",
+      "x_min": 0.06019135272080309,
+      "minimum_days": 160.27158621970864,
+      "estimated_minimum_time_error_seconds": 3.999856517726087e-08
+    }
+  ],
+  "reference_branches": [
+    {
+      "branch": "left",
+      "reference_x": 0.03211164043831082,
+      "semimajor_axis_relative_difference": 1.1102230246251565e-16,
+      "product_relative_tof_residual": 2.220446049250313e-16,
+      "low_path": false,
+      "semimajor_axis_m": 3819868345.581066,
+      "anomaly_time_error_seconds": 0.0,
+      "iterations": 3,
+      "departure_ephemeris_velocity_difference_m_s": 367.10234648854265,
+      "arrival_ephemeris_velocity_difference_m_s": 1209.2403026952845
+    },
+    {
+      "branch": "right",
+      "reference_x": 0.24793848301682458,
+      "semimajor_axis_relative_difference": 4.440892098500626e-16,
+      "product_relative_tof_residual": 2.220446049250313e-16,
+      "low_path": true,
+      "semimajor_axis_m": 4065872860.0054245,
+      "anomaly_time_error_seconds": 1.862645149230957e-09,
+      "iterations": 3,
+      "departure_ephemeris_velocity_difference_m_s": 133.73535771954747,
+      "arrival_ephemeris_velocity_difference_m_s": 94.79739797813865
+    }
+  ],
+  "limitation": "The product provides M>0 scalar preparation only. Roots/velocities here come from independent validation references. Differences from actual spacecraft velocities include non-Keplerian gravity and maneuvers and are not numerical error tests."
+}
