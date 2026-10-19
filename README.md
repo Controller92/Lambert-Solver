@@ -14,7 +14,12 @@ tests and reproducible independent high-precision validation. It does not find a
 `src/lambert_root_preparation.py` adds the first three TOF derivatives and a
 zero-revolution initial guess. See [the third increment](docs/third-increment.md)
 for the parabolic limits, corrected starter exponent, measured errors, and
-limitations. Root iteration and velocity reconstruction remain subsequent work.
+limitations. These preparation routines produce no roots or velocities.
+
+`src/lambert_root.py` now provides safeguarded zero-revolution root inversion,
+with residuals, iteration counts and conditioning diagnostics. See
+[the fourth increment](docs/fourth-increment.md) for validation and limitations.
+Velocity reconstruction and CUDA remain subsequent work.
 
 ## Interplanetary Trajectory Calculator
 
