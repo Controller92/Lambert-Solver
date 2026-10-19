@@ -1,5 +1,13 @@
 # Lamberts-Problem Documentation
 
+The current custom CPU entry point is `src.lambert_solver.solve_zero_rev`.
+It returns both endpoint velocities, explicit statuses and root diagnostics.
+The [sixth increment](docs/sixth-increment.md) fixes tiny-arc precision through
+the complete calculation and validates arbitrary 3D planes. The
+[Mars 2020 comparison](docs/mars2020-validation.md) exercises cached JPL Horizons
+states. The custom mathematical runtime uses only Python's standard library.
+CUDA C++ implementation and profiling are the next milestone.
+
 The isolated CPU geometry reference and explicit input contract are in
 `src/lambert_geometry.py`. See [the first increment and branch audit](docs/first-increment.md)
 for conventions, validation, known legacy defects, and the next mathematical step.
@@ -23,9 +31,9 @@ with residuals, iteration counts and conditioning diagnostics. See
 `src/lambert_solver.py` connects those layers and reconstructs departure and
 arrival velocities for zero-revolution transfers. See [the fifth increment](docs/fifth-increment.md)
 for the API, analytical/Gooding/propagation validation and precision warnings.
-This isolated CPU solver is separate from the legacy GUI. Very small short arcs
-can lose accuracy through rounded geometry; inspect both geometry and root
-diagnostics. CUDA and multirevolution support remain subsequent work.
+This isolated CPU solver is separate from the legacy GUI. Retained `q=c/s`
+preserves tiny-arc shape information; inspect the root conditioning diagnostics.
+CUDA and multirevolution support remain subsequent work.
 
 ## Interplanetary Trajectory Calculator
 

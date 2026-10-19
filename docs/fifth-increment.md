@@ -1,5 +1,9 @@
 # Fifth increment: complete zero-revolution CPU transfer
 
+Historical validation snapshot. The [sixth increment](sixth-increment.md)
+fixes the tiny-arc limitation described below and removes the temporary
+geometry warning properties. Use that increment for current precision results.
+
 Built on verified `major-revision` commit `07d4b29`. This increment adds one
 velocity reconstruction module and a complete scalar entry point. The earlier
 geometry, TOF, derivatives/starter and root modules are unchanged. There is no
@@ -72,8 +76,7 @@ result = solve_zero_rev(problem)
 if result.status != LambertStatus.OK:
     print(result.status, result.geometry.status,
           None if result.root is None else result.root.status)
-elif (result.geometry_precision_warning is not False
-      or result.root.x_precision_limited is not False):
+elif result.root.x_precision_limited is not False:
     print('Review precision before using these velocities', result)
 else:
     print(result.v1_m_s, result.v2_m_s)

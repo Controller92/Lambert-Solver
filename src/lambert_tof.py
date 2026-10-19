@@ -16,6 +16,35 @@ BATTIN_X_MIN = 0.8
 BATTIN_X_MAX = 1.2
 SERIES_REL_TOL = sys.float_info.epsilon
 MAX_SERIES_TERMS = 128
+SHAPE_ABS_TOL = 64*sys.float_info.epsilon
+
+
+def _resolve_geometry(lambda_: float, q: float | None) -> tuple[float, float, float]:
+    """Validate the redundant shape pair and retain the small 1-lambda.
+
+    With no q, lambda is the authoritative scalar input. Geometry callers
+    supply q=c/s; near |lambda|=1 that carries information lambda cannot hold.
+    Consistency is tested absolutely, since a relative test would reject the
+    very small-q cases this representation is intended to preserve.
+    """
+    if isinstance(lambda_, bool) or isinstance(q, bool):
+        raise ValueError('boolean shape parameter')
+    lam = float(lambda_)
+    if not math.isfinite(lam) or abs(lam) > 1 or (abs(lam) == 1 and q is None):
+        raise ValueError('lambda requires a nondegenerate shape')
+    inferred = (1-lam)*(1+lam)
+    if q is None:
+        return lam, inferred, 1-lam
+    q = float(q)
+    if (not math.isfinite(q) or not 0 < q <= 1
+            or abs(q-inferred) > SHAPE_ABS_TOL):
+        raise ValueError('q must be positive, <=1 and consistent with lambda')
+    return lam, q, q/(1+lam) if lam >= 0 else 1-lam
+
+
+def _eta(x: float, lam: float, q: float, y: float) -> float:
+    """Stable y-lambda*x, shared with derivatives and reconstruction."""
+    return q/(y+lam*x) if lam*x > 0 else y-lam*x
 
 
 class TofStatus(IntEnum):
@@ -68,40 +97,43 @@ def _gauss_series(z: float) -> tuple[float | None, int]:
     return None, MAX_SERIES_TERMS
 
 
-def evaluate_tof_zero_rev(x: float, lambda_: float) -> TofResult:
-    """Evaluate for finite x > -1 and -1 < lambda < 1; M is fixed to zero.
+def evaluate_tof_zero_rev(x: float, lambda_: float, *, q: float | None = None) -> TofResult:
+    """Evaluate for finite x > -1 and nondegenerate shape; M is fixed to zero.
 
-    x=-1 has infinite TOF and |lambda|=1 is degenerate; neither is admitted.
+    Optional q=c/s preserves geometry precision when 1-lambda^2 is tiny.
+    Omit q for the original scalar-lambda contract. A supplied q must be finite,
+    positive, <=1 and agree with 1-lambda^2 within 64*binary64 epsilon absolutely.
+    x=-1 has infinite TOF and is not admitted. Without q, |lambda|=1 is
+    degenerate and rejected. With retained positive q, lambda may round to +/-1.
     Invalid values return INVALID_INPUT. Intermediate overflow/underflow or
     a nonpositive/nonfinite result returns NUMERICAL_RANGE. A bounded series
     that exhausts its term budget returns SERIES_NONCONVERGENCE. No fallback
     value is substituted. All calculations are scalar with fixed-size state.
     """
-    if isinstance(x, bool) or isinstance(lambda_, bool):
+    if isinstance(x, bool):
         return TofResult(TofStatus.INVALID_INPUT)
     try:
-        x, lam = float(x), float(lambda_)
+        x = float(x)
+        lam, q, one_minus_lam = _resolve_geometry(lambda_, q)
     except (TypeError, ValueError, OverflowError):
         return TofResult(TofStatus.INVALID_INPUT)
-    if not (math.isfinite(x) and x > -1.0 and math.isfinite(lam) and abs(lam) < 1.0):
+    if not (math.isfinite(x) and x > -1.0):
         return TofResult(TofStatus.INVALID_INPUT)
 
-    # Factor 1-lambda^2 to retain accuracy near either geometry limit.
-    q = (1.0-lam)*(1.0+lam)
-    y = math.hypot(math.sqrt(q), lam*x)
     terms = 0
     try:
+        y = math.hypot(math.sqrt(q), lam*x)
         if x == 1.0:
             # Eq. (21), factored so 1-lambda^3 does not cancel near lambda=1.
-            T = (2.0/3.0) * (1.0-lam) * (1.0+lam+lam*lam)
+            T = (2.0/3.0) * one_minus_lam * (1.0+lam+lam*lam)
             y, method = 1.0, TofMethod.PARABOLIC
         else:
             # eta=y-lambda*x. Rationalize only when that subtraction cancels.
-            eta = q/(y+lam*x) if lam*x > 0.0 else y-lam*x
+            eta = _eta(x, lam, q, y)
             if not (math.isfinite(eta) and eta > 0.0):
                 return TofResult(TofStatus.NUMERICAL_RANGE)
             if BATTIN_X_MIN <= x <= BATTIN_X_MAX:
-                z = math.fsum((1.0-lam, -x*eta))/2.0
+                z = math.fsum((one_minus_lam, -x*eta))/2.0
                 F, terms = _gauss_series(z)
                 if F is None:
                     return TofResult(TofStatus.SERIES_NONCONVERGENCE, series_terms=terms)

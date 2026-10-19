@@ -8,13 +8,12 @@ DOI 10.1007/s10569-014-9587-y, using the corrected unit bases from geometry.
 from dataclasses import dataclass
 from enum import IntEnum
 import math
-import sys
 
-from .lambert_geometry import GeometryResult, GeometryStatus, LambertInput, Vector3, prepare_geometry
+from .lambert_geometry import (
+    GeometryResult, GeometryStatus, LambertInput, Vector3, prepare_geometry,
+)
 from .lambert_root import RootOptions, RootResult, RootStatus, solve_x_zero_rev
-
-# Diagnostic consistency threshold, not a certified velocity error bound.
-GEOMETRY_Q_RTOL = 64*sys.float_info.epsilon
+from .lambert_tof import _eta
 
 
 class LambertStatus(IntEnum):
@@ -32,8 +31,7 @@ class LambertResult:
     and the tri-state x_precision_limited flag. OK means root stopping tests
     passed and velocities are representable. It is not a velocity error bound.
     True/None conditioning diagnostics must not be treated as False.
-    geometry_precision_warning separately exposes loss when rounded lambda
-    cannot accurately retain the geometric identity 1-lambda^2=c/s.
+    Geometry retains q=c/s independently of rounded lambda throughout the solve.
     """
     status: LambertStatus
     geometry: GeometryResult
@@ -41,21 +39,8 @@ class LambertResult:
     v1_m_s: Vector3 | None = None
     v2_m_s: Vector3 | None = None
 
-    @property
-    def geometry_q_relative_mismatch(self) -> float | None:
-        g = self.geometry.geometry
-        if g is None:
-            return None
-        geometric_q = g.chord_m/g.semiperimeter_m
-        return abs((1-g.lambda_)*(1+g.lambda_)-geometric_q)/geometric_q
 
-    @property
-    def geometry_precision_warning(self) -> bool | None:
-        mismatch = self.geometry_q_relative_mismatch
-        return None if mismatch is None else mismatch > GEOMETRY_Q_RTOL
-
-
-def _velocity_scale(mu, s, radius):
+def _velocity_scale(mu: float, s: float, radius: float) -> float:
     """sqrt(mu*s/2)/radius without overflowing an intermediate mu*s."""
     mm, me = math.frexp(mu)
     sm, se = math.frexp(s)
@@ -79,21 +64,17 @@ def solve_zero_rev(problem: LambertInput,
     if geometry.status != GeometryStatus.OK:
         return LambertResult(LambertStatus.GEOMETRY_FAILURE, geometry)
     g = geometry.geometry
-    root = solve_x_zero_rev(g.time_nondim, g.lambda_, options)
+    root = solve_x_zero_rev(g.time_nondim, g.lambda_, options, q=g.q)
     if root.status != RootStatus.OK:
         return LambertResult(LambertStatus.ROOT_FAILURE, geometry, root)
 
     x, y, lam = root.x, root.y, g.lambda_
     try:
-        q = (1-lam)*(1+lam)
+        q = g.q
         # (y-lambda*x)*(y+lambda*x)=1-lambda^2. Rationalize the
         # subtractive member, particularly important for long hyperbolic arcs.
-        if lam*x > 0:
-            plus = y+lam*x
-            minus = q/plus
-        else:
-            minus = y-lam*x
-            plus = q/minus
+        minus = _eta(x, lam, q, y)
+        plus = y+lam*x if lam*x > 0 else q/minus
         # A=lambda*y-x, B=lambda*y+x. The rewritten member avoids
         # first subtracting nearly equal lambda*y and +/-x near |lambda|=1.
         if lam*x > 0:

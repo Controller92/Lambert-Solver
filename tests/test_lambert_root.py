@@ -87,10 +87,10 @@ class RootTests(unittest.TestCase):
     def test_actual_tof_evaluation_count(self):
         target = evaluate_tof_zero_rev(0.3, -0.5).time_nondim
         count = 0
-        def counted(x, lam):
+        def counted(x, lam, *, q=None):
             nonlocal count
             count += 1
-            return evaluate_tof_zero_rev(x, lam)
+            return evaluate_tof_zero_rev(x, lam, q=q)
         with patch('src.lambert_root.evaluate_tof_zero_rev', side_effect=counted), \
                 patch('src.lambert_root_preparation.evaluate_tof_zero_rev', side_effect=counted):
             r = solve_x_zero_rev(target, -0.5)

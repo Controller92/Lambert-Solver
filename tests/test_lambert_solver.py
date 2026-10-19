@@ -122,18 +122,24 @@ class SolverTests(unittest.TestCase):
             self.assertIs(result.root.x_precision_limited, flag)
             self.assertEqual(result.root.estimated_x_error, estimate)
 
-    def test_nearly_coincident_geometry_has_separate_warning(self):
-        regular = self.solved(LambertInput((1., 0., 0.), (0., 1., 0.), math.pi/2, 1.))
-        self.assertFalse(regular.geometry_precision_warning)
-        self.assertIsNone(solve_zero_rev(None).geometry_precision_warning)
-        for angle in (1e-4, 1e-6, 1e-8, 1e-10, 1e-12):
-            p = LambertInput((1., 0., 0.), (math.cos(angle), math.sin(angle), 0.), angle, 1.)
-            result = self.solved(p)
-            # Geometry conditioning is distinct from the scalar equation's
-            # residual/step diagnostics. Both must remain available to callers.
-            self.assertTrue(result.geometry_precision_warning)
-            self.assertFalse(result.root.x_precision_limited)
-            self.assertGreater(result.geometry_q_relative_mismatch, 1e-14)
+    def test_tiny_circular_arcs_recover_both_velocities(self):
+        maximum = 0.
+        # At these angles cos(angle) rounds to 1. The actual input endpoint
+        # is (1,angle), not an exact point on the circle. Its required radial
+        # velocity is +/-angle/2 to leading order, with O(angle^2) corrections.
+        for angle in (1e-8, 1e-10, 1e-12, 1e-13, 2e-14):
+            for long_way in (False, True):
+                sign = -1 if long_way else 1
+                p = LambertInput((1., 0., 0.), (math.cos(angle), math.sin(angle), 0.),
+                                 2*math.pi-angle if long_way else angle, 1., long_way)
+                result = self.solved(p)
+                v1 = (sign*angle/2, sign, 0.)
+                v2 = (-sign*angle/2, sign, 0.)
+                error = max(math.dist(result.v1_m_s, v1), math.dist(result.v2_m_s, v2))
+                maximum = max(maximum, error)
+                self.assertLessEqual(error, 3e-14)
+                self.assertFalse(result.root.x_precision_limited)
+        print(f'Tiny circular maximum velocity error / circular speed: {maximum:.3e}')
 
 
 if __name__ == '__main__':

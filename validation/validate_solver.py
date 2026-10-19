@@ -187,7 +187,6 @@ def validate():
         populations['elliptic' if case.eccentricity < 1 else 'parabolic' if case.eccentricity == 1 else 'hyperbolic'] += 1
         populations['x_precision_warning'] += result.root.x_precision_limited is True
         populations['x_precision_unknown'] += result.root.x_precision_limited is None
-        populations['geometry_precision_warning'] += result.geometry_precision_warning is True
 
     print('Validation dependencies:', ', '.join(f'{n}={version(n)}' for n in ('mpmath', 'lamberthub', 'numpy', 'scipy', 'numba', 'llvmlite')))
     print('Corpus:', dict(populations))
@@ -199,32 +198,29 @@ def validate():
     print('All errors are scaled as documented; propagation includes numerical integrator error.')
 
 
-def characterize_small_arcs():
-    """Report a known precision limit without claiming the main error bound.
-
-    Require a geometry warning on every degraded small short arc. Conservatively
-    warning on the corresponding accurately recovered long arc is acceptable.
-    This is characterization of an unresolved limit, not accuracy acceptance.
-    """
-    print('Small-arc precision characterization (separate from the accepted corpus):')
-    for k in (4, 6, 8, 10, 12):
-        angle = 10.**-k
+def validate_small_arcs():
+    """Regression acceptance for the formerly degraded small circular arcs."""
+    print('Tiny circular arc validation (velocity bound 3e-14):')
+    for angle in (1e-8, 1e-10, 1e-12, 1e-13, 2e-14):
         for long_way in (False, True):
             tof = 2*math.pi-angle if long_way else angle
             p = LambertInput((1., 0., 0.), (math.cos(angle), math.sin(angle), 0.), tof, 1., long_way)
             result = solve_zero_rev(p)
-            if result.status != LambertStatus.OK or result.geometry_precision_warning is not True:
-                raise AssertionError(f'Small-arc precision limit not exposed: {k}, {long_way}, {result}')
+            if result.status != LambertStatus.OK:
+                raise AssertionError(f'Tiny-arc solve failed: {angle}, {long_way}, {result}')
             sign = -1 if long_way else 1
-            known1 = (0., sign, 0.)
-            known2 = (-sign*math.sin(angle), sign*math.cos(angle), 0.)
+            # cos(angle) rounds to 1: use the asymptotic solution for the
+            # received endpoint (1,angle), not an unrounded circular orbit.
+            known1 = (sign*angle/2, sign, 0.)
+            known2 = (-sign*angle/2, sign, 0.)
             error = max(math.dist(result.v1_m_s, known1), math.dist(result.v2_m_s, known2))
+            if error > 3e-14:
+                raise AssertionError(f'Tiny-arc velocity error: {angle}, {long_way}, {error}')
             print(f'angle={angle:g}, long_way={long_way}, velocity_error={error:.17g}, '
-                  f'q_relative_mismatch={result.geometry_q_relative_mismatch:.17g}, '
-                  f'geometry_warning={result.geometry_precision_warning}, '
+                  f'q={result.geometry.geometry.q:.17g}, '
                   f'root_warning={result.root.x_precision_limited}')
 
 
 if __name__ == '__main__':
     validate()
-    characterize_small_arcs()
+    validate_small_arcs()

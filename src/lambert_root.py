@@ -10,7 +10,7 @@ import math
 import sys
 
 from .lambert_root_preparation import evaluate_derivatives_zero_rev, initial_guess_zero_rev
-from .lambert_tof import TofStatus, evaluate_tof_zero_rev
+from .lambert_tof import TofStatus, _resolve_geometry, evaluate_tof_zero_rev
 
 # Diagnostic roundoff allowance, calibrated against the independently verified
 # forward evaluator. Its slope-based error estimate is not an interval proof.
@@ -88,8 +88,12 @@ def _householder_step(f, derivatives):
 
 
 def solve_x_zero_rev(target_time: float, lambda_: float,
-                     options: RootOptions = RootOptions()) -> RootResult:
-    """Solve M=0 for positive finite target T and finite |lambda|<1.
+                     options: RootOptions = RootOptions(), *,
+                     q: float | None = None) -> RootResult:
+    """Solve M=0 for positive finite target T and nondegenerate shape.
+
+    Optional q=c/s follows evaluate_tof_zero_rev's contract and is retained
+    through every forward, derivative, starter and diagnostic evaluation.
 
     Require BOTH |dx|<=x_atol+x_rtol*|x| and
     |T(x)-target|<=tof_atol+tof_rtol*target. No velocities, ephemerides, GPU
@@ -104,12 +108,13 @@ def solve_x_zero_rev(target_time: float, lambda_: float,
                                         options.tof_atol, options.tof_rtol)):
         return result
     try:
-        target, lam = float(target_time), float(lambda_)
+        target = float(target_time)
+        lam, _, _ = _resolve_geometry(lambda_, q)
         xa, xr, ta, tr = (float(v) for v in (options.x_atol, options.x_rtol,
                                              options.tof_atol, options.tof_rtol))
     except (TypeError, ValueError, OverflowError):
         return result
-    if (not math.isfinite(target) or target <= 0 or not math.isfinite(lam) or abs(lam) >= 1
+    if (not math.isfinite(target) or target <= 0
             or not all(math.isfinite(v) and v >= 0 for v in (xa, xr, ta, tr))
             or xr >= 1 or tr >= 1
             or type(options.max_iterations) is not int or options.max_iterations < 0
@@ -118,7 +123,7 @@ def solve_x_zero_rev(target_time: float, lambda_: float,
 
     def evaluate(point):
         result.tof_evaluations += 1
-        return evaluate_tof_zero_rev(point, lam)
+        return evaluate_tof_zero_rev(point, lam, q=q)
 
     def record(point, value):
         result.last_x, result.time_nondim = point, value.time_nondim
@@ -132,7 +137,7 @@ def solve_x_zero_rev(target_time: float, lambda_: float,
         result.status = status
         return result
 
-    guess = initial_guess_zero_rev(target, lam)
+    guess = initial_guess_zero_rev(target, lam, q=q)
     result.tof_evaluations += 2
     t0 = evaluate(0.)
     if t0.status != TofStatus.OK:
@@ -198,7 +203,7 @@ def solve_x_zero_rev(target_time: float, lambda_: float,
             if candidate is None:
                 return finish(RootStatus.RESOLUTION_LIMIT)
         elif iteration % 4 != 0 or residual_ok(f):
-            derivatives = evaluate_derivatives_zero_rev(x, lam)
+            derivatives = evaluate_derivatives_zero_rev(x, lam, q=q)
             result.tof_evaluations += 1
             if derivatives.status != TofStatus.OK:
                 result.derivative_failures += 1
@@ -241,7 +246,7 @@ def solve_x_zero_rev(target_time: float, lambda_: float,
             # A small step is not a forward x-error certificate on flat curves.
             # Unknown diagnostics stay None when the combined derivative API
             # cannot represent its higher derivatives, even if bisection worked.
-            final_derivatives = evaluate_derivatives_zero_rev(x, lam)
+            final_derivatives = evaluate_derivatives_zero_rev(x, lam, q=q)
             result.tof_evaluations += 1
             if final_derivatives.status == TofStatus.OK and final_derivatives.first < 0:
                 time_error = abs(result.residual)+TOF_ROUNDOFF_ULPS*math.ulp(value.time_nondim)

@@ -8,7 +8,9 @@ from dataclasses import dataclass
 from enum import IntEnum
 import math
 
-from .lambert_tof import SERIES_REL_TOL, TofStatus, evaluate_tof_zero_rev
+from .lambert_tof import (
+    SERIES_REL_TOL, TofStatus, _eta, _resolve_geometry, evaluate_tof_zero_rev,
+)
 
 # Higher derivatives amplify recurrence cancellation beyond the TOF series window.
 DERIVATIVE_X_MIN = 0.7
@@ -49,19 +51,25 @@ class InitialGuessResult:
     region: GuessRegion | None = None
 
 
-def _odd_complement(lam: float, power: int) -> float:
+def _odd_complement(lam: float, power: int, one_minus_lam: float) -> float:
     """1-lambda^odd_power without subtracting near equals at positive lambda=1."""
-    return -math.expm1(power*math.log(lam)) if lam > 0 else 1.0+(-lam)**power
+    if lam <= 0:
+        return 1.0+(-lam)**power
+    polynomial = 1.
+    for _ in range(1, power):
+        polynomial = 1+lam*polynomial
+    return one_minus_lam*polynomial
 
 
-def _derivative_series(x: float, lam: float) -> tuple[tuple[float, float, float] | None, int]:
+def _derivative_series(x: float, lam: float, q: float,
+                       one_minus_lam: float) -> tuple[tuple[float, float, float] | None, int]:
     """Differentiate T=sum a_n*d^n, d=1-x^2, in the positive-x local region.
 
     a_n=2*c_n*(1-lambda^(2*n+3))/(2*n+3), c_n=binomial(2*n,n)/4^n.
     The three sums are derivatives with respect to d; then apply the chain rule.
     """
-    d, q, l2 = (1-x)*(1+x), (1-lam)*(1+lam), lam*lam
-    complement = (1-lam)*(1+lam+l2)
+    d, l2 = (1-x)*(1+x), lam*lam
+    complement = one_minus_lam*(1+lam+l2)
     lam_power, coefficient = lam*l2, 1.0
     s1 = s2 = s3 = e1 = e2 = e3 = 0.0
     p1 = p2 = p3 = 1.0
@@ -99,34 +107,36 @@ def _derivative_series(x: float, lam: float) -> tuple[tuple[float, float, float]
     return None, MAX_DERIVATIVE_TERMS
 
 
-def evaluate_derivatives_zero_rev(x: float, lambda_: float) -> DerivativeResult:
+def evaluate_derivatives_zero_rev(x: float, lambda_: float, *,
+                                  q: float | None = None) -> DerivativeResult:
     """Return T, y, and first three x derivatives; never perform a root step.
 
     Reuses TofStatus. Failure has no partial values. NUMERICAL_RANGE includes
     derivative underflow even if T alone remains representable. series_terms
     counts a_n terms through n (n=0 is constant and does not affect derivatives).
+    Optional q follows evaluate_tof_zero_rev's retained-geometry contract.
     """
-    tof = evaluate_tof_zero_rev(x, lambda_)
+    tof = evaluate_tof_zero_rev(x, lambda_, q=q)
     if tof.status != TofStatus.OK:
         return DerivativeResult(tof.status)
-    x, lam = float(x), float(lambda_)
+    x = float(x)
+    lam, q, one_minus_lam = _resolve_geometry(lambda_, q)
     T, y = tof.time_nondim, tof.y
     terms = 0
     try:
         if x == 1:
-            a1 = _odd_complement(lam, 5)/5
-            a2 = (3/28)*_odd_complement(lam, 7)
-            a3 = (5/72)*_odd_complement(lam, 9)
+            a1 = _odd_complement(lam, 5, one_minus_lam)/5
+            a2 = (3/28)*_odd_complement(lam, 7, one_minus_lam)
+            a3 = (5/72)*_odd_complement(lam, 9, one_minus_lam)
             derivatives = (-2*a1, math.fsum((8*a2, -2*a1)), math.fsum((24*a2, -48*a3)))
             method = DerivativeMethod.PARABOLIC
         elif DERIVATIVE_X_MIN <= x <= DERIVATIVE_X_MAX:
-            derivatives, terms = _derivative_series(x, lam)
+            derivatives, terms = _derivative_series(x, lam, q, one_minus_lam)
             if derivatives is None:
                 return DerivativeResult(TofStatus.SERIES_NONCONVERGENCE, series_terms=terms)
             method = DerivativeMethod.SERIES
         else:
-            q = (1-lam)*(1+lam)
-            eta = q/(y+lam*x) if lam*x > 0 else y-lam*x
+            eta = _eta(x, lam, q, y)
             d = (1-x)*(1+x)
             # -2+2*lambda^3*x/y = -2*(q+lambda^2*eta/y), avoiding cancellation.
             first = math.fsum((3*T*x, -2*q, -2*lam*lam*(eta/y)))/d
@@ -147,12 +157,14 @@ def _log_ratio(a: float, b: float) -> float:
     return math.log1p((a-b)/b) if 0.5 <= ratio <= 2.0 else math.log(a)-math.log(b)
 
 
-def initial_guess_zero_rev(target_time: float, lambda_: float) -> InitialGuessResult:
+def initial_guess_zero_rev(target_time: float, lambda_: float, *,
+                           q: float | None = None) -> InitialGuessResult:
     """Paper's M=0 starter with the middle exponent rederived from log-time lines.
 
     T0=T(0), T1=T(1). target_time must be positive and finite. x0 is only an
     approximation. NUMERICAL_RANGE includes an x0 rounded to the excluded -1
     endpoint; no clipping or substitute guess is returned.
+    Optional q is carried to both threshold evaluations.
     """
     if isinstance(target_time, bool):
         return InitialGuessResult(TofStatus.INVALID_INPUT)
@@ -162,7 +174,8 @@ def initial_guess_zero_rev(target_time: float, lambda_: float) -> InitialGuessRe
         return InitialGuessResult(TofStatus.INVALID_INPUT)
     if not (math.isfinite(target) and target > 0):
         return InitialGuessResult(TofStatus.INVALID_INPUT)
-    t0, t1 = evaluate_tof_zero_rev(0., lambda_), evaluate_tof_zero_rev(1., lambda_)
+    t0 = evaluate_tof_zero_rev(0., lambda_, q=q)
+    t1 = evaluate_tof_zero_rev(1., lambda_, q=q)
     if t0.status != TofStatus.OK or t1.status != TofStatus.OK:
         return InitialGuessResult(t0.status if t0.status != TofStatus.OK else t1.status)
     T0, T1, lam = t0.time_nondim, t1.time_nondim, float(lambda_)

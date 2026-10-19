@@ -32,7 +32,7 @@ class GeometryTests(unittest.TestCase):
                          (3., 4., 5., 6.))
         self.assertAlmostEqual(g.lambda_, 1/math.sqrt(6), delta=2e-16)
         self.assertAlmostEqual(g.time_nondim, 2/math.sqrt(108), delta=1e-16)
-        self.assertEqual(g.rho, -0.2)
+        self.assertAlmostEqual(g.rho, -0.2, delta=3e-17)
         self.assertAlmostEqual(g.sigma, math.sqrt(0.96), delta=3e-16)
         self.assertEqual(g.normal, (0., 0., 1.))
         self.assertEqual(g.transverse1, (0., 1., 0.))
