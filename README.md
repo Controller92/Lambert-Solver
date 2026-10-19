@@ -11,6 +11,11 @@ for a supplied `x`, including the parabolic limit and stable near-parabolic seri
 See [the TOF increment](docs/second-increment.md) for its equations, analytical
 tests and reproducible independent high-precision validation. It does not find a root.
 
+`src/lambert_root_preparation.py` adds the first three TOF derivatives and a
+zero-revolution initial guess. See [the third increment](docs/third-increment.md)
+for the parabolic limits, corrected starter exponent, measured errors, and
+limitations. Root iteration and velocity reconstruction remain subsequent work.
+
 ## Interplanetary Trajectory Calculator
 
 This project is an application designed to calculate interplanetary trajectories using Lambert's problem. It provides a graphical user interface (GUI) for users to input various parameters related to their trajectory calculations.
