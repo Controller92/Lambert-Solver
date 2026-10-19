@@ -6,6 +6,11 @@ for conventions, validation, known legacy defects, and the next mathematical ste
 Run its standard-library tests with `python3 -m unittest discover -s tests -v`.
 This helper does not yet solve Lambert's time-of-flight equation.
 
+The next isolated layer, `src/lambert_tof.py`, evaluates zero-revolution `T(x, lambda)`
+for a supplied `x`, including the parabolic limit and stable near-parabolic series.
+See [the TOF increment](docs/second-increment.md) for its equations, analytical
+tests and reproducible independent high-precision validation. It does not find a root.
+
 ## Interplanetary Trajectory Calculator
 
 This project is an application designed to calculate interplanetary trajectories using Lambert's problem. It provides a graphical user interface (GUI) for users to input various parameters related to their trajectory calculations.
