@@ -1,0 +1,78 @@
+Python reference tests
+test_analytical_circular_quarter_and_three_quarter_arcs (test_lambert_geometry.GeometryTests.test_analytical_circular_quarter_and_three_quarter_arcs) ... ok
+test_independent_decimal_geometry_and_basis (test_lambert_geometry.GeometryTests.test_independent_decimal_geometry_and_basis) ... ok
+test_invalid_unsupported_and_degenerate_statuses (test_lambert_geometry.GeometryTests.test_invalid_unsupported_and_degenerate_statuses) ... ok
+test_nearly_antiparallel_and_unequal_nearly_parallel (test_lambert_geometry.GeometryTests.test_nearly_antiparallel_and_unequal_nearly_parallel) ... ok
+test_rotation_and_endpoint_reversal (test_lambert_geometry.GeometryTests.test_rotation_and_endpoint_reversal) ... ok
+test_similarity_scaling (test_lambert_geometry.GeometryTests.test_similarity_scaling) ... ok
+test_three_four_five_triangle (test_lambert_geometry.GeometryTests.test_three_four_five_triangle) ... ok
+test_general_3d_geometry_against_actual_decimal_inputs (test_lambert_precision.PrecisionTests.test_general_3d_geometry_against_actual_decimal_inputs) ... ok
+test_invalid_or_inconsistent_q_is_rejected_at_every_layer (test_lambert_precision.PrecisionTests.test_invalid_or_inconsistent_q_is_rejected_at_every_layer) ... ok
+test_parabolic_limits_retain_q_when_lambda_rounds (test_lambert_precision.PrecisionTests.test_parabolic_limits_retain_q_when_lambda_rounds) ... ok
+test_actual_tof_evaluation_count (test_lambert_root.RootTests.test_actual_tof_evaluation_count) ... ok
+test_analytic_points_and_actual_zero_step (test_lambert_root.RootTests.test_analytic_points_and_actual_zero_step) ... ok
+test_analytical_circular_short_and_long_arcs (test_lambert_root.RootTests.test_analytical_circular_short_and_long_arcs) ... ok
+test_five_unrepresentable_starters_recover_known_x (test_lambert_root.RootTests.test_five_unrepresentable_starters_recover_known_x) ... ok
+test_flat_long_arc_reports_x_conditioning (test_lambert_root.RootTests.test_flat_long_arc_reports_x_conditioning) ... ok
+test_forward_failure_is_reported (test_lambert_root.RootTests.test_forward_failure_is_reported) ... ok
+test_invalid_inputs_options_and_unrepresentable_upper_range (test_lambert_root.RootTests.test_invalid_inputs_options_and_unrepresentable_upper_range) ... ok
+test_iteration_budget_never_claims_success (test_lambert_root.RootTests.test_iteration_budget_never_claims_success) ... ok
+test_poor_starter_and_large_hyperbolic_derivative_underflow (test_lambert_root.RootTests.test_poor_starter_and_large_hyperbolic_derivative_underflow) ... ok
+test_unsafe_steps_and_unavailable_derivatives_use_bisection (test_lambert_root.RootTests.test_unsafe_steps_and_unavailable_derivatives_use_bisection) ... ok
+test_zero_step_without_small_residual_is_resolution_failure (test_lambert_root.RootTests.test_zero_step_without_small_residual_is_resolution_failure) ... ok
+test_all_failure_paths_return_no_partial_values (test_lambert_root_preparation.RootPreparationTests.test_all_failure_paths_return_no_partial_values) ... ok
+test_exact_parabolic_derivatives_against_decimal_limits (test_lambert_root_preparation.RootPreparationTests.test_exact_parabolic_derivatives_against_decimal_limits) ... ok
+test_parabolic_neighbors_and_series_switches (test_lambert_root_preparation.RootPreparationTests.test_parabolic_neighbors_and_series_switches) ... ok
+test_regular_minimum_energy_point (test_lambert_root_preparation.RootPreparationTests.test_regular_minimum_energy_point) ... ok
+test_short_time_starter_matches_inverse_parabolic_slope (test_lambert_root_preparation.RootPreparationTests.test_short_time_starter_matches_inverse_parabolic_slope) ... ok
+test_starter_continuity_and_monotonicity (test_lambert_root_preparation.RootPreparationTests.test_starter_continuity_and_monotonicity) ... ok
+test_starter_thresholds_and_correct_middle_inversion (test_lambert_root_preparation.RootPreparationTests.test_starter_thresholds_and_correct_middle_inversion) ... ok
+test_circular_arcs_scales_and_planes (test_lambert_solver.SolverTests.test_circular_arcs_scales_and_planes) ... ok
+test_elliptic_anomaly_long_arc (test_lambert_solver.SolverTests.test_elliptic_anomaly_long_arc) ... ok
+test_failures_never_have_velocities (test_lambert_solver.SolverTests.test_failures_never_have_velocities) ... ok
+test_hyperbolic_anomaly_time (test_lambert_solver.SolverTests.test_hyperbolic_anomaly_time) ... ok
+test_parabolic_barker_time (test_lambert_solver.SolverTests.test_parabolic_barker_time) ... ok
+test_root_conditioning_diagnostics_are_preserved (test_lambert_solver.SolverTests.test_root_conditioning_diagnostics_are_preserved) ... ok
+test_time_reversal (test_lambert_solver.SolverTests.test_time_reversal) ... ok
+test_tiny_circular_arcs_recover_both_velocities (test_lambert_solver.SolverTests.test_tiny_circular_arcs_recover_both_velocities) ... ok
+test_both_circular_arcs_reproduce_elapsed_time (test_lambert_tof.TimeOfFlightTests.test_both_circular_arcs_reproduce_elapsed_time) ... ok
+test_closed_hyperbolic_case (test_lambert_tof.TimeOfFlightTests.test_closed_hyperbolic_case) ... ok
+test_exhausted_series_reports_failure (test_lambert_tof.TimeOfFlightTests.test_exhausted_series_reports_failure) ... ok
+test_invalid_and_range_failures_have_no_values (test_lambert_tof.TimeOfFlightTests.test_invalid_and_range_failures_have_no_values) ... ok
+test_minimum_energy_identity (test_lambert_tof.TimeOfFlightTests.test_minimum_energy_identity) ... ok
+test_parabolic_identity_with_independent_decimal_arithmetic (test_lambert_tof.TimeOfFlightTests.test_parabolic_identity_with_independent_decimal_arithmetic) ... ok
+test_parabolic_neighbors_and_method_switches (test_lambert_tof.TimeOfFlightTests.test_parabolic_neighbors_and_method_switches) ... ok
+test_positive_decreasing_curve_on_representative_domains (test_lambert_tof.TimeOfFlightTests.test_positive_decreasing_curve_on_representative_domains) ... ok
+
+----------------------------------------------------------------------
+Ran 44 tests in 0.059s
+
+OK
+500-case Decimal/basis max length_relative: 2.220e-16
+500-case Decimal/basis max lambda_absolute: 2.220e-16
+500-case Decimal/basis max T_relative: 4.441e-16
+500-case Decimal/basis max rho_absolute: 2.220e-16
+500-case Decimal/basis max sigma_absolute: 4.441e-16
+500-case Decimal/basis max basis_absolute: 3.331e-16
+L-similarity max absolute lambda/T error: 5.551e-17
+Analytical circular maximum velocity error / circular speed: 3.519e-16
+Tiny circular maximum velocity error / circular speed: 3.331e-16
+Circular short/long T absolute errors: 2.220e-16, 4.441e-16
+
+Native CPU/GPU integration tests
+test_bad_python_layouts_never_reach_native_code (test_bindings.CudaTests.test_bad_python_layouts_never_reach_native_code) ... ok
+test_cpu_circular_and_noncontiguous_batches (test_bindings.CudaTests.test_cpu_circular_and_noncontiguous_batches) ... ok
+test_explicit_numerical_and_input_failures (test_bindings.CudaTests.test_explicit_numerical_and_input_failures) ... ok
+test_independent_contexts_and_zero_iteration_status (test_bindings.CudaTests.test_independent_contexts_and_zero_iteration_status) ... ok
+test_nearly_antiparallel_device_roundoff (test_bindings.CudaTests.test_nearly_antiparallel_device_roundoff) ... ok
+test_reuse_empty_tail_statuses_and_owned_lifetime (test_bindings.CudaTests.test_reuse_empty_tail_statuses_and_owned_lifetime) ... ok
+test_root_precision_tristate_and_budget (test_bindings.CudaTests.test_root_precision_tristate_and_budget) ... ok
+test_bad_python_layouts_never_reach_native_code (test_bindings.NativeTests.test_bad_python_layouts_never_reach_native_code) ... ok
+test_cpu_circular_and_noncontiguous_batches (test_bindings.NativeTests.test_cpu_circular_and_noncontiguous_batches) ... ok
+test_explicit_numerical_and_input_failures (test_bindings.NativeTests.test_explicit_numerical_and_input_failures) ... ok
+test_root_precision_tristate_and_budget (test_bindings.NativeTests.test_root_precision_tristate_and_budget) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.387s
+
+OK

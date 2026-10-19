@@ -4,6 +4,8 @@ The custom engine now runs in **CUDA C++**, with a shared C++ CPU path and
 NumPy batch bindings in `src/lambert_native.py`. See the
 [native engine walkthrough](docs/seventh-increment.md) for build instructions,
 API examples, independent accuracy checks and measured GPU performance.
+The [first optimization pass](docs/eighth-increment.md) reduces representative
+search kernel time by 17.9% and includes a reproducible baseline comparison.
 The Python mathematical implementation remains the independently validated
 reference. Multirevolution solutions and legacy GUI integration are still separate work.
 

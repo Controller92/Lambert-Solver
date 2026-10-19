@@ -1,5 +1,9 @@
 # Native CPU/CUDA results, 2026-10-19
 
+This report preserves the first native baseline. See the
+[eighth increment](eighth-increment.md) for the current optimization results
+and matched before/after timings.
+
 The source, contracts and reproduction commands are in the
 [seventh increment](seventh-increment.md). Raw measurements are committed in
 `validation/results/native-baseline.json` and `native-accuracy.txt`.

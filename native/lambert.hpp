@@ -128,8 +128,10 @@ template <int N> LB_HD double small_sum(const double (&values)[N]) {
     return total;
 }
 LB_HD double sum2(double a, double b) {
-    const double x[2] = {a, b};
-    return small_sum(x);
+    // One binary64 addition already rounds the exact two-term sum. Expansion
+    // storage is needed only when a later term can expose its lost low part.
+    double total = a + b;
+    return finite(total) ? total : missing;
 }
 LB_HD double sum3(double a, double b, double c) {
     const double x[3] = {a, b, c};
@@ -308,9 +310,10 @@ LB_HD void compensated_add(double term, double &sum, double &correction) {
     correction = (updated - sum) - v;
     sum = updated;
 }
-LB_HD Derivatives derivatives(double x, Shape s) {
+// The supplied TOF must be the evaluation at this same (x, s). Root iteration
+// already owns it, so derivative and conditioning checks need no repeat call.
+LB_HD Derivatives derivatives(double x, Shape s, Tof t) {
     Derivatives r;
-    Tof t = tof(x, s);
     r.status = t.status;
     if (t.status != 0)
         return r;
@@ -382,15 +385,17 @@ LB_HD Derivatives derivatives(double x, Shape s) {
     r.third = c;
     return r;
 }
+LB_HD Derivatives derivatives(double x, Shape s) {
+    return derivatives(x, s, tof(x, s));
+}
 LB_HD double log_ratio(double a, double b) {
     double ratio = a / b;
     return ratio >= .5 && ratio <= 2. ? ::log1p((a - b) / b) : ::log(a) - ::log(b);
 }
-LB_HD Guess guess(double target, Shape s) {
+LB_HD Guess guess(double target, Shape s, Tof t0, Tof t1) {
     Guess r;
     if (!finite(target) || target <= 0.)
         return r;
-    Tof t0 = tof(0., s), t1 = tof(1., s);
     if (t0.status || t1.status) {
         r.status = t0.status ? t0.status : t1.status;
         return r;
@@ -410,6 +415,9 @@ LB_HD Guess guess(double target, Shape s) {
         r.x = x;
     }
     return r;
+}
+LB_HD Guess guess(double target, Shape s) {
+    return guess(target, s, tof(0., s), tof(1., s));
 }
 LB_HD bool valid(Options o) {
     return finite(o.x_atol) && o.x_atol >= 0. && finite(o.x_rtol) && o.x_rtol >= 0. &&
@@ -451,9 +459,8 @@ LB_HD Root solve_root(double target, Shape s, Options o = Options{}) {
     Root r;
     if (!s.valid || !finite(target) || target <= 0. || !valid(o))
         return r;
-    Guess starter = guess(target, s);
-    r.evaluations += 2;
-    Tof t0 = counted_tof(r, 0., s);
+    Tof t0 = counted_tof(r, 0., s), t1 = counted_tof(r, 1., s);
+    Guess starter = guess(target, s, t0, t1);
     if (t0.status) {
         r.status = 5;
         r.evaluation_status = t0.status;
@@ -543,8 +550,7 @@ LB_HD Root solve_root(double target, Shape s, Options o = Options{}) {
                 return r;
             }
         } else if (iteration % 4 != 0 || residual_ok(f, target, o)) {
-            Derivatives d = derivatives(x, s);
-            ++r.evaluations;
+            Derivatives d = derivatives(x, s, value);
             if (d.status)
                 ++r.derivative_failures;
             double step = householder(f, d), proposed = x - step;
@@ -599,8 +605,7 @@ LB_HD Root solve_root(double target, Shape s, Options o = Options{}) {
             residual_ok(r.residual, target, o)) {
             r.x = x;
             r.y = value.y;
-            Derivatives d = derivatives(x, s);
-            ++r.evaluations;
+            Derivatives d = derivatives(x, s, value);
             if (d.status == 0 && d.first < 0.) {
                 r.estimated_x_error =
                     (::fabs(r.residual) + 16. * ulp(value.time)) / ::fabs(d.first);

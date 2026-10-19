@@ -1,0 +1,19 @@
+========= COMPUTE-SANITIZER
+test_bad_python_layouts_never_reach_native_code (test_bindings.CudaTests.test_bad_python_layouts_never_reach_native_code) ... ok
+test_cpu_circular_and_noncontiguous_batches (test_bindings.CudaTests.test_cpu_circular_and_noncontiguous_batches) ... ok
+test_explicit_numerical_and_input_failures (test_bindings.CudaTests.test_explicit_numerical_and_input_failures) ... ok
+test_independent_contexts_and_zero_iteration_status (test_bindings.CudaTests.test_independent_contexts_and_zero_iteration_status) ... ok
+test_nearly_antiparallel_device_roundoff (test_bindings.CudaTests.test_nearly_antiparallel_device_roundoff) ... ok
+test_reuse_empty_tail_statuses_and_owned_lifetime (test_bindings.CudaTests.test_reuse_empty_tail_statuses_and_owned_lifetime) ... ok
+test_root_precision_tristate_and_budget (test_bindings.CudaTests.test_root_precision_tristate_and_budget) ... ok
+test_bad_python_layouts_never_reach_native_code (test_bindings.NativeTests.test_bad_python_layouts_never_reach_native_code) ... ok
+test_cpu_circular_and_noncontiguous_batches (test_bindings.NativeTests.test_cpu_circular_and_noncontiguous_batches) ... ok
+test_explicit_numerical_and_input_failures (test_bindings.NativeTests.test_explicit_numerical_and_input_failures) ... ok
+test_root_precision_tristate_and_budget (test_bindings.NativeTests.test_root_precision_tristate_and_budget) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.383s
+
+OK
+========= LEAK SUMMARY: 0 bytes leaked in 0 allocations
+========= ERROR SUMMARY: 0 errors

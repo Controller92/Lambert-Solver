@@ -35,7 +35,9 @@ in the earlier increments; no external Lambert implementation is called by the e
 
 Two deliberate implementation adaptations are independently checked:
 
-- Bounded short floating-point expansions replace Python's math.fsum. Explicit
+- Bounded short floating-point expansions replace Python's math.fsum for
+  three/four terms. Since the eighth increment, two-term sums use one guarded
+  binary64 addition. Explicit
   FMA product remainders implement compensated transfer-plane products. Only
   these explicit FMAs are used; compiler contraction is disabled elsewhere.
 - Geometrically q<=1. Near antiparallel directions, device hypot rounding can
@@ -198,6 +200,11 @@ Numerical tables and measured timing results are recorded in
 [the native results report](native-results.md).
 
 ## Next performance work
+
+The [eighth increment](eighth-increment.md) completes the first optimization pass:
+TOF reuse and simpler two-term sums reduce search kernel time by 17.9%, with
+unchanged independent accuracy bounds. The resource and timing descriptions
+below record this increment's original baseline.
 
 The baseline uses 196 registers per thread, a 32-byte stack/local frame, zero
 compiler-reported spill stores/loads and no shared memory. At 128 threads per

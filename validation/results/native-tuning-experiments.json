@@ -1,0 +1,1457 @@
+{
+  "source_patch_base": "bc01ed04a0b803ad8ea563f989ea0c46b4f37a20",
+  "experiments": "Exploratory, default 128 threads, 65536 rows, seed 958707, rotating variant order; seven samples of five launches each. Kernel events only; no clocks/power control. Source patches and compiler commands are retained below; the timing procedure is described in the increment report. Unshipped norm and input-layout candidates only received benchmark accuracy checks, not full extreme-range validation.",
+  "hardware_counter_limit": "RmProfilingAdminOnly: 1 observed; administrator-only counters were not accessed and driver settings were not changed.",
+  "variants": {
+    "sum2": {
+      "source_patch": "--- a/native/lambert.hpp\n+++ b/native/lambert.hpp\n@@ -128,8 +128,8 @@\n     return total;\n }\n LB_HD double sum2(double a, double b) {\n-    const double x[2] = {a, b};\n-    return small_sum(x);\n+    double total = a + b;\n+    return finite(total) ? total : missing;\n }\n LB_HD double sum3(double a, double b, double c) {\n     const double x[3] = {a, b, c};\n",
+      "build_log": "<workspace>/work/cuda-12.8.1/toolkit/bin/nvcc -std=c++17 -O3 --shared --cudart=static -Xcompiler=-fPIC,-ffp-contract=off,-fno-fast-math,-Wall,-Wextra --fmad=false --prec-div=true --prec-sqrt=true --ftz=false -gencode=arch=compute_120,code=sm_120 --ptxas-options=-v,-warn-spills -lineinfo -ccbin /usr/bin/g++ -L<workspace>/work/cuda-12.8.1/toolkit/lib <workspace>/work/increment-8/sum2/cuda.cu <workspace>/work/increment-8/sum2/cpu.cpp -o <workspace>/work/increment-8/sum2/liblambert_cuda.so\nptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_ZN39_GLOBAL__N__3d3d053b_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' for 'sm_120'\nptxas info    : Function properties for _ZN39_GLOBAL__N__3d3d053b_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE\n    32 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 196 registers, used 0 barriers, 32 bytes cumulative stack size\nptxas info    : Compile time = 568.202 ms\n",
+      "library_sha256": "75d79732ce4c5fdd19c31330abd5859985835eff8cb916b15f1e4b788d6a2ee5"
+    },
+    "reuse": {
+      "source_patch": "--- a/native/lambert.hpp\n+++ b/native/lambert.hpp\n@@ -308,9 +308,8 @@\n     correction = (updated - sum) - v;\n     sum = updated;\n }\n-LB_HD Derivatives derivatives(double x, Shape s) {\n+LB_HD Derivatives derivatives(double x, Shape s, Tof t) {\n     Derivatives r;\n-    Tof t = tof(x, s);\n     r.status = t.status;\n     if (t.status != 0)\n         return r;\n@@ -382,15 +381,17 @@\n     r.third = c;\n     return r;\n }\n+LB_HD Derivatives derivatives(double x, Shape s) {\n+    return derivatives(x, s, tof(x, s));\n+}\n LB_HD double log_ratio(double a, double b) {\n     double ratio = a / b;\n     return ratio >= .5 && ratio <= 2. ? ::log1p((a - b) / b) : ::log(a) - ::log(b);\n }\n-LB_HD Guess guess(double target, Shape s) {\n+LB_HD Guess guess(double target, Shape s, Tof t0, Tof t1) {\n     Guess r;\n     if (!finite(target) || target <= 0.)\n         return r;\n-    Tof t0 = tof(0., s), t1 = tof(1., s);\n     if (t0.status || t1.status) {\n         r.status = t0.status ? t0.status : t1.status;\n         return r;\n@@ -451,9 +452,8 @@\n     Root r;\n     if (!s.valid || !finite(target) || target <= 0. || !valid(o))\n         return r;\n-    Guess starter = guess(target, s);\n-    r.evaluations += 2;\n-    Tof t0 = counted_tof(r, 0., s);\n+    Tof t0 = counted_tof(r, 0., s), t1 = counted_tof(r, 1., s);\n+    Guess starter = guess(target, s, t0, t1);\n     if (t0.status) {\n         r.status = 5;\n         r.evaluation_status = t0.status;\n@@ -543,8 +543,7 @@\n                 return r;\n             }\n         } else if (iteration % 4 != 0 || residual_ok(f, target, o)) {\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status)\n                 ++r.derivative_failures;\n             double step = householder(f, d), proposed = x - step;\n@@ -599,8 +598,7 @@\n             residual_ok(r.residual, target, o)) {\n             r.x = x;\n             r.y = value.y;\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status == 0 && d.first < 0.) {\n                 r.estimated_x_error =\n                     (::fabs(r.residual) + 16. * ulp(value.time)) / ::fabs(d.first);\n",
+      "build_log": "<workspace>/work/cuda-12.8.1/toolkit/bin/nvcc -std=c++17 -O3 --shared --cudart=static -Xcompiler=-fPIC,-ffp-contract=off,-fno-fast-math,-Wall,-Wextra --fmad=false --prec-div=true --prec-sqrt=true --ftz=false -gencode=arch=compute_120,code=sm_120 --ptxas-options=-v,-warn-spills -lineinfo -ccbin /usr/bin/g++ -L<workspace>/work/cuda-12.8.1/toolkit/lib <workspace>/work/increment-8/reuse/cuda.cu <workspace>/work/increment-8/reuse/cpu.cpp -o <workspace>/work/increment-8/reuse/liblambert_cuda.so\nptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_ZN39_GLOBAL__N__61df89d8_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' for 'sm_120'\nptxas info    : Function properties for _ZN39_GLOBAL__N__61df89d8_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE\n    32 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 195 registers, used 0 barriers, 32 bytes cumulative stack size\nptxas info    : Compile time = 478.403 ms\n",
+      "library_sha256": "7b901044c0840e4f16120bbc33acb0e0d6c021c2e473cf1a5e1a33112ee7c1fc"
+    },
+    "both": {
+      "source_patch": "--- a/native/lambert.hpp\n+++ b/native/lambert.hpp\n@@ -128,8 +128,8 @@\n     return total;\n }\n LB_HD double sum2(double a, double b) {\n-    const double x[2] = {a, b};\n-    return small_sum(x);\n+    double total = a + b;\n+    return finite(total) ? total : missing;\n }\n LB_HD double sum3(double a, double b, double c) {\n     const double x[3] = {a, b, c};\n@@ -308,9 +308,8 @@\n     correction = (updated - sum) - v;\n     sum = updated;\n }\n-LB_HD Derivatives derivatives(double x, Shape s) {\n+LB_HD Derivatives derivatives(double x, Shape s, Tof t) {\n     Derivatives r;\n-    Tof t = tof(x, s);\n     r.status = t.status;\n     if (t.status != 0)\n         return r;\n@@ -382,15 +381,17 @@\n     r.third = c;\n     return r;\n }\n+LB_HD Derivatives derivatives(double x, Shape s) {\n+    return derivatives(x, s, tof(x, s));\n+}\n LB_HD double log_ratio(double a, double b) {\n     double ratio = a / b;\n     return ratio >= .5 && ratio <= 2. ? ::log1p((a - b) / b) : ::log(a) - ::log(b);\n }\n-LB_HD Guess guess(double target, Shape s) {\n+LB_HD Guess guess(double target, Shape s, Tof t0, Tof t1) {\n     Guess r;\n     if (!finite(target) || target <= 0.)\n         return r;\n-    Tof t0 = tof(0., s), t1 = tof(1., s);\n     if (t0.status || t1.status) {\n         r.status = t0.status ? t0.status : t1.status;\n         return r;\n@@ -451,9 +452,8 @@\n     Root r;\n     if (!s.valid || !finite(target) || target <= 0. || !valid(o))\n         return r;\n-    Guess starter = guess(target, s);\n-    r.evaluations += 2;\n-    Tof t0 = counted_tof(r, 0., s);\n+    Tof t0 = counted_tof(r, 0., s), t1 = counted_tof(r, 1., s);\n+    Guess starter = guess(target, s, t0, t1);\n     if (t0.status) {\n         r.status = 5;\n         r.evaluation_status = t0.status;\n@@ -543,8 +543,7 @@\n                 return r;\n             }\n         } else if (iteration % 4 != 0 || residual_ok(f, target, o)) {\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status)\n                 ++r.derivative_failures;\n             double step = householder(f, d), proposed = x - step;\n@@ -599,8 +598,7 @@\n             residual_ok(r.residual, target, o)) {\n             r.x = x;\n             r.y = value.y;\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status == 0 && d.first < 0.) {\n                 r.estimated_x_error =\n                     (::fabs(r.residual) + 16. * ulp(value.time)) / ::fabs(d.first);\n",
+      "build_log": "<workspace>/work/cuda-12.8.1/toolkit/bin/nvcc -std=c++17 -O3 --shared --cudart=static -Xcompiler=-fPIC,-ffp-contract=off,-fno-fast-math,-Wall,-Wextra --fmad=false --prec-div=true --prec-sqrt=true --ftz=false -gencode=arch=compute_120,code=sm_120 --ptxas-options=-v,-warn-spills -lineinfo -ccbin /usr/bin/g++ -L<workspace>/work/cuda-12.8.1/toolkit/lib <workspace>/work/increment-8/both/cuda.cu <workspace>/work/increment-8/both/cpu.cpp -o <workspace>/work/increment-8/both/liblambert_cuda.so\nptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_ZN39_GLOBAL__N__da1e592d_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' for 'sm_120'\nptxas info    : Function properties for _ZN39_GLOBAL__N__da1e592d_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE\n    32 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 197 registers, used 0 barriers, 32 bytes cumulative stack size\nptxas info    : Compile time = 464.590 ms\n",
+      "library_sha256": "715a8fb3d5f7f7e1f8375d4c71c553f63b515025f7bd7a1c7afd6917bfda646b"
+    },
+    "storage": {
+      "source_patch": "--- a/native/lambert.hpp\n+++ b/native/lambert.hpp\n@@ -99,37 +99,45 @@\n \n // Short error-free expansions retain cancellation-sensitive sums. The number\n // of terms is bounded at compile time (at most four), never dynamically allocated.\n+struct Expansion {\n+    double a=0., b=0., c=0., d=0.;\n+    LB_HD double get(int i) const { return i==0 ? a : i==1 ? b : i==2 ? c : d; }\n+    LB_HD void set(int i, double value) {\n+        if (i==0) a=value;\n+        else if(i==1) b=value;\n+        else if(i==2) c=value;\n+        else d=value;\n+    }\n+};\n template <int N> LB_HD double small_sum(const double (&values)[N]) {\n-    double partial[N];\n-    int count = 0;\n-    for (int j = 0; j < N; ++j) {\n-        double x = values[j];\n-        int next = 0;\n-        for (int k = 0; k < count; ++k) {\n-            double y = partial[k];\n-            if (::fabs(x) < ::fabs(y)) {\n-                double temp = x;\n-                x = y;\n-                y = temp;\n-            }\n-            double high = x + y, low = y - (high - x);\n-            if (!finite(high))\n-                return missing;\n-            if (low != 0.)\n-                partial[next++] = low;\n-            x = high;\n-        }\n-        partial[next] = x;\n-        count = next + 1;\n-    }\n-    double total = 0.;\n-    for (int k = 0; k < count; ++k)\n-        total += partial[k];\n+    Expansion partial;\n+    int count=0;\n+#pragma unroll\n+    for(int j=0;j<N;++j) {\n+        double x=values[j];\n+        int next=0;\n+#pragma unroll\n+        for(int k=0;k<N;++k) {\n+            if(k<count) {\n+                double y=partial.get(k);\n+                if(::fabs(x)<::fabs(y)) { double temp=x; x=y; y=temp; }\n+                double high=x+y, low=y-(high-x);\n+                if(!finite(high)) return missing;\n+                if(low!=0.) partial.set(next++,low);\n+                x=high;\n+            }\n+        }\n+        partial.set(next,x);\n+        count=next+1;\n+    }\n+    double total=0.;\n+#pragma unroll\n+    for(int k=0;k<N;++k) { if(k<count) total+=partial.get(k); }\n     return total;\n }\n LB_HD double sum2(double a, double b) {\n-    const double x[2] = {a, b};\n-    return small_sum(x);\n+    double total = a + b;\n+    return finite(total) ? total : missing;\n }\n LB_HD double sum3(double a, double b, double c) {\n     const double x[3] = {a, b, c};\n@@ -308,9 +316,8 @@\n     correction = (updated - sum) - v;\n     sum = updated;\n }\n-LB_HD Derivatives derivatives(double x, Shape s) {\n+LB_HD Derivatives derivatives(double x, Shape s, Tof t) {\n     Derivatives r;\n-    Tof t = tof(x, s);\n     r.status = t.status;\n     if (t.status != 0)\n         return r;\n@@ -382,15 +389,17 @@\n     r.third = c;\n     return r;\n }\n+LB_HD Derivatives derivatives(double x, Shape s) {\n+    return derivatives(x, s, tof(x, s));\n+}\n LB_HD double log_ratio(double a, double b) {\n     double ratio = a / b;\n     return ratio >= .5 && ratio <= 2. ? ::log1p((a - b) / b) : ::log(a) - ::log(b);\n }\n-LB_HD Guess guess(double target, Shape s) {\n+LB_HD Guess guess(double target, Shape s, Tof t0, Tof t1) {\n     Guess r;\n     if (!finite(target) || target <= 0.)\n         return r;\n-    Tof t0 = tof(0., s), t1 = tof(1., s);\n     if (t0.status || t1.status) {\n         r.status = t0.status ? t0.status : t1.status;\n         return r;\n@@ -451,9 +460,8 @@\n     Root r;\n     if (!s.valid || !finite(target) || target <= 0. || !valid(o))\n         return r;\n-    Guess starter = guess(target, s);\n-    r.evaluations += 2;\n-    Tof t0 = counted_tof(r, 0., s);\n+    Tof t0 = counted_tof(r, 0., s), t1 = counted_tof(r, 1., s);\n+    Guess starter = guess(target, s, t0, t1);\n     if (t0.status) {\n         r.status = 5;\n         r.evaluation_status = t0.status;\n@@ -543,8 +551,7 @@\n                 return r;\n             }\n         } else if (iteration % 4 != 0 || residual_ok(f, target, o)) {\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status)\n                 ++r.derivative_failures;\n             double step = householder(f, d), proposed = x - step;\n@@ -599,8 +606,7 @@\n             residual_ok(r.residual, target, o)) {\n             r.x = x;\n             r.y = value.y;\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status == 0 && d.first < 0.) {\n                 r.estimated_x_error =\n                     (::fabs(r.residual) + 16. * ulp(value.time)) / ::fabs(d.first);\n",
+      "build_log": "<workspace>/work/cuda-12.8.1/toolkit/bin/nvcc -std=c++17 -O3 --shared --cudart=static -Xcompiler=-fPIC,-ffp-contract=off,-fno-fast-math,-Wall,-Wextra --fmad=false --prec-div=true --prec-sqrt=true --ftz=false -gencode=arch=compute_120,code=sm_120 --ptxas-options=-v,-warn-spills -lineinfo -ccbin /usr/bin/g++ -L<workspace>/work/cuda-12.8.1/toolkit/lib <workspace>/work/increment-8/storage/cuda.cu <workspace>/work/increment-8/storage/cpu.cpp -o <workspace>/work/increment-8/storage/liblambert_cuda.so\nptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_ZN39_GLOBAL__N__aa53a566_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' for 'sm_120'\nptxas info    : Function properties for _ZN39_GLOBAL__N__aa53a566_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 194 registers, used 0 barriers\nptxas info    : Compile time = 407.769 ms\n<workspace>/work/increment-8/storage/lambert.hpp:116: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  116 |     for(int j=0;j<N;++j) {\n      | \n<workspace>/work/increment-8/storage/lambert.hpp:120: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  120 |         for(int k=0;k<N;++k) {\n      | \n<workspace>/work/increment-8/storage/lambert.hpp:135: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  135 |     for(int k=0;k<N;++k) { if(k<count) total+=partial.get(k); }\n      | \nIn file included from <workspace>/work/increment-8/storage/api.h:2,\n                 from <workspace>/work/increment-8/storage/cpu.cpp:1:\n<workspace>/work/increment-8/storage/lambert.hpp:115: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  115 | #pragma unroll\n      | \n<workspace>/work/increment-8/storage/lambert.hpp:119: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  119 | #pragma unroll\n      | \n<workspace>/work/increment-8/storage/lambert.hpp:134: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  134 | #pragma unroll\n      | \n",
+      "library_sha256": "f5bb4c1c7e2428c30210e089aeaa8d9a2813b614681301473464362f36e2d793"
+    },
+    "storage128": {
+      "source_patch": "--- a/native/lambert.hpp\n+++ b/native/lambert.hpp\n@@ -99,37 +99,45 @@\n \n // Short error-free expansions retain cancellation-sensitive sums. The number\n // of terms is bounded at compile time (at most four), never dynamically allocated.\n+struct Expansion {\n+    double a=0., b=0., c=0., d=0.;\n+    LB_HD double get(int i) const { return i==0 ? a : i==1 ? b : i==2 ? c : d; }\n+    LB_HD void set(int i, double value) {\n+        if (i==0) a=value;\n+        else if(i==1) b=value;\n+        else if(i==2) c=value;\n+        else d=value;\n+    }\n+};\n template <int N> LB_HD double small_sum(const double (&values)[N]) {\n-    double partial[N];\n-    int count = 0;\n-    for (int j = 0; j < N; ++j) {\n-        double x = values[j];\n-        int next = 0;\n-        for (int k = 0; k < count; ++k) {\n-            double y = partial[k];\n-            if (::fabs(x) < ::fabs(y)) {\n-                double temp = x;\n-                x = y;\n-                y = temp;\n-            }\n-            double high = x + y, low = y - (high - x);\n-            if (!finite(high))\n-                return missing;\n-            if (low != 0.)\n-                partial[next++] = low;\n-            x = high;\n-        }\n-        partial[next] = x;\n-        count = next + 1;\n-    }\n-    double total = 0.;\n-    for (int k = 0; k < count; ++k)\n-        total += partial[k];\n+    Expansion partial;\n+    int count=0;\n+#pragma unroll\n+    for(int j=0;j<N;++j) {\n+        double x=values[j];\n+        int next=0;\n+#pragma unroll\n+        for(int k=0;k<N;++k) {\n+            if(k<count) {\n+                double y=partial.get(k);\n+                if(::fabs(x)<::fabs(y)) { double temp=x; x=y; y=temp; }\n+                double high=x+y, low=y-(high-x);\n+                if(!finite(high)) return missing;\n+                if(low!=0.) partial.set(next++,low);\n+                x=high;\n+            }\n+        }\n+        partial.set(next,x);\n+        count=next+1;\n+    }\n+    double total=0.;\n+#pragma unroll\n+    for(int k=0;k<N;++k) { if(k<count) total+=partial.get(k); }\n     return total;\n }\n LB_HD double sum2(double a, double b) {\n-    const double x[2] = {a, b};\n-    return small_sum(x);\n+    double total = a + b;\n+    return finite(total) ? total : missing;\n }\n LB_HD double sum3(double a, double b, double c) {\n     const double x[3] = {a, b, c};\n@@ -308,9 +316,8 @@\n     correction = (updated - sum) - v;\n     sum = updated;\n }\n-LB_HD Derivatives derivatives(double x, Shape s) {\n+LB_HD Derivatives derivatives(double x, Shape s, Tof t) {\n     Derivatives r;\n-    Tof t = tof(x, s);\n     r.status = t.status;\n     if (t.status != 0)\n         return r;\n@@ -382,15 +389,17 @@\n     r.third = c;\n     return r;\n }\n+LB_HD Derivatives derivatives(double x, Shape s) {\n+    return derivatives(x, s, tof(x, s));\n+}\n LB_HD double log_ratio(double a, double b) {\n     double ratio = a / b;\n     return ratio >= .5 && ratio <= 2. ? ::log1p((a - b) / b) : ::log(a) - ::log(b);\n }\n-LB_HD Guess guess(double target, Shape s) {\n+LB_HD Guess guess(double target, Shape s, Tof t0, Tof t1) {\n     Guess r;\n     if (!finite(target) || target <= 0.)\n         return r;\n-    Tof t0 = tof(0., s), t1 = tof(1., s);\n     if (t0.status || t1.status) {\n         r.status = t0.status ? t0.status : t1.status;\n         return r;\n@@ -451,9 +460,8 @@\n     Root r;\n     if (!s.valid || !finite(target) || target <= 0. || !valid(o))\n         return r;\n-    Guess starter = guess(target, s);\n-    r.evaluations += 2;\n-    Tof t0 = counted_tof(r, 0., s);\n+    Tof t0 = counted_tof(r, 0., s), t1 = counted_tof(r, 1., s);\n+    Guess starter = guess(target, s, t0, t1);\n     if (t0.status) {\n         r.status = 5;\n         r.evaluation_status = t0.status;\n@@ -543,8 +551,7 @@\n                 return r;\n             }\n         } else if (iteration % 4 != 0 || residual_ok(f, target, o)) {\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status)\n                 ++r.derivative_failures;\n             double step = householder(f, d), proposed = x - step;\n@@ -599,8 +606,7 @@\n             residual_ok(r.residual, target, o)) {\n             r.x = x;\n             r.y = value.y;\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status == 0 && d.first < 0.) {\n                 r.estimated_x_error =\n                     (::fabs(r.residual) + 16. * ulp(value.time)) / ::fabs(d.first);\n",
+      "build_log": "<workspace>/work/cuda-12.8.1/toolkit/bin/nvcc --maxrregcount=128 -std=c++17 -O3 --shared --cudart=static -Xcompiler=-fPIC,-ffp-contract=off,-fno-fast-math,-Wall,-Wextra --fmad=false --prec-div=true --prec-sqrt=true --ftz=false -gencode=arch=compute_120,code=sm_120 --ptxas-options=-v,-warn-spills -lineinfo -ccbin /usr/bin/g++ -L<workspace>/work/cuda-12.8.1/toolkit/lib <workspace>/work/increment-8/storage128/cuda.cu <workspace>/work/increment-8/storage128/cpu.cpp -o <workspace>/work/increment-8/storage128/liblambert_cuda.so\nptxas info    : Overriding maximum register limit 256 for '_ZN39_GLOBAL__N__a3943d60_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' with  128 of maxrregcount option\nptxas warning : Registers are spilled to local memory in function '_ZN39_GLOBAL__N__a3943d60_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE', 512 bytes spill stores, 520 bytes spill loads\nptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_ZN39_GLOBAL__N__a3943d60_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' for 'sm_120'\nptxas info    : Function properties for _ZN39_GLOBAL__N__a3943d60_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE\n    256 bytes stack frame, 512 bytes spill stores, 520 bytes spill loads\nptxas info    : Used 128 registers, used 0 barriers, 256 bytes cumulative stack size\nptxas info    : Compile time = 406.941 ms\n<workspace>/work/increment-8/storage128/lambert.hpp:116: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  116 |     for(int j=0;j<N;++j) {\n      | \n<workspace>/work/increment-8/storage128/lambert.hpp:120: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  120 |         for(int k=0;k<N;++k) {\n      | \n<workspace>/work/increment-8/storage128/lambert.hpp:135: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  135 |     for(int k=0;k<N;++k) { if(k<count) total+=partial.get(k); }\n      | \nIn file included from <workspace>/work/increment-8/storage128/api.h:2,\n                 from <workspace>/work/increment-8/storage128/cpu.cpp:1:\n<workspace>/work/increment-8/storage128/lambert.hpp:115: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  115 | #pragma unroll\n      | \n<workspace>/work/increment-8/storage128/lambert.hpp:119: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  119 | #pragma unroll\n      | \n<workspace>/work/increment-8/storage128/lambert.hpp:134: warning: ignoring \u2018#pragma unroll \u2019 [-Wunknown-pragmas]\n  134 | #pragma unroll\n      | \n",
+      "library_sha256": "387e8fb4ca95c0329a4dd73784490f2d363cdee7308383c0b3a89bc49fb3dac4"
+    },
+    "both128": {
+      "source_patch": "--- a/native/lambert.hpp\n+++ b/native/lambert.hpp\n@@ -128,8 +128,8 @@\n     return total;\n }\n LB_HD double sum2(double a, double b) {\n-    const double x[2] = {a, b};\n-    return small_sum(x);\n+    double total = a + b;\n+    return finite(total) ? total : missing;\n }\n LB_HD double sum3(double a, double b, double c) {\n     const double x[3] = {a, b, c};\n@@ -308,9 +308,8 @@\n     correction = (updated - sum) - v;\n     sum = updated;\n }\n-LB_HD Derivatives derivatives(double x, Shape s) {\n+LB_HD Derivatives derivatives(double x, Shape s, Tof t) {\n     Derivatives r;\n-    Tof t = tof(x, s);\n     r.status = t.status;\n     if (t.status != 0)\n         return r;\n@@ -382,15 +381,17 @@\n     r.third = c;\n     return r;\n }\n+LB_HD Derivatives derivatives(double x, Shape s) {\n+    return derivatives(x, s, tof(x, s));\n+}\n LB_HD double log_ratio(double a, double b) {\n     double ratio = a / b;\n     return ratio >= .5 && ratio <= 2. ? ::log1p((a - b) / b) : ::log(a) - ::log(b);\n }\n-LB_HD Guess guess(double target, Shape s) {\n+LB_HD Guess guess(double target, Shape s, Tof t0, Tof t1) {\n     Guess r;\n     if (!finite(target) || target <= 0.)\n         return r;\n-    Tof t0 = tof(0., s), t1 = tof(1., s);\n     if (t0.status || t1.status) {\n         r.status = t0.status ? t0.status : t1.status;\n         return r;\n@@ -451,9 +452,8 @@\n     Root r;\n     if (!s.valid || !finite(target) || target <= 0. || !valid(o))\n         return r;\n-    Guess starter = guess(target, s);\n-    r.evaluations += 2;\n-    Tof t0 = counted_tof(r, 0., s);\n+    Tof t0 = counted_tof(r, 0., s), t1 = counted_tof(r, 1., s);\n+    Guess starter = guess(target, s, t0, t1);\n     if (t0.status) {\n         r.status = 5;\n         r.evaluation_status = t0.status;\n@@ -543,8 +543,7 @@\n                 return r;\n             }\n         } else if (iteration % 4 != 0 || residual_ok(f, target, o)) {\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status)\n                 ++r.derivative_failures;\n             double step = householder(f, d), proposed = x - step;\n@@ -599,8 +598,7 @@\n             residual_ok(r.residual, target, o)) {\n             r.x = x;\n             r.y = value.y;\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status == 0 && d.first < 0.) {\n                 r.estimated_x_error =\n                     (::fabs(r.residual) + 16. * ulp(value.time)) / ::fabs(d.first);\n",
+      "build_log": "<workspace>/work/cuda-12.8.1/toolkit/bin/nvcc --maxrregcount=128 -std=c++17 -O3 --shared --cudart=static -Xcompiler=-fPIC,-ffp-contract=off,-fno-fast-math,-Wall,-Wextra --fmad=false --prec-div=true --prec-sqrt=true --ftz=false -gencode=arch=compute_120,code=sm_120 --ptxas-options=-v,-warn-spills -lineinfo -ccbin /usr/bin/g++ -L<workspace>/work/cuda-12.8.1/toolkit/lib <workspace>/work/increment-8/both128/cuda.cu <workspace>/work/increment-8/both128/cpu.cpp -o <workspace>/work/increment-8/both128/liblambert_cuda.so\nptxas info    : Overriding maximum register limit 256 for '_ZN39_GLOBAL__N__6f3fccad_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' with  128 of maxrregcount option\nptxas warning : Registers are spilled to local memory in function '_ZN39_GLOBAL__N__6f3fccad_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE', 520 bytes spill stores, 552 bytes spill loads\nptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_ZN39_GLOBAL__N__6f3fccad_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' for 'sm_120'\nptxas info    : Function properties for _ZN39_GLOBAL__N__6f3fccad_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE\n    288 bytes stack frame, 520 bytes spill stores, 552 bytes spill loads\nptxas info    : Used 128 registers, used 0 barriers, 288 bytes cumulative stack size\nptxas info    : Compile time = 484.001 ms\n",
+      "library_sha256": "fb143ac17edaf6fdb6b3137ae0ac95e6755f5b1596fa085ba84c35039d0979dc"
+    },
+    "both160": {
+      "source_patch": "--- a/native/lambert.hpp\n+++ b/native/lambert.hpp\n@@ -128,8 +128,8 @@\n     return total;\n }\n LB_HD double sum2(double a, double b) {\n-    const double x[2] = {a, b};\n-    return small_sum(x);\n+    double total = a + b;\n+    return finite(total) ? total : missing;\n }\n LB_HD double sum3(double a, double b, double c) {\n     const double x[3] = {a, b, c};\n@@ -308,9 +308,8 @@\n     correction = (updated - sum) - v;\n     sum = updated;\n }\n-LB_HD Derivatives derivatives(double x, Shape s) {\n+LB_HD Derivatives derivatives(double x, Shape s, Tof t) {\n     Derivatives r;\n-    Tof t = tof(x, s);\n     r.status = t.status;\n     if (t.status != 0)\n         return r;\n@@ -382,15 +381,17 @@\n     r.third = c;\n     return r;\n }\n+LB_HD Derivatives derivatives(double x, Shape s) {\n+    return derivatives(x, s, tof(x, s));\n+}\n LB_HD double log_ratio(double a, double b) {\n     double ratio = a / b;\n     return ratio >= .5 && ratio <= 2. ? ::log1p((a - b) / b) : ::log(a) - ::log(b);\n }\n-LB_HD Guess guess(double target, Shape s) {\n+LB_HD Guess guess(double target, Shape s, Tof t0, Tof t1) {\n     Guess r;\n     if (!finite(target) || target <= 0.)\n         return r;\n-    Tof t0 = tof(0., s), t1 = tof(1., s);\n     if (t0.status || t1.status) {\n         r.status = t0.status ? t0.status : t1.status;\n         return r;\n@@ -451,9 +452,8 @@\n     Root r;\n     if (!s.valid || !finite(target) || target <= 0. || !valid(o))\n         return r;\n-    Guess starter = guess(target, s);\n-    r.evaluations += 2;\n-    Tof t0 = counted_tof(r, 0., s);\n+    Tof t0 = counted_tof(r, 0., s), t1 = counted_tof(r, 1., s);\n+    Guess starter = guess(target, s, t0, t1);\n     if (t0.status) {\n         r.status = 5;\n         r.evaluation_status = t0.status;\n@@ -543,8 +543,7 @@\n                 return r;\n             }\n         } else if (iteration % 4 != 0 || residual_ok(f, target, o)) {\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status)\n                 ++r.derivative_failures;\n             double step = householder(f, d), proposed = x - step;\n@@ -599,8 +598,7 @@\n             residual_ok(r.residual, target, o)) {\n             r.x = x;\n             r.y = value.y;\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status == 0 && d.first < 0.) {\n                 r.estimated_x_error =\n                     (::fabs(r.residual) + 16. * ulp(value.time)) / ::fabs(d.first);\n",
+      "build_log": "<workspace>/work/cuda-12.8.1/toolkit/bin/nvcc --maxrregcount=160 -std=c++17 -O3 --shared --cudart=static -Xcompiler=-fPIC,-ffp-contract=off,-fno-fast-math,-Wall,-Wextra --fmad=false --prec-div=true --prec-sqrt=true --ftz=false -gencode=arch=compute_120,code=sm_120 --ptxas-options=-v,-warn-spills -lineinfo -ccbin /usr/bin/g++ -L<workspace>/work/cuda-12.8.1/toolkit/lib <workspace>/work/increment-8/both160/cuda.cu <workspace>/work/increment-8/both160/cpu.cpp -o <workspace>/work/increment-8/both160/liblambert_cuda.so\nptxas info    : Overriding maximum register limit 256 for '_ZN39_GLOBAL__N__dd0ccecf_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' with  160 of maxrregcount option\nptxas warning : Registers are spilled to local memory in function '_ZN39_GLOBAL__N__dd0ccecf_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE', 224 bytes spill stores, 180 bytes spill loads\nptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_ZN39_GLOBAL__N__dd0ccecf_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' for 'sm_120'\nptxas info    : Function properties for _ZN39_GLOBAL__N__dd0ccecf_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE\n    176 bytes stack frame, 224 bytes spill stores, 180 bytes spill loads\nptxas info    : Used 160 registers, used 0 barriers, 176 bytes cumulative stack size\nptxas info    : Compile time = 466.393 ms\n",
+      "library_sha256": "d0fe2652c983cec95633c78c543c2f37eaaa14f95f9837fee8618b3d75e4e7e0"
+    },
+    "both96": {
+      "source_patch": "--- a/native/lambert.hpp\n+++ b/native/lambert.hpp\n@@ -128,8 +128,8 @@\n     return total;\n }\n LB_HD double sum2(double a, double b) {\n-    const double x[2] = {a, b};\n-    return small_sum(x);\n+    double total = a + b;\n+    return finite(total) ? total : missing;\n }\n LB_HD double sum3(double a, double b, double c) {\n     const double x[3] = {a, b, c};\n@@ -308,9 +308,8 @@\n     correction = (updated - sum) - v;\n     sum = updated;\n }\n-LB_HD Derivatives derivatives(double x, Shape s) {\n+LB_HD Derivatives derivatives(double x, Shape s, Tof t) {\n     Derivatives r;\n-    Tof t = tof(x, s);\n     r.status = t.status;\n     if (t.status != 0)\n         return r;\n@@ -382,15 +381,17 @@\n     r.third = c;\n     return r;\n }\n+LB_HD Derivatives derivatives(double x, Shape s) {\n+    return derivatives(x, s, tof(x, s));\n+}\n LB_HD double log_ratio(double a, double b) {\n     double ratio = a / b;\n     return ratio >= .5 && ratio <= 2. ? ::log1p((a - b) / b) : ::log(a) - ::log(b);\n }\n-LB_HD Guess guess(double target, Shape s) {\n+LB_HD Guess guess(double target, Shape s, Tof t0, Tof t1) {\n     Guess r;\n     if (!finite(target) || target <= 0.)\n         return r;\n-    Tof t0 = tof(0., s), t1 = tof(1., s);\n     if (t0.status || t1.status) {\n         r.status = t0.status ? t0.status : t1.status;\n         return r;\n@@ -451,9 +452,8 @@\n     Root r;\n     if (!s.valid || !finite(target) || target <= 0. || !valid(o))\n         return r;\n-    Guess starter = guess(target, s);\n-    r.evaluations += 2;\n-    Tof t0 = counted_tof(r, 0., s);\n+    Tof t0 = counted_tof(r, 0., s), t1 = counted_tof(r, 1., s);\n+    Guess starter = guess(target, s, t0, t1);\n     if (t0.status) {\n         r.status = 5;\n         r.evaluation_status = t0.status;\n@@ -543,8 +543,7 @@\n                 return r;\n             }\n         } else if (iteration % 4 != 0 || residual_ok(f, target, o)) {\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status)\n                 ++r.derivative_failures;\n             double step = householder(f, d), proposed = x - step;\n@@ -599,8 +598,7 @@\n             residual_ok(r.residual, target, o)) {\n             r.x = x;\n             r.y = value.y;\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status == 0 && d.first < 0.) {\n                 r.estimated_x_error =\n                     (::fabs(r.residual) + 16. * ulp(value.time)) / ::fabs(d.first);\n",
+      "build_log": "<workspace>/work/cuda-12.8.1/toolkit/bin/nvcc --maxrregcount=96 -std=c++17 -O3 --shared --cudart=static -Xcompiler=-fPIC,-ffp-contract=off,-fno-fast-math,-Wall,-Wextra --fmad=false --prec-div=true --prec-sqrt=true --ftz=false -gencode=arch=compute_120,code=sm_120 --ptxas-options=-v,-warn-spills -lineinfo -ccbin /usr/bin/g++ -L<workspace>/work/cuda-12.8.1/toolkit/lib <workspace>/work/increment-8/both96/cuda.cu <workspace>/work/increment-8/both96/cpu.cpp -o <workspace>/work/increment-8/both96/liblambert_cuda.so\nptxas info    : Overriding maximum register limit 256 for '_ZN39_GLOBAL__N__4e2beb20_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' with  96 of maxrregcount option\nptxas warning : Registers are spilled to local memory in function '_ZN39_GLOBAL__N__4e2beb20_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE', 1660 bytes spill stores, 1124 bytes spill loads\nptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_ZN39_GLOBAL__N__4e2beb20_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' for 'sm_120'\nptxas info    : Function properties for _ZN39_GLOBAL__N__4e2beb20_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE\n    432 bytes stack frame, 1660 bytes spill stores, 1124 bytes spill loads\nptxas info    : Used 96 registers, used 0 barriers, 432 bytes cumulative stack size\nptxas info    : Compile time = 496.000 ms\n",
+      "library_sha256": "5f300f60ba7fea94fcc125a4a85a4f59323ab0dc3e815dce5d52f92802317ed5"
+    },
+    "norm": {
+      "source_patch": "--- a/native/lambert.hpp\n+++ b/native/lambert.hpp\n@@ -91,7 +91,12 @@\n     return {a.x / k, a.y / k, a.z / k};\n }\n LB_HD double norm(Vec3 a) {\n-    return ::hypot(::hypot(a.x, a.y), a.z);\n+    double scale=max2(::fabs(a.x),max2(::fabs(a.y),::fabs(a.z)));\n+    if(scale==0. || !finite(scale)) return scale;\n+    int e=0;\n+    ::frexp(scale,&e);\n+    double x=::ldexp(a.x,-e), y=::ldexp(a.y,-e), z=::ldexp(a.z,-e);\n+    return ::ldexp(::sqrt(x*x+y*y+z*z),e);\n }\n LB_HD Vec3 cross(Vec3 a, Vec3 b) {\n     return {a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x};\n@@ -128,8 +133,8 @@\n     return total;\n }\n LB_HD double sum2(double a, double b) {\n-    const double x[2] = {a, b};\n-    return small_sum(x);\n+    double total = a + b;\n+    return finite(total) ? total : missing;\n }\n LB_HD double sum3(double a, double b, double c) {\n     const double x[3] = {a, b, c};\n@@ -308,9 +313,8 @@\n     correction = (updated - sum) - v;\n     sum = updated;\n }\n-LB_HD Derivatives derivatives(double x, Shape s) {\n+LB_HD Derivatives derivatives(double x, Shape s, Tof t) {\n     Derivatives r;\n-    Tof t = tof(x, s);\n     r.status = t.status;\n     if (t.status != 0)\n         return r;\n@@ -382,15 +386,17 @@\n     r.third = c;\n     return r;\n }\n+LB_HD Derivatives derivatives(double x, Shape s) {\n+    return derivatives(x, s, tof(x, s));\n+}\n LB_HD double log_ratio(double a, double b) {\n     double ratio = a / b;\n     return ratio >= .5 && ratio <= 2. ? ::log1p((a - b) / b) : ::log(a) - ::log(b);\n }\n-LB_HD Guess guess(double target, Shape s) {\n+LB_HD Guess guess(double target, Shape s, Tof t0, Tof t1) {\n     Guess r;\n     if (!finite(target) || target <= 0.)\n         return r;\n-    Tof t0 = tof(0., s), t1 = tof(1., s);\n     if (t0.status || t1.status) {\n         r.status = t0.status ? t0.status : t1.status;\n         return r;\n@@ -451,9 +457,8 @@\n     Root r;\n     if (!s.valid || !finite(target) || target <= 0. || !valid(o))\n         return r;\n-    Guess starter = guess(target, s);\n-    r.evaluations += 2;\n-    Tof t0 = counted_tof(r, 0., s);\n+    Tof t0 = counted_tof(r, 0., s), t1 = counted_tof(r, 1., s);\n+    Guess starter = guess(target, s, t0, t1);\n     if (t0.status) {\n         r.status = 5;\n         r.evaluation_status = t0.status;\n@@ -543,8 +548,7 @@\n                 return r;\n             }\n         } else if (iteration % 4 != 0 || residual_ok(f, target, o)) {\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status)\n                 ++r.derivative_failures;\n             double step = householder(f, d), proposed = x - step;\n@@ -599,8 +603,7 @@\n             residual_ok(r.residual, target, o)) {\n             r.x = x;\n             r.y = value.y;\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status == 0 && d.first < 0.) {\n                 r.estimated_x_error =\n                     (::fabs(r.residual) + 16. * ulp(value.time)) / ::fabs(d.first);\n",
+      "build_log": "<workspace>/work/cuda-12.8.1/toolkit/bin/nvcc -std=c++17 -O3 --shared --cudart=static -Xcompiler=-fPIC,-ffp-contract=off,-fno-fast-math,-Wall,-Wextra --fmad=false --prec-div=true --prec-sqrt=true --ftz=false -gencode=arch=compute_120,code=sm_120 --ptxas-options=-v,-warn-spills -lineinfo -ccbin /usr/bin/g++ -L<workspace>/work/cuda-12.8.1/toolkit/lib <workspace>/work/increment-8/norm/cuda.cu <workspace>/work/increment-8/norm/cpu.cpp -o <workspace>/work/increment-8/norm/liblambert_cuda.so\nptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_ZN39_GLOBAL__N__989d21a4_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' for 'sm_120'\nptxas info    : Function properties for _ZN39_GLOBAL__N__989d21a4_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE\n    32 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 197 registers, used 0 barriers, 32 bytes cumulative stack size\nptxas info    : Compile time = 499.485 ms\n",
+      "library_sha256": "119716622888b79174344761ae329e1eab92d9392cfbc33d060618beec49682f"
+    },
+    "soa_input": {
+      "source_patch": "--- a/native/lambert.hpp\n+++ b/native/lambert.hpp\n@@ -128,8 +128,8 @@\n     return total;\n }\n LB_HD double sum2(double a, double b) {\n-    const double x[2] = {a, b};\n-    return small_sum(x);\n+    double total = a + b;\n+    return finite(total) ? total : missing;\n }\n LB_HD double sum3(double a, double b, double c) {\n     const double x[3] = {a, b, c};\n@@ -308,9 +308,8 @@\n     correction = (updated - sum) - v;\n     sum = updated;\n }\n-LB_HD Derivatives derivatives(double x, Shape s) {\n+LB_HD Derivatives derivatives(double x, Shape s, Tof t) {\n     Derivatives r;\n-    Tof t = tof(x, s);\n     r.status = t.status;\n     if (t.status != 0)\n         return r;\n@@ -382,15 +381,17 @@\n     r.third = c;\n     return r;\n }\n+LB_HD Derivatives derivatives(double x, Shape s) {\n+    return derivatives(x, s, tof(x, s));\n+}\n LB_HD double log_ratio(double a, double b) {\n     double ratio = a / b;\n     return ratio >= .5 && ratio <= 2. ? ::log1p((a - b) / b) : ::log(a) - ::log(b);\n }\n-LB_HD Guess guess(double target, Shape s) {\n+LB_HD Guess guess(double target, Shape s, Tof t0, Tof t1) {\n     Guess r;\n     if (!finite(target) || target <= 0.)\n         return r;\n-    Tof t0 = tof(0., s), t1 = tof(1., s);\n     if (t0.status || t1.status) {\n         r.status = t0.status ? t0.status : t1.status;\n         return r;\n@@ -451,9 +452,8 @@\n     Root r;\n     if (!s.valid || !finite(target) || target <= 0. || !valid(o))\n         return r;\n-    Guess starter = guess(target, s);\n-    r.evaluations += 2;\n-    Tof t0 = counted_tof(r, 0., s);\n+    Tof t0 = counted_tof(r, 0., s), t1 = counted_tof(r, 1., s);\n+    Guess starter = guess(target, s, t0, t1);\n     if (t0.status) {\n         r.status = 5;\n         r.evaluation_status = t0.status;\n@@ -543,8 +543,7 @@\n                 return r;\n             }\n         } else if (iteration % 4 != 0 || residual_ok(f, target, o)) {\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status)\n                 ++r.derivative_failures;\n             double step = householder(f, d), proposed = x - step;\n@@ -599,8 +598,7 @@\n             residual_ok(r.residual, target, o)) {\n             r.x = x;\n             r.y = value.y;\n-            Derivatives d = derivatives(x, s);\n-            ++r.evaluations;\n+            Derivatives d = derivatives(x, s, value);\n             if (d.status == 0 && d.first < 0.) {\n                 r.estimated_x_error =\n                     (::fabs(r.residual) + 16. * ulp(value.time)) / ::fabs(d.first);\n--- a/native/cuda.cu\n+++ b/native/cuda.cu\n@@ -7,8 +7,14 @@\n __global__ void solve_kernel(const lambert::Input *input, lambert::Result *output, size_t count,\n                              lambert::Options options) {\n     size_t index = size_t(blockIdx.x) * blockDim.x + threadIdx.x;\n-    if (index < count)\n-        output[index] = lambert::solve(input[index], options);\n+    if (index < count) {\n+        const double *v = reinterpret_cast<const double *>(input);\n+        const int32_t *flags = reinterpret_cast<const int32_t *>(v+8*count);\n+        lambert::Input p{{v[index],v[count+index],v[2*count+index]},\n+                         {v[3*count+index],v[4*count+index],v[5*count+index]},\n+                         v[6*count+index],v[7*count+index],flags[2*index],flags[2*index+1]};\n+        output[index] = lambert::solve(p, options);\n+    }\n }\n struct Context {\n     lambert::Input *input = nullptr;\n",
+      "build_log": "<workspace>/work/cuda-12.8.1/toolkit/bin/nvcc -std=c++17 -O3 --shared --cudart=static -Xcompiler=-fPIC,-ffp-contract=off,-fno-fast-math,-Wall,-Wextra --fmad=false --prec-div=true --prec-sqrt=true --ftz=false -gencode=arch=compute_120,code=sm_120 --ptxas-options=-v,-warn-spills -lineinfo -ccbin /usr/bin/g++ -L<workspace>/work/cuda-12.8.1/toolkit/lib <workspace>/work/increment-8/soa_input/cuda.cu <workspace>/work/increment-8/soa_input/cpu.cpp -o <workspace>/work/increment-8/soa_input/liblambert_cuda.so\nptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_ZN39_GLOBAL__N__ae55fb9b_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' for 'sm_120'\nptxas info    : Function properties for _ZN39_GLOBAL__N__ae55fb9b_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE\n    32 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 197 registers, used 0 barriers, 32 bytes cumulative stack size\nptxas info    : Compile time = 481.951 ms\n",
+      "library_sha256": "cab074f7c551b8a41405e51f97bcc7f7026f8d6b88c189770802235270b9019e"
+    }
+  },
+  "measurements": {
+    "sum_and_reuse": [
+      {
+        "distribution": "circular",
+        "variant": "baseline",
+        "kernel_ms": 1.7175424098968506,
+        "samples": [
+          1.7097536325454712,
+          1.7130177021026611,
+          1.7182912826538086,
+          1.7171647548675537,
+          1.7175424098968506,
+          1.717952013015747,
+          1.7178176641464233
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 11.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "sum2",
+        "kernel_ms": 1.6678593158721924,
+        "samples": [
+          1.6605184078216553,
+          1.6605184078216553,
+          1.668172836303711,
+          1.6682624816894531,
+          1.6678593158721924,
+          1.6673920154571533,
+          1.6681535243988037
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 11.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "reuse",
+        "kernel_ms": 1.4535424709320068,
+        "samples": [
+          1.4480960369110107,
+          1.4465663433074951,
+          1.4537471532821655,
+          1.4538432359695435,
+          1.4535231590270996,
+          1.453932762145996,
+          1.4535424709320068
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "both",
+        "kernel_ms": 1.4121663570404053,
+        "samples": [
+          1.4063423871994019,
+          1.4056063890457153,
+          1.4121663570404053,
+          1.4121536016464233,
+          1.412172794342041,
+          1.412185549736023,
+          1.4124799966812134
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "baseline",
+        "kernel_ms": 8.252473831176758,
+        "samples": [
+          8.180742263793945,
+          8.31976318359375,
+          8.280025482177734,
+          8.202079772949219,
+          8.252473831176758,
+          8.257158279418945,
+          8.245882034301758
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 10.826644897460938
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "sum2",
+        "kernel_ms": 7.765388488769531,
+        "samples": [
+          7.843692779541016,
+          7.810534477233887,
+          7.729151725769043,
+          7.765388488769531,
+          7.744179725646973,
+          7.800621032714844,
+          7.72369909286499
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 10.826644897460938
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "reuse",
+        "kernel_ms": 7.246425628662109,
+        "samples": [
+          7.243923187255859,
+          7.246425628662109,
+          7.242342472076416,
+          7.279468536376953,
+          7.284505367279053,
+          7.268671989440918,
+          7.185881614685059
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 6.194122314453125
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "both",
+        "kernel_ms": 6.7875776290893555,
+        "samples": [
+          6.7875776290893555,
+          6.865664005279541,
+          6.795116424560547,
+          6.7450690269470215,
+          6.744537353515625,
+          6.855334281921387,
+          6.7466559410095215
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 6.194122314453125
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "baseline",
+        "kernel_ms": 8.288076400756836,
+        "samples": [
+          8.247750282287598,
+          8.26546573638916,
+          8.341676712036133,
+          8.221402168273926,
+          8.303020477294922,
+          8.288076400756836,
+          8.365017890930176
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 10.831893920898438
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "sum2",
+        "kernel_ms": 7.740525245666504,
+        "samples": [
+          7.720160007476807,
+          7.7790207862854,
+          7.740525245666504,
+          7.738221168518066,
+          7.791347503662109,
+          7.713088035583496,
+          7.817491054534912
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 10.831893920898438
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "reuse",
+        "kernel_ms": 7.240895748138428,
+        "samples": [
+          7.266316890716553,
+          7.2983808517456055,
+          7.240895748138428,
+          7.265702247619629,
+          7.202419281005859,
+          7.200697422027588,
+          7.201977729797363
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "both",
+        "kernel_ms": 6.778816223144531,
+        "samples": [
+          6.7723069190979,
+          6.854771614074707,
+          6.770349025726318,
+          6.746739387512207,
+          6.778816223144531,
+          6.788697719573975,
+          6.822522163391113
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "mixed",
+        "variant": "baseline",
+        "kernel_ms": 10.298611640930176,
+        "samples": [
+          10.298611640930176,
+          10.285382270812988,
+          10.26035213470459,
+          10.339341163635254,
+          10.282976150512695,
+          10.313177108764648,
+          10.33118724822998
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 10.84222412109375
+      },
+      {
+        "distribution": "mixed",
+        "variant": "sum2",
+        "kernel_ms": 9.7144193649292,
+        "samples": [
+          9.810905456542969,
+          9.702893257141113,
+          9.667449951171875,
+          9.7144193649292,
+          9.683385848999023,
+          9.735468864440918,
+          9.815999984741211
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 10.84222412109375
+      },
+      {
+        "distribution": "mixed",
+        "variant": "reuse",
+        "kernel_ms": 8.865880966186523,
+        "samples": [
+          8.867891311645508,
+          8.911763191223145,
+          8.851167678833008,
+          8.80652141571045,
+          8.865880966186523,
+          8.831544876098633,
+          8.927142143249512
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 6.066925048828125
+      },
+      {
+        "distribution": "mixed",
+        "variant": "both",
+        "kernel_ms": 8.306297302246094,
+        "samples": [
+          8.306297302246094,
+          8.387245178222656,
+          8.236019134521484,
+          8.264313697814941,
+          8.344659805297852,
+          8.375116348266602,
+          8.253222465515137
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 6.066925048828125
+      }
+    ],
+    "register_and_storage": [
+      {
+        "distribution": "circular",
+        "variant": "baseline",
+        "kernel_ms": 1.7176191806793213,
+        "samples": [
+          1.7097728252410889,
+          1.7178432941436768,
+          1.7179263830184937,
+          1.717977523803711,
+          1.7176191806793213,
+          1.7167936563491821,
+          1.7166528701782227
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 11.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "both",
+        "kernel_ms": 1.4120960235595703,
+        "samples": [
+          1.4055744409561157,
+          1.412992000579834,
+          1.412499189376831,
+          1.4118335247039795,
+          1.4120960235595703,
+          1.4119423627853394,
+          1.4125888347625732
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "storage",
+        "kernel_ms": 1.4246591329574585,
+        "samples": [
+          1.4230592250823975,
+          1.4249024391174316,
+          1.4249279499053955,
+          1.4236736297607422,
+          1.4246591329574585,
+          1.4237312078475952,
+          1.425222396850586
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "storage128",
+        "kernel_ms": 1.3935999870300293,
+        "samples": [
+          1.393561601638794,
+          1.3928511142730713,
+          1.3935999870300293,
+          1.391692876815796,
+          1.39400315284729,
+          1.3948160409927368,
+          1.3947263956069946
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "both128",
+        "kernel_ms": 1.3793472051620483,
+        "samples": [
+          1.3779199123382568,
+          1.3763456344604492,
+          1.377241611480713,
+          1.3793472051620483,
+          1.3808319568634033,
+          1.3817408084869385,
+          1.380396842956543
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "both160",
+        "kernel_ms": 1.460166335105896,
+        "samples": [
+          1.4603840112686157,
+          1.4577535390853882,
+          1.4598143100738525,
+          1.460166335105896,
+          1.4608639478683472,
+          1.4600447416305542,
+          1.4627968072891235
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "both96",
+        "kernel_ms": 1.3821696043014526,
+        "samples": [
+          1.3802239894866943,
+          1.3805568218231201,
+          1.3799808025360107,
+          1.3821696043014526,
+          1.3826175928115845,
+          1.382643222808838,
+          1.3833792209625244
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "baseline",
+        "kernel_ms": 8.242572784423828,
+        "samples": [
+          8.280428886413574,
+          8.262194633483887,
+          8.186079978942871,
+          8.218847274780273,
+          8.242572784423828,
+          8.241843223571777,
+          8.274425506591797
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 10.826644897460938
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "both",
+        "kernel_ms": 6.804070472717285,
+        "samples": [
+          6.843475341796875,
+          6.804070472717285,
+          6.7857985496521,
+          6.764415740966797,
+          6.807494163513184,
+          6.827622413635254,
+          6.751091003417969
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 6.194122314453125
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "storage",
+        "kernel_ms": 6.7933759689331055,
+        "samples": [
+          6.7890944480896,
+          6.830309867858887,
+          6.797183990478516,
+          6.7933759689331055,
+          6.732934474945068,
+          6.7995710372924805,
+          6.733811378479004
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 6.194122314453125
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "storage128",
+        "kernel_ms": 6.8095808029174805,
+        "samples": [
+          6.728243350982666,
+          6.784095764160156,
+          6.826834678649902,
+          6.923398494720459,
+          6.8095808029174805,
+          6.812838554382324,
+          6.761754035949707
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 6.194122314453125
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "both128",
+        "kernel_ms": 6.7804670333862305,
+        "samples": [
+          6.698451042175293,
+          6.776191711425781,
+          6.7804670333862305,
+          6.927117347717285,
+          6.858431816101074,
+          6.7468414306640625,
+          6.993682861328125
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 6.194122314453125
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "both160",
+        "kernel_ms": 6.624588966369629,
+        "samples": [
+          6.587436676025391,
+          6.596550941467285,
+          6.624588966369629,
+          6.633805274963379,
+          6.6298370361328125,
+          6.650764465332031,
+          6.530770778656006
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 6.194122314453125
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "both96",
+        "kernel_ms": 6.904646396636963,
+        "samples": [
+          6.893754005432129,
+          6.88183069229126,
+          7.012038230895996,
+          6.9136962890625,
+          7.010502815246582,
+          6.839084625244141,
+          6.904646396636963
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 6.194122314453125
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "baseline",
+        "kernel_ms": 8.257421493530273,
+        "samples": [
+          8.257421493530273,
+          8.2558012008667,
+          8.219615936279297,
+          8.162893295288086,
+          8.283020973205566,
+          8.28245735168457,
+          8.265581130981445
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 10.831893920898438
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "both",
+        "kernel_ms": 6.773446559906006,
+        "samples": [
+          6.849734306335449,
+          6.759359836578369,
+          6.749945640563965,
+          6.773446559906006,
+          6.862560272216797,
+          6.763270378112793,
+          6.80474853515625
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "storage",
+        "kernel_ms": 6.782764434814453,
+        "samples": [
+          6.803155422210693,
+          6.8010687828063965,
+          6.857842922210693,
+          6.765081882476807,
+          6.728781223297119,
+          6.782764434814453,
+          6.74810266494751
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "storage128",
+        "kernel_ms": 6.820070743560791,
+        "samples": [
+          6.768927574157715,
+          6.912223815917969,
+          6.833446502685547,
+          6.92913293838501,
+          6.816127777099609,
+          6.781772613525391,
+          6.820070743560791
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "both128",
+        "kernel_ms": 6.781292915344238,
+        "samples": [
+          6.821625709533691,
+          6.781292915344238,
+          6.7275261878967285,
+          6.759161472320557,
+          6.920358180999756,
+          6.741337776184082,
+          6.927187442779541
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "both160",
+        "kernel_ms": 6.585427284240723,
+        "samples": [
+          6.62241268157959,
+          6.595827579498291,
+          6.561023712158203,
+          6.561081886291504,
+          6.580608367919922,
+          6.640851020812988,
+          6.585427284240723
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "both96",
+        "kernel_ms": 6.905068874359131,
+        "samples": [
+          6.911654472351074,
+          7.195648193359375,
+          6.82596492767334,
+          6.905068874359131,
+          6.917215824127197,
+          6.900614261627197,
+          6.846803188323975
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "mixed",
+        "variant": "baseline",
+        "kernel_ms": 10.305107116699219,
+        "samples": [
+          10.343730926513672,
+          10.305107116699219,
+          10.273542404174805,
+          10.341209411621094,
+          10.385510444641113,
+          10.276646614074707,
+          10.270700454711914
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 10.84222412109375
+      },
+      {
+        "distribution": "mixed",
+        "variant": "both",
+        "kernel_ms": 8.302957534790039,
+        "samples": [
+          8.272083282470703,
+          8.225472450256348,
+          8.302957534790039,
+          8.343737602233887,
+          8.237024307250977,
+          8.36734676361084,
+          8.339922904968262
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 6.066925048828125
+      },
+      {
+        "distribution": "mixed",
+        "variant": "storage",
+        "kernel_ms": 8.349203109741211,
+        "samples": [
+          8.322469711303711,
+          8.357651710510254,
+          8.285989761352539,
+          8.368288040161133,
+          8.342419624328613,
+          8.3521146774292,
+          8.349203109741211
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 6.066925048828125
+      },
+      {
+        "distribution": "mixed",
+        "variant": "storage128",
+        "kernel_ms": 8.289158821105957,
+        "samples": [
+          8.233197212219238,
+          8.33994197845459,
+          8.279404640197754,
+          8.403303146362305,
+          8.278310775756836,
+          8.426874160766602,
+          8.289158821105957
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 6.066925048828125
+      },
+      {
+        "distribution": "mixed",
+        "variant": "both128",
+        "kernel_ms": 8.324012756347656,
+        "samples": [
+          8.25795841217041,
+          8.429235458374023,
+          8.337042808532715,
+          8.324012756347656,
+          8.32533073425293,
+          8.279507637023926,
+          8.314284324645996
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 6.066925048828125
+      },
+      {
+        "distribution": "mixed",
+        "variant": "both160",
+        "kernel_ms": 8.041650772094727,
+        "samples": [
+          8.08493423461914,
+          8.019366264343262,
+          8.041650772094727,
+          8.079667091369629,
+          7.9822845458984375,
+          8.086477279663086,
+          8.039142608642578
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 6.066925048828125
+      },
+      {
+        "distribution": "mixed",
+        "variant": "both96",
+        "kernel_ms": 8.450124740600586,
+        "samples": [
+          8.44068431854248,
+          8.551257133483887,
+          8.43706226348877,
+          8.462630271911621,
+          8.530802726745605,
+          8.442412376403809,
+          8.450124740600586
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 6.066925048828125
+      }
+    ],
+    "scaled_norm": [
+      {
+        "distribution": "circular",
+        "variant": "baseline",
+        "kernel_ms": 1.7102336883544922,
+        "samples": [
+          1.7102336883544922,
+          1.7094080448150635,
+          1.7076671123504639,
+          1.7076222896575928,
+          1.716646432876587,
+          1.717215895652771,
+          1.7166528701782227
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 11.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "both",
+        "kernel_ms": 1.4060351848602295,
+        "samples": [
+          1.405625581741333,
+          1.4050815105438232,
+          1.4060351848602295,
+          1.4049279689788818,
+          1.4085887670516968,
+          1.413004755973816,
+          1.4117183685302734
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "norm",
+        "kernel_ms": 1.4089343547821045,
+        "samples": [
+          1.4066816568374634,
+          1.4062848091125488,
+          1.4066112041473389,
+          1.4089343547821045,
+          1.409286379814148,
+          1.4688704013824463,
+          1.4133567810058594
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "baseline",
+        "kernel_ms": 8.274483680725098,
+        "samples": [
+          8.28133773803711,
+          8.160198211669922,
+          8.224543571472168,
+          8.194892883300781,
+          8.310688018798828,
+          8.274483680725098,
+          8.355097770690918
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 10.826644897460938
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "both",
+        "kernel_ms": 6.826207637786865,
+        "samples": [
+          6.827827453613281,
+          6.793574333190918,
+          6.826207637786865,
+          6.755641937255859,
+          6.8765692710876465,
+          6.8637375831604,
+          6.8081793785095215
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 6.194122314453125
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "norm",
+        "kernel_ms": 6.810054779052734,
+        "samples": [
+          6.74977970123291,
+          6.810054779052734,
+          6.81580114364624,
+          6.815072059631348,
+          6.788140773773193,
+          6.763980865478516,
+          6.8343610763549805
+        ],
+        "max_scaled_difference": 2.335547531577274e-15,
+        "mean_evaluations": 6.1941680908203125
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "baseline",
+        "kernel_ms": 8.26688003540039,
+        "samples": [
+          8.26688003540039,
+          8.277606010437012,
+          8.163782119750977,
+          8.228594779968262,
+          8.293325424194336,
+          8.232780456542969,
+          8.271628379821777
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 10.831893920898438
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "both",
+        "kernel_ms": 6.791014194488525,
+        "samples": [
+          6.84292459487915,
+          6.8095550537109375,
+          6.783679962158203,
+          6.7792510986328125,
+          6.846086025238037,
+          6.791014194488525,
+          6.7779645919799805
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "norm",
+        "kernel_ms": 6.803391933441162,
+        "samples": [
+          6.817971229553223,
+          6.821324825286865,
+          6.793670654296875,
+          6.83835506439209,
+          6.728825569152832,
+          6.7977728843688965,
+          6.803391933441162
+        ],
+        "max_scaled_difference": 2.0469309420188206e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "mixed",
+        "variant": "baseline",
+        "kernel_ms": 10.267609596252441,
+        "samples": [
+          10.238950729370117,
+          10.236140251159668,
+          10.320333480834961,
+          10.267609596252441,
+          10.375750541687012,
+          10.215328216552734,
+          10.285632133483887
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 10.84222412109375
+      },
+      {
+        "distribution": "mixed",
+        "variant": "both",
+        "kernel_ms": 8.302297592163086,
+        "samples": [
+          8.302297592163086,
+          8.361785888671875,
+          8.257708549499512,
+          8.34917163848877,
+          8.306976318359375,
+          8.292384147644043,
+          8.300614356994629
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 6.066925048828125
+      },
+      {
+        "distribution": "mixed",
+        "variant": "norm",
+        "kernel_ms": 8.296582221984863,
+        "samples": [
+          8.378969192504883,
+          8.296582221984863,
+          8.248172760009766,
+          8.337401390075684,
+          8.331449508666992,
+          8.281907081604004,
+          8.234809875488281
+        ],
+        "max_scaled_difference": 3.984348531354376e-15,
+        "mean_evaluations": 6.0669097900390625
+      }
+    ],
+    "input_layout": [
+      {
+        "distribution": "circular",
+        "variant": "baseline",
+        "kernel_ms": 1.7154560089111328,
+        "samples": [
+          1.7109311819076538,
+          1.708927869796753,
+          1.714188814163208,
+          1.7159936428070068,
+          1.7175935506820679,
+          1.7169408798217773,
+          1.7154560089111328
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 11.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "both",
+        "kernel_ms": 1.4117119312286377,
+        "samples": [
+          1.406163215637207,
+          1.405440092086792,
+          1.4127488136291504,
+          1.4111039638519287,
+          1.4117119312286377,
+          1.4124480485916138,
+          1.4119744300842285
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "circular",
+        "variant": "soa_input",
+        "kernel_ms": 1.410163164138794,
+        "samples": [
+          1.403987169265747,
+          1.4041919708251953,
+          1.404678463935852,
+          1.4103167057037354,
+          1.4101887941360474,
+          1.410163164138794,
+          1.4109567403793335
+        ],
+        "max_scaled_difference": 2.840319854655311e-16,
+        "mean_evaluations": 7.0
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "baseline",
+        "kernel_ms": 8.212301254272461,
+        "samples": [
+          8.186162948608398,
+          8.213613510131836,
+          8.212301254272461,
+          8.198451042175293,
+          8.252941131591797,
+          8.149696350097656,
+          8.338098526000977
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 10.826644897460938
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "both",
+        "kernel_ms": 6.800396919250488,
+        "samples": [
+          6.743161678314209,
+          6.784607887268066,
+          6.800396919250488,
+          6.881305694580078,
+          6.78775691986084,
+          6.820422172546387,
+          6.849318504333496
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 6.194122314453125
+      },
+      {
+        "distribution": "transfer_search",
+        "variant": "soa_input",
+        "kernel_ms": 6.801382541656494,
+        "samples": [
+          6.766240119934082,
+          6.809881687164307,
+          6.81516170501709,
+          6.834828853607178,
+          6.794995307922363,
+          6.801382541656494,
+          6.795238494873047
+        ],
+        "max_scaled_difference": 2.657467061660512e-15,
+        "mean_evaluations": 6.194122314453125
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "baseline",
+        "kernel_ms": 8.227506637573242,
+        "samples": [
+          8.190783500671387,
+          8.227506637573242,
+          8.298515319824219,
+          8.207391738891602,
+          8.201567649841309,
+          8.314099311828613,
+          8.298707962036133
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 10.831893920898438
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "both",
+        "kernel_ms": 6.771308898925781,
+        "samples": [
+          6.771308898925781,
+          6.772230625152588,
+          6.7622528076171875,
+          6.78801965713501,
+          6.750816345214844,
+          6.713632106781006,
+          6.784294128417969
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "rotated_search",
+        "variant": "soa_input",
+        "kernel_ms": 6.805881500244141,
+        "samples": [
+          6.7213568687438965,
+          6.805881500244141,
+          6.808889865875244,
+          6.7840704917907715,
+          6.853183746337891,
+          6.833075046539307,
+          6.794790744781494
+        ],
+        "max_scaled_difference": 3.032803955739044e-15,
+        "mean_evaluations": 6.194183349609375
+      },
+      {
+        "distribution": "mixed",
+        "variant": "baseline",
+        "kernel_ms": 10.30128002166748,
+        "samples": [
+          10.308249473571777,
+          10.199846267700195,
+          10.279411315917969,
+          10.306821823120117,
+          10.27684497833252,
+          10.30128002166748,
+          10.313868522644043
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 10.84222412109375
+      },
+      {
+        "distribution": "mixed",
+        "variant": "both",
+        "kernel_ms": 8.318029403686523,
+        "samples": [
+          8.311712265014648,
+          8.273612976074219,
+          8.318029403686523,
+          8.345388412475586,
+          8.271699905395508,
+          8.33580207824707,
+          8.365382194519043
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 6.066925048828125
+      },
+      {
+        "distribution": "mixed",
+        "variant": "soa_input",
+        "kernel_ms": 8.267801284790039,
+        "samples": [
+          8.260435104370117,
+          8.296825408935547,
+          8.317919731140137,
+          8.270636558532715,
+          8.258918762207031,
+          8.249631881713867,
+          8.267801284790039
+        ],
+        "max_scaled_difference": 4.442957294744368e-15,
+        "mean_evaluations": 6.066925048828125
+      }
+    ]
+  },
+  "static_instruction_counts": {
+    "baseline": {
+      "instructions_including_padding": 39720,
+      "non_nop_instructions": 18041,
+      "opcodes": {
+        "BRA": 1027,
+        "BREAK.RELIABLE": 36,
+        "BSSY.RECONVERGENT": 491,
+        "BSSY.RELIABLE": 32,
+        "BSYNC.RECONVERGENT": 491,
+        "BSYNC.RELIABLE": 32,
+        "CALL.REL.NOINC": 263,
+        "CS2R": 16,
+        "DADD": 2015,
+        "DFMA": 2588,
+        "DFMA.RM": 1,
+        "DFMA.RP": 1,
+        "DMUL": 1288,
+        "DMUL.RP": 1,
+        "DSETP.EQ.AND": 1,
+        "DSETP.EQ.OR": 11,
+        "DSETP.GE.AND": 5,
+        "DSETP.GE.OR": 1,
+        "DSETP.GEU.AND": 122,
+        "DSETP.GT.AND": 37,
+        "DSETP.GT.OR": 1,
+        "DSETP.GTU.AND": 79,
+        "DSETP.GTU.OR": 2,
+        "DSETP.LE.AND": 3,
+        "DSETP.LE.OR": 14,
+        "DSETP.LT.AND": 1,
+        "DSETP.LTU.OR": 14,
+        "DSETP.MAX.AND": 8,
+        "DSETP.MIN.AND": 33,
+        "DSETP.NAN.AND": 12,
+        "DSETP.NE.AND": 9,
+        "DSETP.NEU.AND": 163,
+        "DSETP.NEU.OR": 16,
+        "EXIT": 2,
+        "FFMA": 229,
+        "FSEL": 827,
+        "FSETP.GEU.AND": 231,
+        "FSETP.GEU.OR": 12,
+        "FSETP.GT.AND": 241,
+        "FSETP.GTU.AND": 1,
+        "FSETP.NEU.AND": 2,
+        "HFMA2": 128,
+        "I2F.F64.U32": 91,
+        "IABS": 9,
+        "IADD.64": 50,
+        "IADD3": 546,
+        "IMAD": 259,
+        "IMAD.U32": 18,
+        "IMAD.WIDE.U32": 9,
+        "IMNMX.U64": 50,
+        "ISETP.EQ.AND": 1,
+        "ISETP.EQ.OR": 42,
+        "ISETP.GE.AND": 32,
+        "ISETP.GE.U32.AND": 178,
+        "ISETP.GE.U64.AND": 1,
+        "ISETP.GT.AND": 51,
+        "ISETP.GT.U32.AND": 36,
+        "ISETP.GT.U32.OR": 1,
+        "ISETP.LT.OR": 2,
+        "ISETP.NE.AND": 346,
+        "ISETP.NE.OR": 3,
+        "ISETP.NE.S64.AND": 18,
+        "ISETP.NE.U32.AND": 2,
+        "LDC": 8,
+        "LDC.64": 5,
+        "LDCU": 2,
+        "LDCU.128": 1,
+        "LDCU.64": 10,
+        "LDG.E.64": 10,
+        "LDL.128": 303,
+        "LDL.64": 291,
+        "LEA": 27,
+        "LEA.HI": 36,
+        "LEA.HI.SX32": 3,
+        "LOP3.LUT": 614,
+        "MOV": 2245,
+        "MOV.64": 888,
+        "MUFU.RCP64H": 254,
+        "MUFU.RSQ64H": 67,
+        "NOP": 21679,
+        "P2R": 2,
+        "PLOP3.LUT": 5,
+        "PRMT": 32,
+        "RET.REL.NODEC": 2,
+        "S2R": 2,
+        "S2UR": 2,
+        "SEL": 72,
+        "SEL.64": 2,
+        "SHF.R.S32.HI": 23,
+        "STG.E.64": 30,
+        "STL.64": 267,
+        "UIADD3.64": 1,
+        "UMOV": 28,
+        "UMOV.64": 574,
+        "VIMNMX.S32": 2,
+        "WARPSYNC.ALL": 1
+      }
+    },
+    "optimized": {
+      "instructions_including_padding": 32480,
+      "non_nop_instructions": 14568,
+      "opcodes": {
+        "BRA": 810,
+        "BREAK.RELIABLE": 33,
+        "BSSY.RECONVERGENT": 373,
+        "BSSY.RELIABLE": 29,
+        "BSYNC.RECONVERGENT": 373,
+        "BSYNC.RELIABLE": 29,
+        "CALL.REL.NOINC": 220,
+        "CS2R": 16,
+        "DADD": 1590,
+        "DFMA": 2138,
+        "DFMA.RM": 1,
+        "DFMA.RP": 1,
+        "DMUL": 1140,
+        "DMUL.RP": 1,
+        "DSETP.EQ.AND": 1,
+        "DSETP.EQ.OR": 11,
+        "DSETP.GE.AND": 5,
+        "DSETP.GE.OR": 1,
+        "DSETP.GEU.AND": 65,
+        "DSETP.GT.AND": 31,
+        "DSETP.GT.OR": 1,
+        "DSETP.GTU.AND": 68,
+        "DSETP.GTU.OR": 2,
+        "DSETP.LE.AND": 3,
+        "DSETP.LE.OR": 11,
+        "DSETP.LT.AND": 1,
+        "DSETP.LTU.OR": 12,
+        "DSETP.MAX.AND": 5,
+        "DSETP.MIN.AND": 27,
+        "DSETP.NAN.AND": 9,
+        "DSETP.NE.AND": 9,
+        "DSETP.NEU.AND": 100,
+        "DSETP.NEU.OR": 10,
+        "EXIT": 2,
+        "FFMA": 193,
+        "FSEL": 640,
+        "FSETP.GEU.AND": 195,
+        "FSETP.GEU.OR": 10,
+        "FSETP.GT.AND": 203,
+        "FSETP.GTU.AND": 1,
+        "FSETP.NEU.AND": 2,
+        "HFMA2": 101,
+        "I2F.F64.U32": 73,
+        "IABS": 9,
+        "IADD.64": 24,
+        "IADD3": 410,
+        "IMAD": 196,
+        "IMAD.WIDE.U32": 7,
+        "IMNMX.U64": 44,
+        "ISETP.EQ.AND": 1,
+        "ISETP.EQ.OR": 34,
+        "ISETP.GE.AND": 23,
+        "ISETP.GE.U32.AND": 147,
+        "ISETP.GE.U64.AND": 1,
+        "ISETP.GT.AND": 42,
+        "ISETP.GT.U32.AND": 32,
+        "ISETP.GT.U32.OR": 1,
+        "ISETP.LT.OR": 2,
+        "ISETP.NE.AND": 285,
+        "ISETP.NE.OR": 3,
+        "ISETP.NE.S64.AND": 18,
+        "ISETP.NE.U32.AND": 2,
+        "LDC": 8,
+        "LDC.64": 5,
+        "LDCU": 2,
+        "LDCU.128": 1,
+        "LDCU.64": 10,
+        "LDG.E.64": 10,
+        "LDL.128": 264,
+        "LDL.64": 155,
+        "LEA": 27,
+        "LEA.HI": 32,
+        "LEA.HI.SX32": 3,
+        "LOP3.LUT": 517,
+        "MOV": 1955,
+        "MOV.64": 733,
+        "MUFU.RCP64H": 214,
+        "MUFU.RSQ64H": 55,
+        "NOP": 17912,
+        "P2R": 2,
+        "PLOP3.LUT": 5,
+        "PRMT": 32,
+        "RET.REL.NODEC": 2,
+        "S2R": 2,
+        "S2UR": 2,
+        "SEL": 60,
+        "SEL.64": 2,
+        "SHF.R.S32.HI": 23,
+        "STG.E.64": 30,
+        "STL.64": 116,
+        "UIADD3.64": 1,
+        "UMOV": 25,
+        "UMOV.64": 445,
+        "VIMNMX.S32": 2,
+        "WARPSYNC.ALL": 1
+      }
+    },
+    "storage": {
+      "instructions_including_padding": 29840,
+      "non_nop_instructions": 13560,
+      "opcodes": {
+        "BRA": 739,
+        "BREAK.RELIABLE": 39,
+        "BSSY.RECONVERGENT": 357,
+        "BSSY.RELIABLE": 35,
+        "BSYNC.RECONVERGENT": 357,
+        "BSYNC.RELIABLE": 35,
+        "CALL.REL.NOINC": 220,
+        "DADD": 1085,
+        "DFMA": 2138,
+        "DFMA.RM": 1,
+        "DFMA.RP": 1,
+        "DMUL": 1147,
+        "DMUL.RP": 1,
+        "DSETP.EQ.AND": 1,
+        "DSETP.EQ.OR": 11,
+        "DSETP.GE.AND": 5,
+        "DSETP.GE.OR": 1,
+        "DSETP.GEU.AND": 93,
+        "DSETP.GT.AND": 31,
+        "DSETP.GT.OR": 1,
+        "DSETP.GTU.AND": 68,
+        "DSETP.GTU.OR": 2,
+        "DSETP.LE.AND": 3,
+        "DSETP.LE.OR": 11,
+        "DSETP.LT.AND": 1,
+        "DSETP.LTU.OR": 12,
+        "DSETP.MAX.AND": 5,
+        "DSETP.MIN.AND": 27,
+        "DSETP.NAN.AND": 9,
+        "DSETP.NE.AND": 9,
+        "DSETP.NEU.AND": 128,
+        "DSETP.NEU.OR": 10,
+        "EXIT": 27,
+        "FFMA": 193,
+        "FSEL": 956,
+        "FSETP.GEU.AND": 195,
+        "FSETP.GEU.OR": 10,
+        "FSETP.GT.AND": 203,
+        "FSETP.GTU.AND": 1,
+        "FSETP.NEU.AND": 2,
+        "HFMA2": 76,
+        "I2F.F64.U32": 69,
+        "IABS": 9,
+        "IADD.64": 15,
+        "IADD3": 218,
+        "IMAD": 18,
+        "IMAD.WIDE.U32": 4,
+        "IMNMX.U64": 44,
+        "ISETP.EQ.AND": 1,
+        "ISETP.EQ.OR": 34,
+        "ISETP.GE.AND": 20,
+        "ISETP.GE.U32.AND": 109,
+        "ISETP.GE.U64.AND": 1,
+        "ISETP.GT.AND": 20,
+        "ISETP.GT.U32.AND": 32,
+        "ISETP.GT.U32.OR": 1,
+        "ISETP.LT.OR": 2,
+        "ISETP.NE.AND": 272,
+        "ISETP.NE.OR": 3,
+        "ISETP.NE.S64.AND": 18,
+        "ISETP.NE.U32.AND": 2,
+        "LDC": 8,
+        "LDC.64": 5,
+        "LDCU": 2,
+        "LDCU.128": 1,
+        "LDCU.64": 10,
+        "LDG.E.64": 10,
+        "LEA": 27,
+        "LEA.HI": 32,
+        "LEA.HI.SX32": 3,
+        "LOP3.LUT": 441,
+        "MOV": 2019,
+        "MOV.64": 947,
+        "MUFU.RCP64H": 214,
+        "MUFU.RSQ64H": 55,
+        "NOP": 16280,
+        "P2R": 2,
+        "PLOP3.LUT": 5,
+        "PRMT": 32,
+        "RET.REL.NODEC": 2,
+        "S2R": 2,
+        "S2UR": 2,
+        "SEL": 88,
+        "SEL.64": 2,
+        "SHF.R.S32.HI": 23,
+        "STG.E.64": 30,
+        "UMOV": 13,
+        "UMOV.64": 444,
+        "VIMNMX.S32": 2,
+        "WARPSYNC.ALL": 1
+      }
+    }
+  },
+  "static_note": "Counts cover the statically emitted kernel, including its library code and cold paths, not dynamically executed instructions. Padding NOPs reported separately; these counts do not locate a runtime hotspot."
+}
