@@ -1,5 +1,11 @@
 # Lamberts-Problem Documentation
 
+The isolated CPU geometry reference and explicit input contract are in
+`src/lambert_geometry.py`. See [the first increment and branch audit](docs/first-increment.md)
+for conventions, validation, known legacy defects, and the next mathematical step.
+Run its standard-library tests with `python3 -m unittest discover -s tests -v`.
+This helper does not yet solve Lambert's time-of-flight equation.
+
 ## Interplanetary Trajectory Calculator
 
 This project is an application designed to calculate interplanetary trajectories using Lambert's problem. It provides a graphical user interface (GUI) for users to input various parameters related to their trajectory calculations.
