@@ -43,6 +43,30 @@ class NativeTests(unittest.TestCase):
     fd=(c.force(0,r+delta)[0]-c.force(0,r-delta)[0])/2e-5
     np.testing.assert_allclose(fd,G[:,j],rtol=2e-9,atol=1e-10)
 
+ def test_oriented_j2_force_gradient_potential_and_stm(self):
+  pole=np.array([.3,.4,np.sqrt(.75)]);poles=np.array([pole,pole])
+  r=np.array([1.2,-.7,.4]);J2=.002;R=.7
+  with NBodyContext([-10.,10.],np.zeros((2,1,6)),[1.],[0.],j2=(0,J2,R,poles)) as c:
+   a,G=c.force(0,r)
+   # Independent potential derivative checks acceleration, including sign and
+   # rotation, rather than reproducing the native force expression.
+   def potential(x):
+    d=np.linalg.norm(x);z=np.dot(x,pole)/d
+    return -1/d*(1-J2*(R/d)**2*(3*z*z-1)/2)
+   for j in range(3):
+    d=np.eye(3)[j]*1e-5
+    self.assertAlmostEqual(a[j],-(potential(r+d)-potential(r-d))/2e-5,places=9)
+    fd=(c.force(0,r+d)[0]-c.force(0,r-d)[0])/2e-5
+    np.testing.assert_allclose(fd,G[:,j],rtol=3e-9,atol=1e-10)
+   np.testing.assert_allclose(G,G.T,atol=1e-15)
+   self.assertAlmostEqual(np.trace(G),0.,places=14)
+   state=np.r_[r,[.1,.8,.2]];base=c.propagate(0,.5,state)
+   for j in range(6):
+    delta=np.eye(6)[j]*1e-6
+    fd=(c.propagate(0,.5,state+delta)['state']-c.propagate(0,.5,state-delta)['state'])/2e-6
+    np.testing.assert_allclose(fd,base['stm'][:,j],rtol=3e-8,atol=3e-9)
+  with self.assertRaises(ValueError):NBodyContext([-1,1],np.zeros((2,1,6)),[1],[0],j2=(0,J2,R,np.ones((2,3))))
+
  def test_two_body_period_reverse_and_stm(self):
   state=np.array([1.,0,0,0,1,0])
   with circular_context() as c:
@@ -95,6 +119,19 @@ class NativeTests(unittest.TestCase):
   with NBodyContext([0,1],np.zeros((2,1,6)),[1],[.5]) as guarded:
    result=guarded.propagate(0,0,[.1,0,0,0,1,0],check=False)
    self.assertEqual(result['status'],3)
+
+ def test_centered_large_epoch_translation_preserves_local_state(self):
+  shift=np.array([3e11,-8e10,2e11]);clock=1e9
+  states=np.zeros((2,1,6));states[:,:,:3]=shift
+  poles=np.array([[0,0,1.],[0,0,1.]])
+  with NBodyContext([clock-10,clock+10],states,[1.],[0.],j2=(0,.002,.5,poles)) as far:
+   with NBodyContext([-10,10],np.zeros((2,1,6)),[1.],[0.],j2=(0,.002,.5,poles)) as local:
+    initial=np.array([1.,.01,0.,.1,1.,.1]);a=clock+1.1234;b=clock+1.6234
+    actual=far.propagate(a,b,initial,origin=shift)
+    expected=local.propagate(0,b-a,initial)
+    np.testing.assert_allclose(actual['state'],expected['state'],rtol=0,atol=1e-14)
+    np.testing.assert_allclose(actual['stm'],expected['stm'],rtol=0,atol=1e-13)
+    self.assertEqual(actual['time'],b)
 
  def test_reject_invalid_arrays_and_options(self):
   for times in [[1,0],[0,0],[0,float('nan')]]:

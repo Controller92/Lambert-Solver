@@ -63,6 +63,11 @@ def parser():
     evaluate.add_argument('--days',type=float,nargs='+',required=True,
         help='Launch offset, leg durations, then surface stays, all in days')
     evaluate.add_argument('--output',type=Path,required=True)
+    global_mission = sub.add_parser('nbody-mission',help='Jointly correct and independently validate a complete finite EMC mission')
+    global_mission.add_argument('candidate',type=Path)
+    global_mission.add_argument('--config',type=Path)
+    global_mission.add_argument('--max-evaluations',type=int,default=160)
+    global_mission.add_argument('--outdir',type=Path,default=Path('results'))
     nbody = sub.add_parser('nbody-flyby',help='Correct and independently validate one finite Mars encounter')
     nbody.add_argument('candidate',type=Path)
     nbody.add_argument('--config',type=Path,help='Source mission configuration; inferred by default')
@@ -234,6 +239,12 @@ def main(argv=None):
     args = parser().parse_args(argv)
     try:
         if args.command in (None,'interactive'):return interactive()
+        if args.command=='nbody-mission':
+            from .nbody_mission import correct_mission
+            run,summary=correct_mission(args.candidate,args.outdir,args.config,args.max_evaluations,
+                progress=lambda s:print(json.dumps(s),flush=True))
+            print(json.dumps(dict(run=str(run.resolve()),**summary),indent=2))
+            return 0 if summary['status']=='passed_global_nbody_numerical_checks' else 2
         if args.command=='nbody-flyby':
             from .nbody_workflow import correct_encounter
             run,summary=correct_encounter(args.candidate,args.outdir,args.config,args.node,args.boundary_radius,

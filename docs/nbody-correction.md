@@ -7,8 +7,8 @@ verification with direct-SPICE DOP853 and NASA GMAT R2026a RK89.
 
 **A corrected local encounter is not yet a corrected complete mission.** The
 boundary velocity changes must be reattached to the interplanetary phases.
-Both Mars encounters, Ceres approach/stay/departure, and Earth endpoints still
-need joint correction. Higher-order forces and spacecraft engineering models
+Joint finite correction of both Mars encounters, Ceres operations and Earth
+endpoints is now available separately in [the complete-mission workflow](nbody-mission.md). Higher-order forces and spacecraft engineering models
 remain necessary for the highest-quality research replacements.
 
 ## Run and reproduce

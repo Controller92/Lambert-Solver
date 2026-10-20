@@ -20,8 +20,15 @@ int32_t nbody_options_size();
 int32_t nbody_result_size();
 void* nbody_create(int64_t knots,int32_t bodies,const double* times,const double* states,
                    const double* mu,const double* radii,int32_t* status);
+// Optional zonal J2: pole unit vectors at each existing ephemeris knot.
+// Copies input; one J2 body per context. Zero disables.
+int32_t nbody_set_j2(void* context,int32_t body,double j2,double radius,const double* poles);
 void nbody_destroy(void* context);
 int32_t nbody_force(void* context,double time,const double* position,double* acceleration,double* gradient);
+// Integrate positions relative to a supplied constant inertial origin. This
+// prevents loss of small periapsis coordinates when adding planetary distances.
+void nbody_propagate_centered(void* context,double start,double end,const double* initial,
+                             const double* origin,const NBodyOptions* options,NBodyResult* result);
 void nbody_propagate(void* context,double start,double end,const double* initial,
                      const NBodyOptions* options,NBodyResult* result);
 }

@@ -1,0 +1,41 @@
+{
+  "description": "Joint finite EMC corrections with oriented Mars J2; numerical acceptance at published tolerances, not flight-ready replacements.",
+  "cases": [
+    {
+      "run": "global-ballistic-d75fdc7d0336",
+      "source_candidate_sha256": "7734d6aa0212f9ba98b153f4e4c3a394cf43c82206649a98cafc3318086092da",
+      "status": "passed_global_nbody_numerical_checks",
+      "model": "ballistic",
+      "full_mission_reattached": true,
+      "duration_years": 5.770973647785022,
+      "total_delta_v_m_s": 52748.47802024154,
+      "source_total_delta_v_m_s": 52739.0124325204,
+      "maximum_native_midpoint_position_defect_m": 0.0015154674094159102,
+      "maximum_native_midpoint_velocity_defect_m_s": 3.5429926146884945e-10,
+      "maximum_independent_half_arc_position_difference_m": 37.08896389601129,
+      "check_count": 98,
+      "failed_checks": [],
+      "external_gmat_full_mission_validation": "not_run",
+      "cost_optimization": "feasibility correction of a known basin; not a minimum-delta-v or global-optimality claim",
+      "scope": "Four N-body cruise legs, oriented Mars J2, instantaneous tangential Mars impulses, free-plane spherical Earth parking, same rotating spherical Ceres surface site with instantaneous landing/launch. No mass/thrust or uncertainty model."
+    },
+    {
+      "run": "global-powered-56174e576ba4",
+      "source_candidate_sha256": "85978fe12818b498234877669b8abf7392eb1f0fb829f5f9c6ffbcc76393a64b",
+      "status": "passed_global_nbody_numerical_checks",
+      "model": "powered",
+      "full_mission_reattached": true,
+      "duration_years": 8.857758617880119,
+      "total_delta_v_m_s": 27016.627330342733,
+      "source_total_delta_v_m_s": 26999.33631874196,
+      "maximum_native_midpoint_position_defect_m": 0.008515060563586077,
+      "maximum_native_midpoint_velocity_defect_m_s": 6.632829566576042e-10,
+      "maximum_independent_half_arc_position_difference_m": 56.783526550522346,
+      "check_count": 96,
+      "failed_checks": [],
+      "external_gmat_full_mission_validation": "not_run",
+      "cost_optimization": "feasibility correction of a known basin; not a minimum-delta-v or global-optimality claim",
+      "scope": "Four N-body cruise legs, oriented Mars J2, instantaneous tangential Mars impulses, free-plane spherical Earth parking, same rotating spherical Ceres surface site with instantaneous landing/launch. No mass/thrust or uncertainty model."
+    }
+  ]
+}

@@ -53,7 +53,7 @@ def pointer(a):return a.ctypes.data_as(D)
 
 
 class NBodyContext:
-    def __init__(self,times,states,mu,radii):
+    def __init__(self,times,states,mu,radii,j2=None):
         self.handle=None
         times=array(times);mu=array(mu);radii=array(radii)
         if times.ndim!=1 or len(times)<2 or (np.diff(times)<=0).any():raise ValueError('Ordered ephemeris knots required')
@@ -61,7 +61,7 @@ class NBodyContext:
         states=array(states,(len(times),len(mu),6))
         self.lib=ct.CDLL(str(ROOT/'build/native/libnbody_cpu.so'))
         self.lib.nbody_abi_version.restype=ct.c_int32
-        if self.lib.nbody_abi_version()!=1:raise RuntimeError('N-body ABI mismatch')
+        if self.lib.nbody_abi_version()!=2:raise RuntimeError('N-body ABI mismatch')
         if self.lib.nbody_options_size()!=ct.sizeof(COptions) or self.lib.nbody_result_size()!=ct.sizeof(CResult):
             raise RuntimeError('N-body structure layout mismatch')
         self.lib.nbody_create.argtypes=[ct.c_int64,ct.c_int32,D,D,D,D,ct.POINTER(ct.c_int32)]
@@ -70,9 +70,20 @@ class NBodyContext:
         self.lib.nbody_force.argtypes=[ct.c_void_p,ct.c_double,D,D,D]
         self.lib.nbody_force.restype=ct.c_int32
         self.lib.nbody_propagate.argtypes=[ct.c_void_p,ct.c_double,ct.c_double,D,ct.POINTER(COptions),ct.POINTER(CResult)]
+        self.lib.nbody_propagate_centered.argtypes=[ct.c_void_p,ct.c_double,ct.c_double,D,D,ct.POINTER(COptions),ct.POINTER(CResult)]
         status=ct.c_int32()
         self.handle=self.lib.nbody_create(len(times),len(mu),pointer(times),pointer(states),pointer(mu),pointer(radii),ct.byref(status))
         if not self.handle:raise ValueError('N-body context: '+STATUS.get(status.value,'unknown failure'))
+
+        if j2 is not None:
+            body,coefficient,radius,poles=j2
+            if type(body) is not int or not 0<=body<len(mu) or not np.isfinite([coefficient,radius]).all() or radius<=0:
+                self.close();raise ValueError('Invalid J2 constants')
+            poles=array(poles,(len(times),3))
+            self.lib.nbody_set_j2.argtypes=[ct.c_void_p,ct.c_int32,ct.c_double,ct.c_double,D]
+            self.lib.nbody_set_j2.restype=ct.c_int32
+            status=self.lib.nbody_set_j2(self.handle,body,float(coefficient),float(radius),pointer(poles))
+            if status:self.close();raise ValueError('N-body J2: '+STATUS[status])
 
     def _open(self):
         if not self.handle:raise RuntimeError('N-body context is closed')
@@ -83,9 +94,13 @@ class NBodyContext:
         if status:raise ValueError('N-body force: '+STATUS[status])
         return acc,G
 
-    def propagate(self,start,end,state,options=None,check=True):
+    def propagate(self,start,end,state,options=None,check=True,origin=None):
         self._open();state=array(state,(6,));o=(options or Options()).validate();result=CResult()
-        self.lib.nbody_propagate(self.handle,float(start),float(end),pointer(state),ct.byref(COptions(**asdict(o))),ct.byref(result))
+        arguments=(ct.byref(COptions(**asdict(o))),ct.byref(result))
+        if origin is None:self.lib.nbody_propagate(self.handle,float(start),float(end),pointer(state),*arguments)
+        else:
+            origin=array(origin,(3,))
+            self.lib.nbody_propagate_centered(self.handle,float(start),float(end),pointer(state),pointer(origin),*arguments)
         out={n:getattr(result,n) for n in ['status','time','smallest_distance','accepted','rejected','evaluations']}
         out.update(state=np.array(result.state),stm=np.array(result.stm).reshape(6,6))
         if check and result.status:raise RuntimeError('N-body propagation: '+STATUS[result.status])

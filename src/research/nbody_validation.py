@@ -2,7 +2,7 @@
 from dataclasses import replace
 import numpy as np
 from scipy.integrate import solve_ivp
-from scipy.optimize import minimize_scalar
+from scipy.optimize import minimize_scalar,brentq
 from ..nbody_native import NBodyContext,Options
 
 
@@ -58,6 +58,16 @@ def validate_local(ephem,seed,result):
   body_minima.append(dict(id=body[0],label=body[3],minimum_distance_m=separation,guard_radius_m=body[2],time_seconds=when))
  mars=next(item for item in body_minima if item['id']=='499')
  rp,tperi=mars['minimum_distance_m'],mars['time_seconds']
+ # A distance minimum is extremely flat at periapsis: direct-SPICE coordinate
+ # roundoff can move the minimizer's reported epoch by tens of milliseconds.
+ # Resolve the time with the radial-velocity zero instead; keep the conservative
+ # sampled/minimized radius for collision and altitude acceptance.
+ def radial_velocity(t):
+  state=(first if t<=tm else continuous).sol(t)-ephem.body_state('499',t)
+  return np.dot(state[:3],state[3:])/norm(state[:3])
+ left,right=max(ti,tm-1.),min(to,tm+1.)
+ if radial_velocity(left)<0<radial_velocity(right):
+  tperi=float(brentq(radial_velocity,left,right,xtol=1e-8))
  check('minimum permitted Mars radius',seed['minimum_periapsis_radius_m']-rp,0.,'m')
  check('maximum permitted Mars radius',rp-seed['maximum_periapsis_radius_m'],0.,'m')
  check('closest approach near shooting node',abs(tperi-tm),.01,'s')

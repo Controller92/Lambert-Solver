@@ -11,6 +11,11 @@ int main(){
   nbody_propagate(c,-1.23456,.0010000002,y,&options,&result);assert(result.status==0);
   nbody_propagate(c,0,11,y,&options,&result);assert(result.status==2&&std::isnan(result.state[0]));
  }
+ double poles[6]={0,0,1,0,0,1};
+ assert(nbody_set_j2(c,0,.002,.5,poles)==0);
+ double origin[3]={0,0,0};
+ nbody_propagate_centered(c,0,.5,y,origin,&options,&result);assert(result.status==0&&std::isfinite(result.stm[35]));
+ assert(nbody_set_j2(c,2,.002,.5,poles)==1);
  nbody_destroy(c);
  c=nbody_create(1,1,times,states,mu,radii,&status);assert(!c&&status==1);
  std::cout<<"N-body address/undefined-behaviour sanitizer checks passed\n";

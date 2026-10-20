@@ -132,3 +132,13 @@ This project is an application designed to calculate interplanetary trajectories
 ### Acknowledgments
 
 This project utilizes the SPICE toolkit for accurate orbital data and trajectory calculations. Special thanks to the developers and maintainers of the SPICE toolkit.
+
+### Joint finite N-body mission correction
+
+`python run.py nbody-mission /path/to/validated/best.json --outdir results/nbody`
+corrects the complete EMC chain with shared finite endpoints, fourteen SPICE
+point masses and oriented Mars J2. It independently checks continuity, clearances,
+surface-site consistency, timelines, impulse accounting and numerical convergence.
+See [model assumptions and acceptance limits](docs/nbody-mission.md). These are
+feasibility corrections of known basins; spacecraft engineering and independent
+whole-mission GMAT validation remain future work.

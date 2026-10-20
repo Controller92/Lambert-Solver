@@ -1,0 +1,18 @@
+test_parameterized_surface_and_tangent_velocity (test_global_mission.GeometryTests.test_parameterized_surface_and_tangent_velocity) ... ok
+test_python_hermite_derivatives_ignore_large_constant_offset (test_global_mission.GeometryTests.test_python_hermite_derivatives_ignore_large_constant_offset) ... ok
+test_shared_nodes_dates_burns_and_variational_jacobian (test_global_mission.GlobalJacobianTests.test_shared_nodes_dates_burns_and_variational_jacobian) ... ok
+test_centered_large_epoch_translation_preserves_local_state (test_nbody.NativeTests.test_centered_large_epoch_translation_preserves_local_state) ... ok
+test_exact_nonbinary_endpoints_and_exact_step_budget (test_nbody.NativeTests.test_exact_nonbinary_endpoints_and_exact_step_budget) ... ok
+test_failure_nan_and_context_lifecycle (test_nbody.NativeTests.test_failure_nan_and_context_lifecycle) ... ok
+test_finite_hyperbolic_lift_energy_momentum_and_clock (test_nbody.NativeTests.test_finite_hyperbolic_lift_energy_momentum_and_clock) ... ok
+test_moving_hermite_body_and_coordinate_translation (test_nbody.NativeTests.test_moving_hermite_body_and_coordinate_translation) ... ok
+test_oriented_j2_force_gradient_potential_and_stm (test_nbody.NativeTests.test_oriented_j2_force_gradient_potential_and_stm) ... ok
+test_point_mass_force_gradient_and_symmetry (test_nbody.NativeTests.test_point_mass_force_gradient_and_symmetry) ... ok
+test_reject_invalid_arrays_and_options (test_nbody.NativeTests.test_reject_invalid_arrays_and_options) ... ok
+test_two_body_period_reverse_and_stm (test_nbody.NativeTests.test_two_body_period_reverse_and_stm) ... ok
+test_ballistic_and_powered_correction_and_complete_jacobian (test_nbody.RealEncounterTests.test_ballistic_and_powered_correction_and_complete_jacobian) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 13.107s
+
+OK
