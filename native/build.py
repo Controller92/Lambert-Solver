@@ -39,6 +39,15 @@ def build(cuda_root=None, arch='120'):
                          '-ccbin', compiler, f'-L{toolkit/"lib"}',
                          str(ROOT/'native'/'cuda.cu'), str(ROOT/'native'/'cpu.cpp'),
                          '-o', str(destination/'liblambert_cuda.so')])
+    # Separate libraries keep Lambert's ABI and kernel footprint unchanged.
+    commands.append([compiler, '-std=c++17', '-O3', '-fPIC', '-shared',
+                     '-fno-fast-math', '-ffp-contract=off', '-Wall', '-Wextra',
+                     str(ROOT/'native'/'flyby_cpu.cpp'), '-o', str(destination/'libflyby_cpu.so')])
+    if cuda_root:
+        flyby_command = commands[1].copy()
+        flyby_command[-4:] = [str(ROOT/'native'/'flyby_cuda.cu'), str(ROOT/'native'/'flyby_cpu.cpp'),
+                              '-o', str(destination/'libflyby_cuda.so')]
+        commands.append(flyby_command)
     metadata = dict(commands=commands, cpu_compiler=subprocess.check_output([compiler, '--version'], text=True))
     if cuda_root:
         metadata['cuda_compiler'] = subprocess.check_output([str(nvcc), '--version'], text=True)

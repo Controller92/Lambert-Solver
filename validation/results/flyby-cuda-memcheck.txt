@@ -1,0 +1,13 @@
+========= COMPUTE-SANITIZER
+test_context_lifecycle_and_reupload (test_native.CUDA.test_context_lifecycle_and_reupload) ... ok
+test_empty_tail_and_invalid_layout (test_native.CUDA.test_empty_tail_and_invalid_layout) ... ok
+test_reference_physics_and_status_parity (test_native.CUDA.test_reference_physics_and_status_parity) ... ok
+test_empty_tail_and_invalid_layout (test_native.Native.test_empty_tail_and_invalid_layout) ... ok
+test_reference_physics_and_status_parity (test_native.Native.test_reference_physics_and_status_parity) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.655s
+
+OK
+========= LEAK SUMMARY: 0 bytes leaked in 0 allocations
+========= ERROR SUMMARY: 0 errors

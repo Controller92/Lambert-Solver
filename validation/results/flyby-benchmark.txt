@@ -1,0 +1,61 @@
+{
+  "count": 262144,
+  "repetitions": 20,
+  "device": {
+    "name": "NVIDIA RTX PRO 2000 Blackwell Generation Laptop GPU",
+    "major": 12,
+    "minor": 0,
+    "driver": 13040,
+    "runtime": 12080,
+    "multiprocessors": 26,
+    "registers": 155,
+    "local_bytes": 72,
+    "active_blocks": 3,
+    "threads_per_sm": 1536,
+    "max_threads_per_block": 384,
+    "predicted_occupancy": 0.25
+  },
+  "note": "Persistent buffers, pageable host transfers; pipeline excludes allocation, Python object packing, JSON, ephemerides and disk.",
+  "runs": {
+    "forward": {
+      "cpu_seconds": 0.04169742399972165,
+      "kernel_ms": 1.7157071828842163,
+      "pipeline_seconds": 0.016999362997012213,
+      "kernel_encounters_per_second": 152790640.8594261,
+      "pipeline_encounters_per_second": 15420813.123766704,
+      "cpu_to_pipeline_speedup": 2.452881558388414,
+      "successes": 262144,
+      "max_iterations": 0
+    },
+    "match": {
+      "cpu_seconds": 0.07119717900059186,
+      "kernel_ms": 2.312654495239258,
+      "pipeline_seconds": 0.017199926005559973,
+      "kernel_encounters_per_second": 113351994.66225483,
+      "pipeline_encounters_per_second": 15240995.799357535,
+      "cpu_to_pipeline_speedup": 4.139388679787167,
+      "successes": 262144,
+      "max_iterations": 0
+    },
+    "powered": {
+      "cpu_seconds": 0.551879768994695,
+      "kernel_ms": 22.653629302978516,
+      "pipeline_seconds": 0.03787175800243858,
+      "kernel_encounters_per_second": 11571832.331763862,
+      "pipeline_encounters_per_second": 6921886.224112448,
+      "cpu_to_pipeline_speedup": 14.572330361826857,
+      "successes": 262144,
+      "max_iterations": 46
+    },
+    "mixed": {
+      "cpu_seconds": 0.2211300580020179,
+      "kernel_ms": 22.865819931030273,
+      "pipeline_seconds": 0.04290137600037269,
+      "kernel_encounters_per_second": 11464447.8435805,
+      "pipeline_encounters_per_second": 6110386.762366846,
+      "cpu_to_pipeline_speedup": 5.154381481845638,
+      "successes": 259548,
+      "max_iterations": 46
+    }
+  }
+}

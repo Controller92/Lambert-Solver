@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "body": "Earth (399), Juno 2013 inbound osculating conic",
+  "frame": "ICRF",
+  "epoch_tdb": "2013-10-09T19:22:32.060483",
+  "mu_m3_s2": 398600435436000.0,
+  "radius_m": 6378137.0,
+  "min_altitude_m": 100000.0,
+  "rp_max_m": 1000000000.0,
+  "velocity_origin": "body_relative",
+  "reference": [
+    0.0,
+    0.0,
+    1.0
+  ],
+  "encounters": [
+    {
+      "mode": "forward",
+      "vin_m_s": [
+        8209.248553488855,
+        5837.656640733166,
+        2542.056301403377
+      ],
+      "rp_m": 6932385.492840225,
+      "azimuth_rad": 2.363448577406619
+    }
+  ]
+}

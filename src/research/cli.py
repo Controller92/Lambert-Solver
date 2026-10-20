@@ -1,7 +1,7 @@
 """Menu and scripted CLI adapted from Simple-Lambert-Solver's Flyby-Solver UI.
 
 Original interface copyright 2025 Controller92, MIT; see third_party/.
-Only validated research workflows are offered. Flyby migration is a later stage.
+Only validated research workflows are offered.
 """
 import argparse
 import json
@@ -33,9 +33,14 @@ def grid_parser(sub):
 
 
 def parser():
-    p = argparse.ArgumentParser(description='LambertLab research CLI: custom C++/CUDA Lambert engine')
+    p = argparse.ArgumentParser(description='LambertLab research CLI: custom C++/CUDA Lambert and flyby engines')
     sub = p.add_subparsers(dest='command')
     grid_parser(sub)
+    flyby = sub.add_parser('flyby',help='Solve saved unpowered or tangential powered encounters')
+    flyby.add_argument('--config',type=Path,required=True)
+    flyby.add_argument('--backend',choices=('cpu','cuda'),default='cpu')
+    flyby.add_argument('--batch-size',type=int,default=65536)
+    flyby.add_argument('--outdir',type=Path,default='results')
     plot = sub.add_parser('plot',help='Regenerate a figure from grid.npz without recomputing')
     plot.add_argument('grid',type=Path);plot.add_argument('--output',type=Path)
     configs = sub.add_parser('configs',help='List saved grid configurations')
@@ -120,12 +125,17 @@ def choose_config():
 
 def interactive():
     print('Welcome to LambertLab Interactive Simulation Runner!')
-    print('Custom Lambert engine | CPU or CUDA | saved research configurations')
+    print('Custom Lambert and flyby engines | CPU or CUDA | saved research configurations')
     while True:
-        print('\n1. Two Body Grid (Porkchop Plot)\n2. Run Saved Configuration\n3. Run EMC Paper Presets\n4. Regenerate Saved Plot\n5. View Saved Configurations\n6. Exit')
+        print('\n1. Two Body Grid (Porkchop Plot)\n2. Run Saved Configuration\n3. Run EMC Paper Presets\n4. Regenerate Saved Plot\n5. View Saved Configurations\n6. Exit\n7. Flyby Encounters')
         try:
             choice = prompt('Select an option',6)
             if choice=='6':return 0
+            if choice=='7':
+                from .flyby import run_encounters
+                run_encounters(prompt('Encounter configuration',str(ROOT/'examples/flyby-earth.json')),
+                               prompt('Output directory','results'),prompt('Backend: cpu/cuda','cuda'))
+                continue
             if choice=='5':
                 for path in saved_configs():print(path.name)
                 continue
@@ -167,7 +177,7 @@ def interactive():
             else:
                 print('Invalid choice');continue
             execute(config,prompt('Output directory','results'))
-        except (ValueError,OSError,RuntimeError,ImportError) as error:
+        except (ValueError,KeyError,TypeError,OSError,RuntimeError,ImportError) as error:
             print(f'Error: {error}',file=sys.stderr)
 
 
@@ -175,6 +185,9 @@ def main(argv=None):
     args = parser().parse_args(argv)
     try:
         if args.command in (None,'interactive'):return interactive()
+        if args.command=='flyby':
+            from .flyby import run_encounters
+            run_encounters(args.config,args.outdir,args.backend,args.batch_size);return 0
         if args.command=='batch':
             run_batch(args.configs,args.outdir,args.cache_dir,args.backend,args.dry_run);return 0
         if args.command=='configs':
@@ -197,7 +210,7 @@ def main(argv=None):
         if args.dry_run:describe(config);return 0
         execute(config,args.outdir,args.cache_dir)
         return 0
-    except (ValueError,OSError,RuntimeError,ImportError) as error:
+    except (ValueError,KeyError,TypeError,OSError,RuntimeError,ImportError) as error:
         print(f'Error: {error}',file=sys.stderr)
         return 1
     except (KeyboardInterrupt,EOFError):

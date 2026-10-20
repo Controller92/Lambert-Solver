@@ -6,8 +6,11 @@ batches, C3 grids, minimum tables and porkchop figures. Launch `python run.py` o
 use `python run.py --help`. The interface adapts Simple-Lambert-Solver's
 Flyby-Solver branch; no PyKEP dependency is needed for the runtime. Four EMC
 paper-window presets and a real multi-revolution smoke preset are included.
-The [flyby upgrade plan](docs/flyby-upgrade-plan.md) describes the separate future
-Python-reference, C++ and CUDA work.
+The [custom flyby encounter engine](docs/flyby-solver.md) now supplies unpowered
+propagation, inverse matching and tangential powered encounters in Python, C++
+and CUDA, with saved CLI batches and a Juno Earth-flyby validation. Run
+`python run.py flyby --config examples/flyby-earth.json --backend cuda`.
+Full multi-leg mission search remains a subsequent increment.
 
 The zero- and multi-revolution native engine runs in **CUDA C++**, with a shared C++ CPU path and
 NumPy batch bindings in `src/lambert_native.py`. See the

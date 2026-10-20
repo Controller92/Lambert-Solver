@@ -4,7 +4,8 @@ The interactive runner adapts the familiar Simple-Lambert-Solver CLI into this
 repository and calls the validated custom C++/CUDA engine. It supplies a complete
 heliocentric porkchop workflow: explicit SPICE kernels, persistent state caches,
 chunked native batches, candidate reduction, numerical output, minimum-C3 tables,
-and figures. Flyby dynamics are a separate future port.
+and figures. The [flyby encounter engine](flyby-solver.md) adds a separate saved
+batch workflow for unpowered and tangential powered encounters.
 
 ## Launch in this workspace
 
@@ -23,6 +24,7 @@ This opens the menu:
 4. Regenerate Saved Plot
 5. View Saved Configurations
 6. Exit
+7. Flyby Encounters
 
 Choose a backend explicitly. CUDA failures do not fall back to CPU. The CPU
 backend is the shared native C++ engine, not PyKEP or the Python reference.
@@ -97,7 +99,8 @@ these override the kernel list and are relative to the shell's working directory
 The legacy `simulation_type: two_body_grid` plus `parameters` JSON format is
 accepted, including string-valued numeric settings and `dep_id`/`arr_id`. Supply
 kernel paths explicitly when an old configuration does not contain them. Legacy
-flyby/chain configurations are rejected in this release rather than misinterpreted.
+flyby/chain configurations are rejected. The new `flyby` command has an explicit
+versioned encounter schema; it does not interpret old chain-search settings.
 
 Flight time limits and departure/flight steps remain fractional; no conversion
 to integer days is applied. All calendar input is explicitly **TDB**, without time
