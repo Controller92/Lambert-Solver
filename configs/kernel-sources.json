@@ -1,0 +1,28 @@
+{
+  "kernels": [
+    {
+      "filename": "naif0012.tls",
+      "url": "https://raw.githubusercontent.com/Controller92/Simple-Lambert-Solver/6c58c779a91c8a9a32a514708089583c2f9d7e23/data/kernels/naif0012.tls",
+      "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+      "bytes": 5257
+    },
+    {
+      "filename": "de440s.bsp",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp",
+      "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+      "bytes": 32726016
+    },
+    {
+      "filename": "gm_de440.tpc",
+      "url": "https://raw.githubusercontent.com/Controller92/Simple-Lambert-Solver/6c58c779a91c8a9a32a514708089583c2f9d7e23/data/kernels/gm_de440.tpc",
+      "sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+      "bytes": 12406
+    },
+    {
+      "filename": "20000001.bsp",
+      "url": "https://raw.githubusercontent.com/Controller92/Simple-Lambert-Solver/6c58c779a91c8a9a32a514708089583c2f9d7e23/data/kernels/20000001.bsp",
+      "sha256": "a00a5d6e014e06b5f7888d035522909b67fcd50f129cb871c836a289a8bde9f5",
+      "bytes": 431104
+    }
+  ]
+}

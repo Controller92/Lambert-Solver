@@ -21,7 +21,7 @@ class MultiLambertResult:
 
     root.minimum contains the shared minimum diagnostics. A successful root's
     True/None precision flag is not a velocity error certificate. The native
-    C++/CUDA batch ABI still supports M=0 only in this Python increment.
+    C++/CUDA batch interface also supports M>0; see lambert_native.
     """
     status: LambertStatus
     geometry: GeometryResult

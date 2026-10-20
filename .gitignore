@@ -54,3 +54,8 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+
+# Research runtime outputs and user-provided ephemerides
+/results/
+/.research-cache/
+/data/kernels/

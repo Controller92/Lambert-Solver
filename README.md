@@ -1,5 +1,14 @@
 # Lamberts-Problem Documentation
 
+The [research CLI](docs/research-cli.md) now connects the validated native engine
+to SPICE ephemerides, interactive prompts, saved JSON configurations, bounded GPU
+batches, C3 grids, minimum tables and porkchop figures. Launch `python run.py` or
+use `python run.py --help`. The interface adapts Simple-Lambert-Solver's
+Flyby-Solver branch; no PyKEP dependency is needed for the runtime. Four EMC
+paper-window presets and a real multi-revolution smoke preset are included.
+The [flyby upgrade plan](docs/flyby-upgrade-plan.md) describes the separate future
+Python-reference, C++ and CUDA work.
+
 The zero- and multi-revolution native engine runs in **CUDA C++**, with a shared C++ CPU path and
 NumPy batch bindings in `src/lambert_native.py`. See the
 [native engine walkthrough](docs/seventh-increment.md) for build instructions,

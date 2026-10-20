@@ -1,0 +1,17 @@
+{
+  "dep_body": "399",
+  "arr_body": "4",
+  "dep_start": "2034-09-15",
+  "dep_end": "2036-06-30",
+  "dep_step": 1.0,
+  "tof_min": 50,
+  "tof_max": 1200,
+  "tof_step": 1.0,
+  "kernels": [
+    "../data/kernels/naif0012.tls",
+    "../data/kernels/de440s.bsp",
+    "../data/kernels/gm_de440.tpc"
+  ],
+  "orientation": "prograde",
+  "backend": "cuda"
+}

@@ -1,0 +1,4 @@
+# Host workflow only. The native C++/CUDA libraries are built separately.
+numpy
+spiceypy
+matplotlib

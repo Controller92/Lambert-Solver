@@ -1,0 +1,541 @@
+{
+  "batch_seconds": 3.486431318000541,
+  "runs": [
+    {
+      "route": "emc-ceres-mars",
+      "schema": 1,
+      "config": {
+        "dep_body": "20000001",
+        "arr_body": "4",
+        "dep_start": "2034-01-01",
+        "dep_end": "2037-06-01",
+        "dep_step": 1.0,
+        "tof_min": 100,
+        "tof_max": 1200,
+        "tof_step": 1.0,
+        "kernels": [
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/naif0012.tls",
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/de440s.bsp",
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/gm_de440.tpc",
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/20000001.bsp"
+        ],
+        "frame": "ECLIPJ2000",
+        "time_scale": "TDB",
+        "backend": "cuda",
+        "orientation": "prograde",
+        "max_revolutions": 0,
+        "batch_size": 65536,
+        "max_cells": 10000000,
+        "max_memory_mb": 2048,
+        "cmin": 10.0,
+        "cmax": 100.0,
+        "tof_contour_step": 50.0,
+        "plot": true
+      },
+      "created_utc": "2026-10-20T00:49:15.134544+00:00",
+      "center": "SUN",
+      "aberration": "NONE",
+      "mu_m3_s2": 1.3271244004127939e+20,
+      "kernels": [
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/naif0012.tls",
+          "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
+        },
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/de440s.bsp",
+          "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
+        },
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/gm_de440.tpc",
+          "sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140"
+        },
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/20000001.bsp",
+          "sha256": "a00a5d6e014e06b5f7888d035522909b67fcd50f129cb871c836a289a8bde9f5"
+        }
+      ],
+      "units": {
+        "states": "m and m/s",
+        "vinf": "m/s",
+        "C3": "km^2/s^2",
+        "et": "TDB seconds past J2000",
+        "tof": "86400-second days"
+      },
+      "native_library_sha256": "6ea14f08a4ced3ca758d06a95b0131cb4ea09016442e3850d9f9d29acca01ddc",
+      "commit": "ec40cd518020a9b6a1b3668be1274d61de2ea153",
+      "dirty_tree": true,
+      "workflow_sources": {
+        "run.py": "347fa815d0326f265438e5f219947ecb8349f877abd7cc53cde5dea7926243ad",
+        "src/research/__init__.py": "720be44ae0aeb70df1b33357f2a776af2134a70e9a17a6f22171520252c4a4f4",
+        "src/research/cli.py": "8e1e6a774fe876efe574dd1a8bebb54129ca28cde59294f815e2a171f03c1d96",
+        "src/research/config.py": "2d3ef193c7fbfb770f12a537d46e5d17d62d822a551c808cc1dd1d2986d44957",
+        "src/research/ephemeris.py": "5662032b65069860df22728180d8cca36ccdcafebb65aad7a38a3e41d7999d85",
+        "src/research/grid.py": "3ac910cbdec682c435f8487a6ac3daec8c807c40667f4e909cf107d7b6573fe7",
+        "src/research/plot.py": "dc3f82f4c53b7f07e3494c4af6d2d100ccbe887c5caefb6163fc7cfd5b0ac9da"
+      },
+      "python": "3.12.3",
+      "numpy": "2.5.4",
+      "spiceypy": "8.3.0",
+      "spice_toolkit": "CSPICE_N0067",
+      "root_options": {
+        "x_atol": 1e-14,
+        "x_rtol": 1e-14,
+        "tof_atol": 0.0,
+        "tof_rtol": 5e-13,
+        "max_iterations": 128,
+        "max_bracket_expansions": 1024
+      },
+      "minimum_options": {
+        "x_atol": 1e-14,
+        "x_rtol": 1e-14,
+        "max_iterations": 128,
+        "max_bracket_expansions": 32
+      },
+      "valid_cells": 1374048,
+      "total_cells": 1374048,
+      "warning_cells": 0,
+      "unknown_precision_cells": 0,
+      "minimum": {
+        "departure_et": 1126526400.0,
+        "tof_days": 544.0,
+        "C3_km2_s2": 9.837858884691846,
+        "revolutions": 0,
+        "branch": -1,
+        "long_way": 1
+      },
+      "ephemeris_calls": 0,
+      "cached_states": 3596,
+      "grid_sha256": "def4c0e83a0e13596b103bee55f60b1e8f679c7ec13964af575bedc1a58ff393",
+      "minimum_table_sha256": "c828cf1f260cd32512fe1c77d72319a585e168a72f8067efb0d53ac90e18540e",
+      "state_seconds": 0.03469868400134146,
+      "solve_seconds": 0.48276816900033737,
+      "kernel_ms": 72.10012805461884,
+      "candidate_solves": 1374048,
+      "policies": [
+        [
+          0,
+          -1,
+          "prograde"
+        ]
+      ],
+      "device": {
+        "name": "NVIDIA RTX PRO 2000 Blackwell Generation Laptop GPU",
+        "major": 12,
+        "minor": 0,
+        "driver": 13040,
+        "runtime": 12080,
+        "multiprocessors": 26,
+        "registers": 197,
+        "local_bytes": 32,
+        "active_blocks": 2,
+        "threads_per_sm": 1536,
+        "max_threads_per_block": 256,
+        "predicted_occupancy": 0.16666666666666666
+      },
+      "plot_status": "ok",
+      "matplotlib": "3.11.2",
+      "total_seconds": 1.1857226400024956
+    },
+    {
+      "route": "emc-earth-mars",
+      "schema": 1,
+      "config": {
+        "dep_body": "399",
+        "arr_body": "4",
+        "dep_start": "2034-09-15",
+        "dep_end": "2036-06-30",
+        "dep_step": 1.0,
+        "tof_min": 50,
+        "tof_max": 1200,
+        "tof_step": 1.0,
+        "kernels": [
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/naif0012.tls",
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/de440s.bsp",
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/gm_de440.tpc"
+        ],
+        "frame": "ECLIPJ2000",
+        "time_scale": "TDB",
+        "backend": "cuda",
+        "orientation": "prograde",
+        "max_revolutions": 0,
+        "batch_size": 65536,
+        "max_cells": 10000000,
+        "max_memory_mb": 2048,
+        "cmin": 10.0,
+        "cmax": 100.0,
+        "tof_contour_step": 50.0,
+        "plot": true
+      },
+      "created_utc": "2026-10-20T00:49:13.195094+00:00",
+      "center": "SUN",
+      "aberration": "NONE",
+      "mu_m3_s2": 1.3271244004127939e+20,
+      "kernels": [
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/naif0012.tls",
+          "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
+        },
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/de440s.bsp",
+          "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
+        },
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/gm_de440.tpc",
+          "sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140"
+        }
+      ],
+      "units": {
+        "states": "m and m/s",
+        "vinf": "m/s",
+        "C3": "km^2/s^2",
+        "et": "TDB seconds past J2000",
+        "tof": "86400-second days"
+      },
+      "native_library_sha256": "6ea14f08a4ced3ca758d06a95b0131cb4ea09016442e3850d9f9d29acca01ddc",
+      "commit": "ec40cd518020a9b6a1b3668be1274d61de2ea153",
+      "dirty_tree": true,
+      "workflow_sources": {
+        "run.py": "347fa815d0326f265438e5f219947ecb8349f877abd7cc53cde5dea7926243ad",
+        "src/research/__init__.py": "720be44ae0aeb70df1b33357f2a776af2134a70e9a17a6f22171520252c4a4f4",
+        "src/research/cli.py": "8e1e6a774fe876efe574dd1a8bebb54129ca28cde59294f815e2a171f03c1d96",
+        "src/research/config.py": "2d3ef193c7fbfb770f12a537d46e5d17d62d822a551c808cc1dd1d2986d44957",
+        "src/research/ephemeris.py": "5662032b65069860df22728180d8cca36ccdcafebb65aad7a38a3e41d7999d85",
+        "src/research/grid.py": "3ac910cbdec682c435f8487a6ac3daec8c807c40667f4e909cf107d7b6573fe7",
+        "src/research/plot.py": "dc3f82f4c53b7f07e3494c4af6d2d100ccbe887c5caefb6163fc7cfd5b0ac9da"
+      },
+      "python": "3.12.3",
+      "numpy": "2.5.4",
+      "spiceypy": "8.3.0",
+      "spice_toolkit": "CSPICE_N0067",
+      "root_options": {
+        "x_atol": 1e-14,
+        "x_rtol": 1e-14,
+        "tof_atol": 0.0,
+        "tof_rtol": 5e-13,
+        "max_iterations": 128,
+        "max_bracket_expansions": 1024
+      },
+      "minimum_options": {
+        "x_atol": 1e-14,
+        "x_rtol": 1e-14,
+        "max_iterations": 128,
+        "max_bracket_expansions": 32
+      },
+      "valid_cells": 753905,
+      "total_cells": 753905,
+      "warning_cells": 0,
+      "unknown_precision_cells": 0,
+      "minimum": {
+        "departure_et": 1119528000.0,
+        "tof_days": 195.0,
+        "C3_km2_s2": 10.262197687746815,
+        "revolutions": 0,
+        "branch": -1,
+        "long_way": 0
+      },
+      "ephemeris_calls": 0,
+      "cached_states": 2460,
+      "grid_sha256": "436e87bb118fddcc2ccaabeec1dcab8b2fa9bbb2cc5064847a3ffde0cf264f17",
+      "minimum_table_sha256": "b99035d4ac8d079938de71a66c24abc8e39f63d86d1f339a0693ea2b97f63d8a",
+      "state_seconds": 0.03509427700191736,
+      "solve_seconds": 0.45072124299622374,
+      "kernel_ms": 39.56592035293579,
+      "candidate_solves": 753905,
+      "policies": [
+        [
+          0,
+          -1,
+          "prograde"
+        ]
+      ],
+      "device": {
+        "name": "NVIDIA RTX PRO 2000 Blackwell Generation Laptop GPU",
+        "major": 12,
+        "minor": 0,
+        "driver": 13040,
+        "runtime": 12080,
+        "multiprocessors": 26,
+        "registers": 197,
+        "local_bytes": 32,
+        "active_blocks": 2,
+        "threads_per_sm": 1536,
+        "max_threads_per_block": 256,
+        "predicted_occupancy": 0.16666666666666666
+      },
+      "plot_status": "ok",
+      "matplotlib": "3.11.2",
+      "total_seconds": 1.073413010002696
+    },
+    {
+      "route": "emc-mars-ceres",
+      "schema": 1,
+      "config": {
+        "dep_body": "4",
+        "arr_body": "20000001",
+        "dep_start": "2035-01-01",
+        "dep_end": "2037-03-01",
+        "dep_step": 1.0,
+        "tof_min": 100,
+        "tof_max": 1200,
+        "tof_step": 1.0,
+        "kernels": [
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/naif0012.tls",
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/de440s.bsp",
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/gm_de440.tpc",
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/20000001.bsp"
+        ],
+        "frame": "ECLIPJ2000",
+        "time_scale": "TDB",
+        "backend": "cuda",
+        "orientation": "prograde",
+        "max_revolutions": 0,
+        "batch_size": 65536,
+        "max_cells": 10000000,
+        "max_memory_mb": 2048,
+        "cmin": 10.0,
+        "cmax": 100.0,
+        "tof_contour_step": 50.0,
+        "plot": true
+      },
+      "created_utc": "2026-10-20T00:49:14.120745+00:00",
+      "center": "SUN",
+      "aberration": "NONE",
+      "mu_m3_s2": 1.3271244004127939e+20,
+      "kernels": [
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/naif0012.tls",
+          "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
+        },
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/de440s.bsp",
+          "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
+        },
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/gm_de440.tpc",
+          "sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140"
+        },
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/20000001.bsp",
+          "sha256": "a00a5d6e014e06b5f7888d035522909b67fcd50f129cb871c836a289a8bde9f5"
+        }
+      ],
+      "units": {
+        "states": "m and m/s",
+        "vinf": "m/s",
+        "C3": "km^2/s^2",
+        "et": "TDB seconds past J2000",
+        "tof": "86400-second days"
+      },
+      "native_library_sha256": "6ea14f08a4ced3ca758d06a95b0131cb4ea09016442e3850d9f9d29acca01ddc",
+      "commit": "ec40cd518020a9b6a1b3668be1274d61de2ea153",
+      "dirty_tree": true,
+      "workflow_sources": {
+        "run.py": "347fa815d0326f265438e5f219947ecb8349f877abd7cc53cde5dea7926243ad",
+        "src/research/__init__.py": "720be44ae0aeb70df1b33357f2a776af2134a70e9a17a6f22171520252c4a4f4",
+        "src/research/cli.py": "8e1e6a774fe876efe574dd1a8bebb54129ca28cde59294f815e2a171f03c1d96",
+        "src/research/config.py": "2d3ef193c7fbfb770f12a537d46e5d17d62d822a551c808cc1dd1d2986d44957",
+        "src/research/ephemeris.py": "5662032b65069860df22728180d8cca36ccdcafebb65aad7a38a3e41d7999d85",
+        "src/research/grid.py": "3ac910cbdec682c435f8487a6ac3daec8c807c40667f4e909cf107d7b6573fe7",
+        "src/research/plot.py": "dc3f82f4c53b7f07e3494c4af6d2d100ccbe887c5caefb6163fc7cfd5b0ac9da"
+      },
+      "python": "3.12.3",
+      "numpy": "2.5.4",
+      "spiceypy": "8.3.0",
+      "spice_toolkit": "CSPICE_N0067",
+      "root_options": {
+        "x_atol": 1e-14,
+        "x_rtol": 1e-14,
+        "tof_atol": 0.0,
+        "tof_rtol": 5e-13,
+        "max_iterations": 128,
+        "max_bracket_expansions": 1024
+      },
+      "minimum_options": {
+        "x_atol": 1e-14,
+        "x_rtol": 1e-14,
+        "max_iterations": 128,
+        "max_bracket_expansions": 32
+      },
+      "valid_cells": 870891,
+      "total_cells": 870891,
+      "warning_cells": 0,
+      "unknown_precision_cells": 0,
+      "minimum": {
+        "departure_et": 1140609600.0,
+        "tof_days": 704.0,
+        "C3_km2_s2": 13.141169217605082,
+        "revolutions": 0,
+        "branch": -1,
+        "long_way": 1
+      },
+      "ephemeris_calls": 0,
+      "cached_states": 2682,
+      "grid_sha256": "6350302de6f0f035d3442fa18930d41fb9d82ef601be4cf6f2807ae9ff070c45",
+      "minimum_table_sha256": "bb124edd2594d79bc6e9fc756cfd4081871891b735c1cb5a3e05a7766a4ca3da",
+      "state_seconds": 0.02516295300301863,
+      "solve_seconds": 0.3040358819998801,
+      "kernel_ms": 41.98809587955475,
+      "candidate_solves": 870891,
+      "policies": [
+        [
+          0,
+          -1,
+          "prograde"
+        ]
+      ],
+      "device": {
+        "name": "NVIDIA RTX PRO 2000 Blackwell Generation Laptop GPU",
+        "major": 12,
+        "minor": 0,
+        "driver": 13040,
+        "runtime": 12080,
+        "multiprocessors": 26,
+        "registers": 197,
+        "local_bytes": 32,
+        "active_blocks": 2,
+        "threads_per_sm": 1536,
+        "max_threads_per_block": 256,
+        "predicted_occupancy": 0.16666666666666666
+      },
+      "plot_status": "ok",
+      "matplotlib": "3.11.2",
+      "total_seconds": 0.7916650640036096
+    },
+    {
+      "route": "emc-mars-earth",
+      "schema": 1,
+      "config": {
+        "dep_body": "4",
+        "arr_body": "399",
+        "dep_start": "2037-01-01",
+        "dep_end": "2038-07-01",
+        "dep_step": 1.0,
+        "tof_min": 100,
+        "tof_max": 550,
+        "tof_step": 1.0,
+        "kernels": [
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/naif0012.tls",
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/de440s.bsp",
+          "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/gm_de440.tpc"
+        ],
+        "frame": "ECLIPJ2000",
+        "time_scale": "TDB",
+        "backend": "cuda",
+        "orientation": "prograde",
+        "max_revolutions": 0,
+        "batch_size": 65536,
+        "max_cells": 10000000,
+        "max_memory_mb": 2048,
+        "cmin": 10.0,
+        "cmax": 100.0,
+        "tof_contour_step": 50.0,
+        "plot": true
+      },
+      "created_utc": "2026-10-20T00:49:15.833600+00:00",
+      "center": "SUN",
+      "aberration": "NONE",
+      "mu_m3_s2": 1.3271244004127939e+20,
+      "kernels": [
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/naif0012.tls",
+          "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
+        },
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/de440s.bsp",
+          "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
+        },
+        {
+          "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/gm_de440.tpc",
+          "sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140"
+        }
+      ],
+      "units": {
+        "states": "m and m/s",
+        "vinf": "m/s",
+        "C3": "km^2/s^2",
+        "et": "TDB seconds past J2000",
+        "tof": "86400-second days"
+      },
+      "native_library_sha256": "6ea14f08a4ced3ca758d06a95b0131cb4ea09016442e3850d9f9d29acca01ddc",
+      "commit": "ec40cd518020a9b6a1b3668be1274d61de2ea153",
+      "dirty_tree": true,
+      "workflow_sources": {
+        "run.py": "347fa815d0326f265438e5f219947ecb8349f877abd7cc53cde5dea7926243ad",
+        "src/research/__init__.py": "720be44ae0aeb70df1b33357f2a776af2134a70e9a17a6f22171520252c4a4f4",
+        "src/research/cli.py": "8e1e6a774fe876efe574dd1a8bebb54129ca28cde59294f815e2a171f03c1d96",
+        "src/research/config.py": "2d3ef193c7fbfb770f12a537d46e5d17d62d822a551c808cc1dd1d2986d44957",
+        "src/research/ephemeris.py": "5662032b65069860df22728180d8cca36ccdcafebb65aad7a38a3e41d7999d85",
+        "src/research/grid.py": "3ac910cbdec682c435f8487a6ac3daec8c807c40667f4e909cf107d7b6573fe7",
+        "src/research/plot.py": "dc3f82f4c53b7f07e3494c4af6d2d100ccbe887c5caefb6163fc7cfd5b0ac9da"
+      },
+      "python": "3.12.3",
+      "numpy": "2.5.4",
+      "spiceypy": "8.3.0",
+      "spice_toolkit": "CSPICE_N0067",
+      "root_options": {
+        "x_atol": 1e-14,
+        "x_rtol": 1e-14,
+        "tof_atol": 0.0,
+        "tof_rtol": 5e-13,
+        "max_iterations": 128,
+        "max_bracket_expansions": 1024
+      },
+      "minimum_options": {
+        "x_atol": 1e-14,
+        "x_rtol": 1e-14,
+        "max_iterations": 128,
+        "max_bracket_expansions": 32
+      },
+      "valid_cells": 246697,
+      "total_cells": 246697,
+      "warning_cells": 0,
+      "unknown_precision_cells": 0,
+      "minimum": {
+        "departure_et": 1184241600.0,
+        "tof_days": 270.0,
+        "C3_km2_s2": 12.55049062413201,
+        "revolutions": 0,
+        "branch": -1,
+        "long_way": 1
+      },
+      "ephemeris_calls": 0,
+      "cached_states": 1544,
+      "grid_sha256": "91fc2c50deb51dacc3ad2d2e359457fc23594c7833056f6ed51d52807b6a6691",
+      "minimum_table_sha256": "860f17f93da4d72199bd0392b963fca27244d1d7492497bc5d77f759802b2dea",
+      "state_seconds": 0.015883006002695765,
+      "solve_seconds": 0.08239682699786499,
+      "kernel_ms": 11.364128232002258,
+      "candidate_solves": 246697,
+      "policies": [
+        [
+          0,
+          -1,
+          "prograde"
+        ]
+      ],
+      "device": {
+        "name": "NVIDIA RTX PRO 2000 Blackwell Generation Laptop GPU",
+        "major": 12,
+        "minor": 0,
+        "driver": 13040,
+        "runtime": 12080,
+        "multiprocessors": 26,
+        "registers": 197,
+        "local_bytes": 32,
+        "active_blocks": 2,
+        "threads_per_sm": 1536,
+        "max_threads_per_block": 256,
+        "predicted_occupancy": 0.16666666666666666
+      },
+      "plot_status": "ok",
+      "matplotlib": "3.11.2",
+      "total_seconds": 0.34990103999734856
+    }
+  ],
+  "limitations": [
+    "Prograde, M=0 only for paper presets; current pinned local kernels and cached states.",
+    "Mars means explicit NAIF 4 barycenter, not 499 body center.",
+    "These are window presets, not an assertion of exact original-paper reproduction.",
+    "Run manifests mark the pre-commit working tree dirty and record exact workflow source and native-library hashes."
+  ]
+}

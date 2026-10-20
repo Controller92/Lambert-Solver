@@ -1,0 +1,18 @@
+{
+  "dep_body": "399",
+  "arr_body": "4",
+  "dep_start": "2035-06-24",
+  "dep_end": "2035-06-26",
+  "dep_step": 1.0,
+  "tof_min": 700.0,
+  "tof_max": 900.0,
+  "tof_step": 100.0,
+  "kernels": [
+    "../data/kernels/naif0012.tls",
+    "../data/kernels/de440s.bsp",
+    "../data/kernels/gm_de440.tpc"
+  ],
+  "orientation": "both",
+  "backend": "cuda",
+  "max_revolutions": 1
+}

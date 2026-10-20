@@ -1,0 +1,77 @@
+[
+  {
+    "grid": "../EMC-porkchop-runs/emc-ceres-mars/20261020T004915-3976c1c0/grid.npz",
+    "sampled_cells": 51,
+    "maxima": {
+      "relative_C3": 2.5458238333256965e-15,
+      "scaled_velocity": 1.0419679807841203e-15,
+      "vinf_consistency": 1.844204245016109e-16
+    },
+    "total_cells": 1374048,
+    "valid_cells": 1374048,
+    "backend": "cuda",
+    "orientation": "prograde",
+    "max_revolutions": 0,
+    "total_seconds": 1.1857226400024956
+  },
+  {
+    "grid": "../EMC-porkchop-runs/emc-earth-mars/20261020T004913-5b3ba01c/grid.npz",
+    "sampled_cells": 51,
+    "maxima": {
+      "relative_C3": 1.1438621700479347e-14,
+      "scaled_velocity": 1.1939370126007657e-15,
+      "vinf_consistency": 1.7529228762867395e-16
+    },
+    "total_cells": 753905,
+    "valid_cells": 753905,
+    "backend": "cuda",
+    "orientation": "prograde",
+    "max_revolutions": 0,
+    "total_seconds": 1.073413010002696
+  },
+  {
+    "grid": "../EMC-porkchop-runs/emc-mars-ceres/20261020T004914-20d49b38/grid.npz",
+    "sampled_cells": 51,
+    "maxima": {
+      "relative_C3": 5.40699784010231e-15,
+      "scaled_velocity": 1.5199250217078944e-15,
+      "vinf_consistency": 2.0783367771048623e-16
+    },
+    "total_cells": 870891,
+    "valid_cells": 870891,
+    "backend": "cuda",
+    "orientation": "prograde",
+    "max_revolutions": 0,
+    "total_seconds": 0.7916650640036096
+  },
+  {
+    "grid": "../EMC-porkchop-runs/emc-mars-earth/20261020T004915-db6fc614/grid.npz",
+    "sampled_cells": 51,
+    "maxima": {
+      "relative_C3": 4.539099195986657e-15,
+      "scaled_velocity": 2.9954643548933827e-15,
+      "vinf_consistency": 1.9822715071489762e-16
+    },
+    "total_cells": 246697,
+    "valid_cells": 246697,
+    "backend": "cuda",
+    "orientation": "prograde",
+    "max_revolutions": 0,
+    "total_seconds": 0.34990103999734856
+  },
+  {
+    "grid": "../CLI-smoke-runs/20261020T004916-c66c5217/grid.npz",
+    "sampled_cells": 9,
+    "maxima": {
+      "relative_C3": 5.803088653202457e-15,
+      "scaled_velocity": 1.016423935063071e-15,
+      "vinf_consistency": 1.6623575735262845e-16
+    },
+    "total_cells": 9,
+    "valid_cells": 9,
+    "backend": "cuda",
+    "orientation": "both",
+    "max_revolutions": 1,
+    "total_seconds": 0.5259968890022719
+  }
+]

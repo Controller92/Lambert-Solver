@@ -1,0 +1,66 @@
+399 → 4 | cuda | prograde | M=0..0
+655 departures × 1,151 flight times = 753,905 cells; 753,905 candidate solves
+Dates: TDB. States: heliocentric geometric. C3: km²/s².
+Grid: 8% (65,536/753,905 cells)
+Grid: 17% (131,072/753,905 cells)
+Grid: 26% (196,608/753,905 cells)
+Grid: 34% (262,144/753,905 cells)
+Grid: 43% (327,680/753,905 cells)
+Grid: 52% (393,216/753,905 cells)
+Grid: 60% (458,752/753,905 cells)
+Grid: 78% (589,824/753,905 cells)
+Grid: 86% (655,360/753,905 cells)
+Grid: 95% (720,896/753,905 cells)
+Grid: 100% (753,905/753,905 cells)
+Saved results: /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/EMC-porkchop-runs/emc-earth-mars/20261020T004913-5b3ba01c
+Valid cells: 753,905/753,905; precision warnings: 0; unknown: 0
+Total 1.073 s; states 0.035 s; solve stage 0.451 s
+Minimum: {"departure_et": 1119528000.0, "tof_days": 195.0, "C3_km2_s2": 10.262197687746815, "revolutions": 0, "branch": -1, "long_way": 0}
+4 → 20000001 | cuda | prograde | M=0..0
+791 departures × 1,101 flight times = 870,891 cells; 870,891 candidate solves
+Dates: TDB. States: heliocentric geometric. C3: km²/s².
+Grid: 7% (65,536/870,891 cells)
+Grid: 15% (131,072/870,891 cells)
+Grid: 22% (196,608/870,891 cells)
+Grid: 30% (262,144/870,891 cells)
+Grid: 45% (393,216/870,891 cells)
+Grid: 52% (458,752/870,891 cells)
+Grid: 60% (524,288/870,891 cells)
+Grid: 75% (655,360/870,891 cells)
+Grid: 82% (720,896/870,891 cells)
+Grid: 90% (786,432/870,891 cells)
+Grid: 100% (870,891/870,891 cells)
+Saved results: /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/EMC-porkchop-runs/emc-mars-ceres/20261020T004914-20d49b38
+Valid cells: 870,891/870,891; precision warnings: 0; unknown: 0
+Total 0.792 s; states 0.025 s; solve stage 0.304 s
+Minimum: {"departure_et": 1140609600.0, "tof_days": 704.0, "C3_km2_s2": 13.141169217605082, "revolutions": 0, "branch": -1, "long_way": 1}
+20000001 → 4 | cuda | prograde | M=0..0
+1,248 departures × 1,101 flight times = 1,374,048 cells; 1,374,048 candidate solves
+Dates: TDB. States: heliocentric geometric. C3: km²/s².
+Grid: 4% (65,536/1,374,048 cells)
+Grid: 14% (196,608/1,374,048 cells)
+Grid: 23% (327,680/1,374,048 cells)
+Grid: 33% (458,752/1,374,048 cells)
+Grid: 42% (589,824/1,374,048 cells)
+Grid: 52% (720,896/1,374,048 cells)
+Grid: 62% (851,968/1,374,048 cells)
+Grid: 71% (983,040/1,374,048 cells)
+Grid: 81% (1,114,112/1,374,048 cells)
+Grid: 90% (1,245,184/1,374,048 cells)
+Grid: 100% (1,374,048/1,374,048 cells)
+Saved results: /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/EMC-porkchop-runs/emc-ceres-mars/20261020T004915-3976c1c0
+Valid cells: 1,374,048/1,374,048; precision warnings: 0; unknown: 0
+Total 1.186 s; states 0.035 s; solve stage 0.483 s
+Minimum: {"departure_et": 1126526400.0, "tof_days": 544.0, "C3_km2_s2": 9.837858884691846, "revolutions": 0, "branch": -1, "long_way": 1}
+4 → 399 | cuda | prograde | M=0..0
+547 departures × 451 flight times = 246,697 cells; 246,697 candidate solves
+Dates: TDB. States: heliocentric geometric. C3: km²/s².
+Grid: 26% (65,536/246,697 cells)
+Grid: 53% (131,072/246,697 cells)
+Grid: 79% (196,608/246,697 cells)
+Grid: 100% (246,697/246,697 cells)
+Saved results: /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/EMC-porkchop-runs/emc-mars-earth/20261020T004915-db6fc614
+Valid cells: 246,697/246,697; precision warnings: 0; unknown: 0
+Total 0.350 s; states 0.016 s; solve stage 0.082 s
+Minimum: {"departure_et": 1184241600.0, "tof_days": 270.0, "C3_km2_s2": 12.55049062413201, "revolutions": 0, "branch": -1, "long_way": 1}
+Batch complete: 3.486 s; summary /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/EMC-porkchop-runs/batch-1a25eede.json
