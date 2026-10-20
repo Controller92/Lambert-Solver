@@ -1,12 +1,13 @@
-"""Cached Horizons Juno case for the M>0 scalar preparation layer.
+"""Cached Horizons Juno regression for complete Python M>0 transfers.
 
 --refresh retrieves public data sequentially; ordinary runs are offline.
 States are Jupiter-centered geometric ICRF vectors in continuous TDB time.
-Gooding and multiprecision roots are validation references, not product solvers.
-The product layer here evaluates T/derivatives/minima and classifies feasibility.
+Gooding and multiprecision roots/velocities are independent validation references.
+Product left/right velocities are also propagated and checked for orbital winding.
 """
 import argparse
 import csv
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 import hashlib
@@ -30,8 +31,12 @@ from src.lambert_multirev import (
     MinimumStatus, FeasibilityStatus, classify_multirev_time, evaluate_derivatives_multi_rev,
     find_minimum_multi_rev,
 )
+from src.lambert_multirev_solver import solve_multi_rev_pair
+from src.lambert_multirev_root import MultiRootStatus
+from src.lambert_solver import LambertStatus
 from src.lambert_tof import TofStatus
 from validate_multirev import lagrange, minimum_reference, reference_lambda
+from validate_multirev_solver import physical_reference, kepler_propagate, propagate_winding
 
 DATA = ROOT/'validation'/'data'/'juno'
 API = 'https://ssd.jpl.nasa.gov/api/horizons.api'
@@ -181,8 +186,8 @@ def validate():
     start, stop = rows[0], rows[-1]
     duration = float(stop['tdb_seconds']-start['tdb_seconds'])
     long_way = bool(np.dot(np.cross(start['r'], stop['r']), normal) < 0)
-    # Geometry remains the validated M=0 geometry helper; only the scalar
-    # preparation receives M. The product's full M>0 solver is still unsupported.
+    # The geometry helper is M-independent; the complete product uses its
+    # dedicated M>0 interface with explicit branch selection below.
     p = LambertInput(tuple(start['r']), tuple(stop['r']), duration, mu, long_way)
     prepared = prepare_geometry(p)
     if prepared.status != GeometryStatus.OK:
@@ -234,7 +239,7 @@ def validate():
             raise AssertionError('Independent Gooding/anomaly time or revolution mismatch')
         if np.dot(np.cross(start['r'], v1), orbital_normal) <= 0:
             raise AssertionError('Independent reference orientation mismatch')
-        gooding.append(dict(low_path=low, semimajor_axis_m=a,
+        gooding.append(dict(low_path=low, v1_m_s=v1.tolist(), v2_m_s=v2.tolist(), semimajor_axis_m=a,
                             anomaly_time_error_seconds=abs(elapsed-duration), iterations=int(iterations),
                             departure_ephemeris_velocity_difference_m_s=float(np.linalg.norm(v1-start['v'])),
                             arrival_ephemeris_velocity_difference_m_s=float(np.linalg.norm(v2-stop['v']))))
@@ -255,17 +260,59 @@ def validate():
                      product_relative_tof_residual=abs(value.time_nondim/g.time_nondim-1), **comparison)
         branches.append(entry)
         print('Reference branch:', json.dumps(entry), flush=True)
+    problem = replace(p, revolutions=m)
+    products = solve_multi_rev_pair(problem)
+    physical = physical_reference(problem)
+    product_records = []
+    for j, product in enumerate(products):
+        if product.status != LambertStatus.OK:
+            raise AssertionError(f'Juno complete product failed: {product}')
+        comparison = gooding[order[j]]
+        gooding_difference = max(np.linalg.norm(np.array(product.v1_m_s)-comparison['v1_m_s']),
+                                 np.linalg.norm(np.array(product.v2_m_s)-comparison['v2_m_s']))
+        expected1, expected2 = physical[1][j]
+        mp_difference = max(np.linalg.norm(np.array(product.v1_m_s)-np.array(list(map(float,expected1)))),
+                            np.linalg.norm(np.array(product.v2_m_s)-np.array(list(map(float,expected2)))))
+        normalized_r1,normalized_r2 = start['r']/length,stop['r']/length
+        u1,u2 = np.array(product.v1_m_s)/speed,np.array(product.v2_m_s)/speed
+        elapsed = duration/(length/speed)
+        kr,kv,ksweep = kepler_propagate(normalized_r1,u1,elapsed)
+        closure_r = np.linalg.norm(np.array(list(map(float,kr)))-normalized_r2)*length
+        closure_v = np.linalg.norm(np.array(list(map(float,kv)))-u2)*speed
+        ode_r,ode_v,ode_sweep = propagate_winding(normalized_r1,u1,normalized_r2,u2,elapsed,m,
+                                                 product.geometry.geometry.transfer_angle_rad)
+        expected_sweep = 2*math.pi*m+product.geometry.geometry.transfer_angle_rad
+        if (gooding_difference>1e-6 or mp_difference>1e-6 or closure_r>10 or closure_v>1e-6
+                or abs(float(ksweep)-expected_sweep)>2e-8):
+            raise AssertionError('Juno product velocity or independent propagation discrepancy')
+        entry = dict(branch=product.branch.value, x=product.root.x,
+                     v1_m_s=product.v1_m_s, v2_m_s=product.v2_m_s,
+                     iterations=product.root.iterations, relative_residual=product.root.relative_residual,
+                     precision_limited=product.root.x_precision_limited,
+                     estimated_x_error=product.root.estimated_x_error,
+                     gooding_velocity_difference_m_s=float(gooding_difference),
+                     multiprecision_velocity_difference_m_s=float(mp_difference),
+                     kepler_position_closure_m=float(closure_r),kepler_velocity_closure_m_s=float(closure_v),
+                     ode_position_closure_m=ode_r*length,ode_velocity_closure_m_s=ode_v*speed,
+                     propagated_angle_degrees=math.degrees(float(ksweep)),
+                     ode_propagated_angle_degrees=math.degrees(ode_sweep))
+        product_records.append(entry)
+        print('Complete product branch:',json.dumps(entry),flush=True)
+    for count in (2,3):
+        for product in solve_multi_rev_pair(replace(problem,revolutions=count)):
+            if product.root.status!=MultiRootStatus.NO_SOLUTION or product.v1_m_s is not None:
+                raise AssertionError('Juno infeasible count fabricated a velocity')
     result = dict(mission='Juno', target=-61, center=599, frame='ICRF', time_scale='TDB',
                   start=START, stop=STOP, duration_days=duration/86400, mu_m3_s2=mu,
                   coarse_samples=len(coarse), refined_samples=len(fine), unique_samples=len(rows),
                   observed_projected_sweep_degrees=math.degrees(sweep), observed_revolutions=m,
                   maximum_sample_angle_degrees=math.degrees(max(increments)),
                   minimum_projection_ratio=float(min(projection_ratio)), feasibility=feasibility,
-                  reference_branches=branches,
-                  limitation='The product provides M>0 scalar preparation only. Roots/velocities here '
-                  'come from independent validation references. Differences from actual spacecraft '
+                  reference_branches=branches, product_branches=product_records,
+                  limitation='Complete M>0 roots and velocities are implemented in Python only; '
+                  'native C++/CUDA still supports M=0. Differences from spacecraft ephemeris '
                   'velocities include non-Keplerian gravity and maneuvers and are not numerical error tests.')
-    print('Juno preparation regression passed. Full multi-revolution product roots remain subsequent work.', flush=True)
+    print('Juno complete multi-revolution regression passed.', flush=True)
     return result
 
 

@@ -1,20 +1,22 @@
 # Lamberts-Problem Documentation
 
-The custom engine now runs in **CUDA C++**, with a shared C++ CPU path and
+The zero-revolution native engine runs in **CUDA C++**, with a shared C++ CPU path and
 NumPy batch bindings in `src/lambert_native.py`. See the
 [native engine walkthrough](docs/seventh-increment.md) for build instructions,
 API examples, independent accuracy checks and measured GPU performance.
 The [first optimization pass](docs/eighth-increment.md) reduces representative
 search kernel time by 17.9% and includes a reproducible baseline comparison.
 The Python mathematical implementation remains the independently validated
-reference. Multirevolution solutions and legacy GUI integration are still separate work.
+reference. Native multi-revolution support and legacy GUI integration remain subsequent work.
 
 The [multi-revolution preparation increment](docs/ninth-increment.md) adds Python
 TOF/derivatives, minimum-time detection and explicit feasibility diagnostics.
-It includes a cached Horizons Juno case around Jupiter. Full M>0 roots and
-velocities are the next increment; the existing complete solvers still reject them.
+It includes a cached Horizons Juno case around Jupiter. The
+[complete Python multi-revolution engine](docs/tenth-increment.md) now supplies
+explicit left/right roots and velocities through `solve_multi_rev` and
+`solve_multi_rev_pair` in `src/lambert_multirev_solver.py`.
 
-The current custom CPU entry point is `src.lambert_solver.solve_zero_rev`.
+The zero-revolution CPU entry point is `src.lambert_solver.solve_zero_rev`.
 It returns both endpoint velocities, explicit statuses and root diagnostics.
 The [sixth increment](docs/sixth-increment.md) fixes tiny-arc precision through
 the complete calculation and validates arbitrary 3D planes. The
@@ -47,7 +49,7 @@ arrival velocities for zero-revolution transfers. See [the fifth increment](docs
 for the API, analytical/Gooding/propagation validation and precision warnings.
 This isolated CPU solver is separate from the legacy GUI. Retained `q=c/s`
 preserves tiny-arc shape information; inspect the root conditioning diagnostics.
-Multirevolution support remains subsequent work.
+The dedicated multi-revolution Python entry points are documented above.
 
 ## Interplanetary Trajectory Calculator
 

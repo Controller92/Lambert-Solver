@@ -1,0 +1,51 @@
+{
+  "scalar": {
+    "counts": {
+      "OK": 457,
+      "precision_warning": 186,
+      "precision_unknown": 0,
+      "RESOLUTION_LIMIT": 25,
+      "NEAR_MINIMUM": 36,
+      "NO_SOLUTION": 36
+    },
+    "maxima": {
+      "root_x": 1.089578046823168e-09,
+      "unflagged_x": 4.614625630280215e-16,
+      "forward_ulps": 3.6089157656800914,
+      "error_over_estimate": 0.4093861928751582
+    }
+  },
+  "conics": {
+    "problems": 48,
+    "branch_solutions": 96,
+    "precision_warnings": 9,
+    "maxima": {
+      "known_velocity": 1.0804397005366316e-15,
+      "gooding_velocity": 3.421937179708943e-15,
+      "energy": 8.095820999637688e-16,
+      "momentum": 5.688200336284365e-16,
+      "propagated_position": 1.2971399036830708e-11,
+      "propagated_velocity": 1.2924876923190039e-11,
+      "winding_angle": 2.341202787192742e-09,
+      "ode_position": 3.958518289360306e-09,
+      "ode_velocity": 3.957288339431501e-09,
+      "control_position": 4.1678703219101e-12,
+      "control_velocity": 4.152903677915779e-12
+    }
+  },
+  "actual": {
+    "problems": 40,
+    "branch_solutions": 80,
+    "max_scaled_velocity_error": 4.563419397151251e-16
+  },
+  "conditioning": {
+    "counts": {
+      "NO_SOLUTION": 6,
+      "NEAR_MINIMUM": 6,
+      "OK": 24,
+      "precision_warning": 24
+    },
+    "max_velocity_error_unit_scale": 3.94639875852151e-10,
+    "max_error_over_envelope": 0.02043115523677319
+  }
+}

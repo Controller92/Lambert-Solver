@@ -70,9 +70,10 @@ class RootResult:
     x_precision_limited: bool | None = None
 
 
-def _householder_step(f, derivatives):
+def _householder_step(f, derivatives, *, decreasing=True):
     """Algebraically scaled form of the paper's update, avoiding f'^2/f'^3."""
-    if derivatives.status != TofStatus.OK or derivatives.first >= 0:
+    if (derivatives.status != TofStatus.OK
+            or (derivatives.first >= 0 if decreasing else derivatives.first <= 0)):
         return None
     try:
         u = f/derivatives.first

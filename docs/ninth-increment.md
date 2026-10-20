@@ -1,5 +1,9 @@
 # Ninth increment: multi-revolution scalar preparation and Juno ephemerides
 
+The [tenth increment](tenth-increment.md) adds complete Python left/right roots
+and velocities. This report preserves the preparation-stage results below;
+the current Juno validator also exercises the complete solver.
+
 `src/lambert_multirev.py` now evaluates multi-revolution time-of-flight and its
 first three derivatives, locates the minimum flight time, and classifies a
 requested time relative to that minimum. This is the Python scalar preparation

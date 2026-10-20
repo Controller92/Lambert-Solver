@@ -10,7 +10,7 @@ from enum import IntEnum
 import math
 
 from .lambert_geometry import (
-    GeometryResult, GeometryStatus, LambertInput, Vector3, prepare_geometry,
+    GeometryResult, GeometryStatus, LambertGeometry, LambertInput, Vector3, prepare_geometry,
 )
 from .lambert_root import RootOptions, RootResult, RootStatus, solve_x_zero_rev
 from .lambert_tof import _eta
@@ -52,6 +52,37 @@ def _velocity_scale(mu: float, s: float, radius: float) -> float:
     return math.ldexp(mantissa, half-re)
 
 
+def _reconstruct_velocities(problem: LambertInput, g: LambertGeometry,
+                            root: RootResult) -> tuple[Vector3, Vector3]:
+    """Shared dimensional reconstruction after a successful scalar root."""
+    x, y, lam = root.x, root.y, g.lambda_
+    q = g.q
+    # (y-lambda*x)*(y+lambda*x)=1-lambda^2. Rationalize the
+    # subtractive member, particularly important for long hyperbolic arcs.
+    minus = _eta(x, lam, q, y)
+    plus = y+lam*x if lam*x > 0 else q/minus
+    # A=lambda*y-x, B=lambda*y+x. The rewritten member avoids
+    # first subtracting nearly equal lambda*y and +/-x near |lambda|=1.
+    if lam*x > 0:
+        a, b = math.fsum((lam*minus, -q*x)), lam*y+x
+    else:
+        a, b = lam*y-x, math.fsum((lam*plus, q*x))
+    scale1 = _velocity_scale(float(problem.mu_m3_s2), g.semiperimeter_m, g.r1_norm_m)
+    scale2 = _velocity_scale(float(problem.mu_m3_s2), g.semiperimeter_m, g.r2_norm_m)
+    radial1 = scale1*math.fsum((a, -g.rho*b))
+    radial2 = -scale2*math.fsum((a, g.rho*b))
+    transverse = g.sigma*plus
+    vt1, vt2 = scale1*transverse, scale2*transverse
+    v1 = tuple(math.fsum((radial1*r, vt1*t))
+               for r, t in zip(g.radial1, g.transverse1))
+    v2 = tuple(math.fsum((radial2*r, vt2*t))
+               for r, t in zip(g.radial2, g.transverse2))
+    if (not all(math.isfinite(v) for v in (*v1, *v2))
+            or scale1 <= 0 or scale2 <= 0 or vt1 <= 0 or vt2 <= 0):
+        raise ValueError('unrepresentable endpoint velocities')
+    return v1, v2
+
+
 def solve_zero_rev(problem: LambertInput,
                    options: RootOptions = RootOptions()) -> LambertResult:
     """Prepare geometry, solve x, reconstruct both inertial velocities in m/s.
@@ -68,32 +99,8 @@ def solve_zero_rev(problem: LambertInput,
     if root.status != RootStatus.OK:
         return LambertResult(LambertStatus.ROOT_FAILURE, geometry, root)
 
-    x, y, lam = root.x, root.y, g.lambda_
     try:
-        q = g.q
-        # (y-lambda*x)*(y+lambda*x)=1-lambda^2. Rationalize the
-        # subtractive member, particularly important for long hyperbolic arcs.
-        minus = _eta(x, lam, q, y)
-        plus = y+lam*x if lam*x > 0 else q/minus
-        # A=lambda*y-x, B=lambda*y+x. The rewritten member avoids
-        # first subtracting nearly equal lambda*y and +/-x near |lambda|=1.
-        if lam*x > 0:
-            a, b = math.fsum((lam*minus, -q*x)), lam*y+x
-        else:
-            a, b = lam*y-x, math.fsum((lam*plus, q*x))
-        scale1 = _velocity_scale(float(problem.mu_m3_s2), g.semiperimeter_m, g.r1_norm_m)
-        scale2 = _velocity_scale(float(problem.mu_m3_s2), g.semiperimeter_m, g.r2_norm_m)
-        radial1 = scale1*math.fsum((a, -g.rho*b))
-        radial2 = -scale2*math.fsum((a, g.rho*b))
-        transverse = g.sigma*plus
-        vt1, vt2 = scale1*transverse, scale2*transverse
-        v1 = tuple(math.fsum((radial1*r, vt1*t))
-                   for r, t in zip(g.radial1, g.transverse1))
-        v2 = tuple(math.fsum((radial2*r, vt2*t))
-                   for r, t in zip(g.radial2, g.transverse2))
-        if (not all(math.isfinite(v) for v in (*v1, *v2))
-                or scale1 <= 0 or scale2 <= 0 or vt1 <= 0 or vt2 <= 0):
-            return LambertResult(LambertStatus.NUMERICAL_RANGE, geometry, root)
+        v1, v2 = _reconstruct_velocities(problem, g, root)
     except (OverflowError, ValueError, ZeroDivisionError):
         return LambertResult(LambertStatus.NUMERICAL_RANGE, geometry, root)
     return LambertResult(LambertStatus.OK, geometry, root, v1, v2)

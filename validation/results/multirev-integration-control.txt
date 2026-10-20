@@ -1,0 +1,27 @@
+Development integration-control experiment, multi-conic-29 (five revolutions), left branch.
+Executed with the existing validation environment: SciPy 1.18.1 DOP853, mpmath 1.3.0,
+NumPy 2.5.4. Source cases() = conics() in validation/validate_multirev_solver.py,
+seed 958710. The diagnostic preceded the residual-progress safeguard refinement;
+the final conic validation retains the same maximum coarse ODE error.
+
+MP comparison of product velocities, scaled by sqrt(mu/p):
+  left:  7.016556451321376e-16
+  right: 1.2229515290038734e-15
+
+State coordinates normalized by p, velocities by sqrt(mu/p), mu=1.
+ODE max_step = elapsed/(steps*(M+1)). Position error is divided by max(1,|r2|).
+Reference control uses the MP actual-input Lambert initial velocity rounded to
+binary64, with the same initial position, elapsed time and integrator.
+
+rtol      atol    steps  initial velocity   integration samples  scaled position error
+3e-14     3e-15   128    product            1998                 3.958518289360306e-09
+3e-14     3e-15   128    MP reference       1998                 3.665063369842601e-09
+2.3e-14   3e-16   256    product            2712                 3.0101242358608298e-09
+2.3e-14   3e-16   256    MP reference       2712                 2.880261431452422e-09
+2.3e-14   1e-16   512    product            4116                 3.449062989442847e-09
+2.3e-14   1e-16   512    MP reference       4116                 3.4825148470004943e-09
+
+The final acceptance uses independent 100-digit Kepler propagation for endpoint
+closure, retaining the preselected 3e-9 position/velocity bounds. DOP853 is still
+executed for every conic branch with an explicit winding test; its endpoint
+errors remain reported as numerical integration diagnostics.
