@@ -1,0 +1,220 @@
+{
+  "conventions": "Heliocentric geometric, Ecliptic J2000, TDB, SI",
+  "state_comparisons": {
+    "earth": {
+      "max_position_difference_m": 0.042297071754147146,
+      "max_velocity_difference_m_s": 1.1852692312943203e-07,
+      "samples": [
+        {
+          "epoch_tdb": "2035-07-01T00:00:00",
+          "position_difference_m": 0.0384828060702669,
+          "velocity_difference_m_s": 1.0720369649654961e-07
+        },
+        {
+          "epoch_tdb": "2038-05-21T00:00:00",
+          "position_difference_m": 0.041839125174867785,
+          "velocity_difference_m_s": 1.1525685830195152e-07
+        },
+        {
+          "epoch_tdb": "2035-07-01T00:00:00",
+          "position_difference_m": 0.0384828060702669,
+          "velocity_difference_m_s": 1.0720369649654961e-07
+        },
+        {
+          "epoch_tdb": "2038-04-22T00:00:00",
+          "position_difference_m": 0.042297071754147146,
+          "velocity_difference_m_s": 1.1852692312943203e-07
+        }
+      ]
+    },
+    "mars": {
+      "max_position_difference_m": 6.103562190951096e-05,
+      "max_velocity_difference_m_s": 6.558459564010244e-12,
+      "samples": [
+        {
+          "epoch_tdb": "2036-01-17T00:00:00",
+          "position_difference_m": 6.103562190951096e-05,
+          "velocity_difference_m_s": 6.558459564010244e-12
+        },
+        {
+          "epoch_tdb": "2036-01-17T00:00:00",
+          "position_difference_m": 6.103562190951096e-05,
+          "velocity_difference_m_s": 6.558459564010244e-12
+        },
+        {
+          "epoch_tdb": "2038-01-16T00:00:00",
+          "position_difference_m": 3.0755072587198445e-05,
+          "velocity_difference_m_s": 4.547473508864641e-13
+        },
+        {
+          "epoch_tdb": "2038-01-16T00:00:00",
+          "position_difference_m": 3.0755072587198445e-05,
+          "velocity_difference_m_s": 4.547473508864641e-13
+        },
+        {
+          "epoch_tdb": "2036-01-17T00:00:00",
+          "position_difference_m": 6.103562190951096e-05,
+          "velocity_difference_m_s": 6.558459564010244e-12
+        },
+        {
+          "epoch_tdb": "2036-01-17T00:00:00",
+          "position_difference_m": 6.103562190951096e-05,
+          "velocity_difference_m_s": 6.558459564010244e-12
+        },
+        {
+          "epoch_tdb": "2037-12-18T00:00:00",
+          "position_difference_m": 4.76837158203125e-07,
+          "velocity_difference_m_s": 3.637978807091713e-12
+        },
+        {
+          "epoch_tdb": "2037-12-18T00:00:00",
+          "position_difference_m": 4.76837158203125e-07,
+          "velocity_difference_m_s": 3.637978807091713e-12
+        }
+      ]
+    },
+    "ceres": {
+      "max_position_difference_m": 0.6736240361228998,
+      "max_velocity_difference_m_s": 3.272318984763946e-08,
+      "samples": [
+        {
+          "epoch_tdb": "2036-09-23T00:00:00",
+          "position_difference_m": 0.6736240361228998,
+          "velocity_difference_m_s": 3.272318984763946e-08
+        },
+        {
+          "epoch_tdb": "2036-10-23T00:00:00",
+          "position_difference_m": 0.6492281956106039,
+          "velocity_difference_m_s": 3.125249554191884e-08
+        },
+        {
+          "epoch_tdb": "2036-09-24T00:00:00",
+          "position_difference_m": 0.672874485632007,
+          "velocity_difference_m_s": 3.269027110280134e-08
+        },
+        {
+          "epoch_tdb": "2036-10-24T00:00:00",
+          "position_difference_m": 0.6484361908508781,
+          "velocity_difference_m_s": 3.11939430553817e-08
+        }
+      ]
+    }
+  },
+  "independent_gooding_encounters": [
+    {
+      "name": "durations_first",
+      "encounters": [
+        {
+          "vinf_in_m_s": 2619.1650509535025,
+          "vinf_out_m_s": 5956.10256809794,
+          "speed_mismatch_m_s": 3336.9375171444376,
+          "required_turn_deg": 124.38094755196857,
+          "maximum_unpowered_turn_deg": 78.76722707798078,
+          "turn_margin_deg": -45.6137204739878,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 815221.1863117678,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4528.9075860319,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.2898901261833,
+            -691.1916922430864,
+            -1033.401244044351
+          ],
+          "vinf_out_vector_m_s": [
+            -716.1346988017249,
+            4319.514239460035,
+            4037.834274704329
+          ]
+        },
+        {
+          "vinf_in_m_s": 12199.125548588396,
+          "vinf_out_m_s": 21353.013570194933,
+          "speed_mismatch_m_s": 9153.888021606537,
+          "required_turn_deg": 156.9907161544336,
+          "maximum_unpowered_turn_deg": 8.498592751333547,
+          "turn_margin_deg": -148.4921234031001,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 5900.651037171398,
+          "optimistic_postflyby_asymptotic_correction_m_s": 32387.30690692797,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            3732.865758547301,
+            11101.751859342074,
+            3411.0823843000326
+          ],
+          "vinf_out_vector_m_s": [
+            -619.664310597127,
+            -21343.515975288556,
+            -146.73269473227316
+          ]
+        }
+      ]
+    },
+    {
+      "name": "calendar_first",
+      "encounters": [
+        {
+          "vinf_in_m_s": 2619.1650509535025,
+          "vinf_out_m_s": 5948.566532561224,
+          "speed_mismatch_m_s": 3329.401481607722,
+          "required_turn_deg": 124.29206923035859,
+          "maximum_unpowered_turn_deg": 78.76722707798078,
+          "turn_margin_deg": -45.52484215237781,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 818112.0661901289,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4518.22819424184,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.2898901261833,
+            -691.1916922430864,
+            -1033.401244044351
+          ],
+          "vinf_out_vector_m_s": [
+            -704.5214389205794,
+            4307.302629741198,
+            4041.8111522228874
+          ]
+        },
+        {
+          "vinf_in_m_s": 12000.14263395175,
+          "vinf_out_m_s": 18559.89983316656,
+          "speed_mismatch_m_s": 6559.757199214811,
+          "required_turn_deg": 160.1360178162798,
+          "maximum_unpowered_turn_deg": 8.76156992506205,
+          "turn_margin_deg": -151.37444789121776,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 4525.080748107637,
+          "optimistic_postflyby_asymptotic_correction_m_s": 29655.85012752747,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            5881.097605120543,
+            9903.33167465352,
+            3367.5118316104144
+          ],
+          "vinf_out_vector_m_s": [
+            -5378.495182943618,
+            -17753.349887576824,
+            -600.1992614993537
+          ]
+        }
+      ]
+    }
+  ],
+  "snapshot_hashes": {
+    "earth": "e3eaa5ad8ac0f54c289abf43193fcd05259e92de3b12a5ae3133ab0e86be1b32",
+    "mars": "099505719ec205b54739277766feed0617b4ffc1642f9bd15a10814fa2e9b17d",
+    "ceres": "9f83e9fdd6ebc84564a431792c8e212373ed13f6402086c44e7228de9905118d"
+  }
+}

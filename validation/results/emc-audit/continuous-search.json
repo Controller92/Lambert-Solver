@@ -1,0 +1,1085 @@
+{
+  "runs": [
+    {
+      "launch_tdb": "2035-05-11T10:46:02.287010",
+      "mars_tdb": "2035-12-21T12:39:04.185374",
+      "ceres_tdb": "2036-11-25T12:39:04.184410",
+      "incoming_prograde": true,
+      "outgoing_prograde": true,
+      "earth_departure_C3_km2_s2": 47.168172827750624,
+      "gooding_max_endpoint_velocity_error_m_s": 4.011892366334971e-10,
+      "states": [
+        [
+          -96880121178.83835,
+          -115922539217.71498,
+          10574116.215184331,
+          22385.418763348272,
+          -19214.90053022699,
+          0.8899681466738585
+        ],
+        [
+          140761068228.22134,
+          169456991620.86478,
+          103133662.25901246,
+          -17721.47145003498,
+          17549.896774169283,
+          802.0811608813476
+        ],
+        [
+          -369049876023.65393,
+          77004286372.87108,
+          70490069608.43349,
+          -4233.402593773924,
+          -18801.15853565233,
+          165.54495950361937
+        ]
+      ],
+      "incoming_v1_m_s": [
+        26092.43459744972,
+        -18323.134424035798,
+        -5711.461530607616
+      ],
+      "incoming_v2_m_s": [
+        -15063.351418071597,
+        15965.057451875791,
+        3917.96999768405
+      ],
+      "outgoing_v1_m_s": [
+        -18147.149374658802,
+        20254.328084125136,
+        5701.543355045576
+      ],
+      "outgoing_v2_m_s": [
+        -6497.273061843542,
+        -14702.252117937976,
+        -938.7177920735752
+      ],
+      "vinf_in_m_s": 4391.592083188557,
+      "vinf_out_m_s": 5612.4754073248405,
+      "speed_mismatch_m_s": 1220.8833241362836,
+      "required_turn_deg": 66.4484340357886,
+      "maximum_unpowered_turn_deg": 44.886190842381126,
+      "turn_margin_deg": -21.562243193407472,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 1832277.5687625725,
+      "optimistic_postflyby_asymptotic_correction_m_s": 2222.679509165986,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        2658.1200319633826,
+        -1584.839322293492,
+        3115.888836802703
+      ],
+      "vinf_out_vector_m_s": [
+        -425.67792462382204,
+        2704.431309955853,
+        4899.462194164229
+      ],
+      "seed": 9587,
+      "optimizer_success": true,
+      "evaluations": 3612,
+      "objective_m_s": 2222.679509165986,
+      "optimizer_message": "Optimization terminated successfully."
+    },
+    {
+      "launch_tdb": "2035-05-11T10:45:42.491695",
+      "mars_tdb": "2035-12-21T12:38:22.421568",
+      "ceres_tdb": "2036-11-25T12:38:22.420427",
+      "incoming_prograde": true,
+      "outgoing_prograde": true,
+      "earth_departure_C3_km2_s2": 47.16821842597828,
+      "gooding_max_endpoint_velocity_error_m_s": 1.8550124927397645e-11,
+      "states": [
+        [
+          -96880564304.50957,
+          -115922158851.83827,
+          10574098.597362638,
+          22385.345088965558,
+          -19214.989567610584,
+          0.8900324730589659
+        ],
+        [
+          140761808342.79932,
+          169456258668.54013,
+          103100164.29561377,
+          -17721.398476260736,
+          17549.984622450156,
+          802.0812144623983
+        ],
+        [
+          -369049699219.1417,
+          77005071583.9832,
+          70490062694.47192,
+          -4233.43885442078,
+          -18801.150967063586,
+          165.5518855768614
+        ]
+      ],
+      "incoming_v1_m_s": [
+        26092.369127121172,
+        -18323.227678074378,
+        -5711.460791739818
+      ],
+      "incoming_v2_m_s": [
+        -15063.272786861862,
+        15965.144045810424,
+        3917.970519253439
+      ],
+      "outgoing_v1_m_s": [
+        -18147.081339743774,
+        20254.403061020854,
+        5701.551059178663
+      ],
+      "outgoing_v2_m_s": [
+        -6497.319347952438,
+        -14702.237615549262,
+        -938.7222291909222
+      ],
+      "vinf_in_m_s": 4391.596292205966,
+      "vinf_out_m_s": 5612.476258339834,
+      "speed_mismatch_m_s": 1220.879966133868,
+      "required_turn_deg": 66.44839176589991,
+      "maximum_unpowered_turn_deg": 44.886134750857764,
+      "turn_margin_deg": -21.562257015042142,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 1832276.3391057902,
+      "optimistic_postflyby_asymptotic_correction_m_s": 2222.679509234337,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        2658.125689398874,
+        -1584.8405766397318,
+        3115.8893047910406
+      ],
+      "vinf_out_vector_m_s": [
+        -425.6828634830381,
+        2704.4184385706976,
+        4899.469844716265
+      ],
+      "seed": 2036,
+      "optimizer_success": true,
+      "evaluations": 4264,
+      "objective_m_s": 2222.679509234337,
+      "optimizer_message": "Optimization terminated successfully."
+    },
+    {
+      "launch_tdb": "2035-07-07T12:14:31.201853",
+      "mars_tdb": "2035-12-27T00:03:20.100737",
+      "ceres_tdb": "2036-11-01T10:08:26.369374",
+      "incoming_prograde": true,
+      "outgoing_prograde": true,
+      "earth_departure_C3_km2_s2": 11.937266352918959,
+      "gooding_max_endpoint_velocity_error_m_s": 1.8212755814086936e-11,
+      "states": [
+        [
+          38744573903.214264,
+          -147083334822.20746,
+          11988365.065522492,
+          28331.248642279796,
+          7482.7175014514305,
+          -1.8743916308534558
+        ],
+        [
+          132187127543.42432,
+          177521051679.3775,
+          482245290.49898684,
+          -18517.489033847778,
+          16538.1161259983,
+          800.3738419003641
+        ],
+        [
+          -358363924559.55145,
+          115700266469.19823,
+          69785963850.56013,
+          -6021.051609852905,
+          -18327.378392100898,
+          510.29001607286517
+        ]
+      ],
+      "incoming_v1_m_s": [
+        31747.391968552358,
+        6974.489522127712,
+        92.65310867948877
+      ],
+      "incoming_v2_m_s": [
+        -15780.732442780132,
+        16176.489553826368,
+        -33.29354447097572
+      ],
+      "outgoing_v1_m_s": [
+        -19012.49959284774,
+        19608.115016334687,
+        5306.530455933421
+      ],
+      "outgoing_v2_m_s": [
+        -8765.349684478406,
+        -13820.883436367003,
+        -276.0471230017283
+      ],
+      "vinf_in_m_s": 2883.6802401709247,
+      "vinf_out_m_s": 5474.977266654354,
+      "speed_mismatch_m_s": 2591.2970264834294,
+      "required_turn_deg": 113.20775683286637,
+      "maximum_unpowered_turn_deg": 72.15002931782527,
+      "turn_margin_deg": -41.05772751504109,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 1018584.0221715373,
+      "optimistic_postflyby_asymptotic_correction_m_s": 3805.3956016441434,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        2736.756591067646,
+        -361.6265721719301,
+        -833.6673863713398
+      ],
+      "vinf_out_vector_m_s": [
+        -495.0105589999621,
+        3069.9988903363883,
+        4506.156614033057
+      ],
+      "seed": 4193,
+      "optimizer_success": true,
+      "evaluations": 1304,
+      "objective_m_s": 3805.3956016441434,
+      "optimizer_message": "Optimization terminated successfully."
+    },
+    {
+      "launch_tdb": "2035-06-27T11:19:40.300662",
+      "mars_tdb": "2036-03-16T23:59:51.633552",
+      "ceres_tdb": "2037-02-19T23:59:29.085652",
+      "incoming_prograde": true,
+      "outgoing_prograde": false,
+      "earth_departure_C3_km2_s2": 1920.9742996797402,
+      "gooding_max_endpoint_velocity_error_m_s": 4.092726157978177e-12,
+      "states": [
+        [
+          13741630608.919714,
+          -151449321046.0658,
+          12463986.718952656,
+          29180.54605180548,
+          2566.9939244710918,
+          0.6314544269658828
+        ],
+        [
+          -21379894072.52028,
+          235632188960.52823,
+          5462851866.215199,
+          -23215.944856655904,
+          -128.3996249213066,
+          566.1027693385362
+        ],
+        [
+          -376236606796.04816,
+          -65410730559.98402,
+          67161359589.13472,
+          2294.6791897925727,
+          -18910.00821596534,
+          -1040.4027958323895
+        ]
+      ],
+      "incoming_v1_m_s": [
+        -28.115019963951603,
+        309.88689288409785,
+        32600.230929300913
+      ],
+      "incoming_v2_m_s": [
+        -83.75753410737084,
+        923.0925330542274,
+        -20931.96182832657
+      ],
+      "outgoing_v1_m_s": [
+        21012.2754509832,
+        -14793.458974603867,
+        -3877.750314691093
+      ],
+      "outgoing_v2_m_s": [
+        -11253.64722679884,
+        10362.565781000014,
+        2093.6062335591764
+      ],
+      "vinf_in_m_s": 31597.001559153374,
+      "vinf_out_m_s": 46807.55566725538,
+      "speed_mismatch_m_s": 15210.554108102006,
+      "required_turn_deg": 41.761240455030894,
+      "maximum_unpowered_turn_deg": 1.3508550237166033,
+      "turn_margin_deg": -40.41038543131429,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 77459.83009223633,
+      "optimistic_postflyby_asymptotic_correction_m_s": 30611.564447895475,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        23132.187322548532,
+        1051.492157975534,
+        -21498.064597665107
+      ],
+      "vinf_out_vector_m_s": [
+        44228.2203076391,
+        -14665.05934968256,
+        -4443.853084029629
+      ],
+      "seed": 9587,
+      "optimizer_success": false,
+      "evaluations": 4440,
+      "objective_m_s": 30611.564447895475,
+      "optimizer_message": "Maximum number of iterations has been exceeded."
+    },
+    {
+      "launch_tdb": "2035-06-27T11:19:44.053569",
+      "mars_tdb": "2036-03-16T23:59:59.031862",
+      "ceres_tdb": "2037-02-19T23:59:45.871441",
+      "incoming_prograde": true,
+      "outgoing_prograde": false,
+      "earth_departure_C3_km2_s2": 1920.97435829168,
+      "gooding_max_endpoint_velocity_error_m_s": 4.714744630104437e-11,
+      "states": [
+        [
+          13741740120.799885,
+          -151449311412.33542,
+          12463989.088729024,
+          29180.544224722325,
+          2567.015351113484,
+          0.6314503058026943
+        ],
+        [
+          -21380065831.28123,
+          235632188010.52332,
+          5462856054.4177,
+          -23215.943271812,
+          -128.4170784155861,
+          566.1023646598154
+        ],
+        [
+          -376236568277.9273,
+          -65411047979.3667,
+          67161342125.13161,
+          2294.6935682899048,
+          -18910.005717294833,
+          -1040.4053625480901
+        ]
+      ],
+      "incoming_v1_m_s": [
+        -28.115629793837467,
+        309.8845000291678,
+        32600.231265578677
+      ],
+      "incoming_v2_m_s": [
+        -83.75764689807289,
+        923.090614513746,
+        -20931.960823956953
+      ],
+      "outgoing_v1_m_s": [
+        21012.28779650407,
+        -14793.437849321286,
+        -3877.74990217888
+      ],
+      "outgoing_v2_m_s": [
+        -11253.651016945641,
+        10362.55881436569,
+        2093.605268439834
+      ],
+      "vinf_in_m_s": 31596.99987460081,
+      "vinf_out_m_s": 46807.553670459456,
+      "speed_mismatch_m_s": 15210.553795858646,
+      "required_turn_deg": 41.76123646318773,
+      "maximum_unpowered_turn_deg": 1.3508551660633805,
+      "turn_margin_deg": -40.410381297124346,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 77459.84934238714,
+      "optimistic_postflyby_asymptotic_correction_m_s": 30611.560926564976,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        23132.185624913927,
+        1051.507692929332,
+        -21498.06318861677
+      ],
+      "vinf_out_vector_m_s": [
+        44228.231068316076,
+        -14665.0207709057,
+        -4443.852266838695
+      ],
+      "seed": 2036,
+      "optimizer_success": false,
+      "evaluations": 4440,
+      "objective_m_s": 30611.560926564976,
+      "optimizer_message": "Maximum number of iterations has been exceeded."
+    },
+    {
+      "launch_tdb": "2035-06-27T11:19:39.176110",
+      "mars_tdb": "2036-03-16T23:59:49.359272",
+      "ceres_tdb": "2037-02-19T23:57:57.147011",
+      "incoming_prograde": true,
+      "outgoing_prograde": false,
+      "earth_departure_C3_km2_s2": 1920.973819469015,
+      "gooding_max_endpoint_velocity_error_m_s": 2.8485880929609024e-11,
+      "states": [
+        [
+          13741597793.877645,
+          -151449323932.78036,
+          12463986.00883782,
+          29180.54659928476,
+          2566.987504015617,
+          0.6314556618441935
+        ],
+        [
+          -21379841272.96454,
+          235632189252.5388,
+          5462850578.738928,
+          -23215.945343842817,
+          -128.39425962401302,
+          566.102893738869
+        ],
+        [
+          -376236817762.1148,
+          -65408991998.892365,
+          67161455241.70794,
+          2294.600436246885,
+          -18910.021901401215,
+          -1040.3887374742249
+        ]
+      ],
+      "incoming_v1_m_s": [
+        -28.10697921218453,
+        309.88836815026093,
+        32600.230825765284
+      ],
+      "incoming_v2_m_s": [
+        -83.76255215200862,
+        923.0926914911231,
+        -20931.962136671184
+      ],
+      "outgoing_v1_m_s": [
+        21012.230783740582,
+        -14793.530745077249,
+        -3877.7457697232153
+      ],
+      "outgoing_v2_m_s": [
+        -11253.645856467414,
+        10362.582250355334,
+        2093.6077580721185
+      ],
+      "vinf_in_m_s": 31596.99836326706,
+      "vinf_out_m_s": 46807.53766919665,
+      "speed_mismatch_m_s": 15210.539305929593,
+      "required_turn_deg": 41.76128608327864,
+      "maximum_unpowered_turn_deg": 1.3508552937729723,
+      "turn_margin_deg": -40.41043078950567,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 77459.7201327055,
+      "optimistic_postflyby_asymptotic_correction_m_s": 30611.576289392455,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        23132.182791690808,
+        1051.4869511151362,
+        -21498.065030410053
+      ],
+      "vinf_out_vector_m_s": [
+        44228.1761275834,
+        -14665.136485453237,
+        -4443.848663462084
+      ],
+      "seed": 4193,
+      "optimizer_success": false,
+      "evaluations": 4440,
+      "objective_m_s": 30611.576289392455,
+      "optimizer_message": "Maximum number of iterations has been exceeded."
+    },
+    {
+      "launch_tdb": "2035-06-27T11:12:46.896852",
+      "mars_tdb": "2036-03-16T23:45:49.779344",
+      "ceres_tdb": "2036-12-03T16:18:53.497725",
+      "incoming_prograde": false,
+      "outgoing_prograde": true,
+      "earth_departure_C3_km2_s2": 1921.347928524083,
+      "gooding_max_endpoint_velocity_error_m_s": 4.8580641882943116e-11,
+      "states": [
+        [
+          13729567218.43548,
+          -151450381763.26108,
+          12463725.57953,
+          29180.747222501188,
+          2564.6336572674722,
+          0.6319077536452999
+        ],
+        [
+          -21360349555.768856,
+          235632296218.3111,
+          5462375270.834223,
+          -23216.125114841652,
+          -126.41356951920324,
+          566.1488161344768
+        ],
+        [
+          -371816023984.48755,
+          63718599619.15009,
+          70565543275.5265,
+          -3620.06437470125,
+          -18917.70552142987,
+          48.767382261984515
+        ]
+      ],
+      "incoming_v1_m_s": [
+        -72.89220069493956,
+        762.3444693449517,
+        -32592.684319730877
+      ],
+      "incoming_v2_m_s": [
+        -11.129973969031738,
+        149.5983622444403,
+        20952.060574416522
+      ],
+      "outgoing_v1_m_s": [
+        -24317.788028470626,
+        6735.709753981067,
+        4630.77445131184
+      ],
+      "outgoing_v2_m_s": [
+        -5309.297447619907,
+        -14114.179541499612,
+        916.4089599396043
+      ],
+      "vinf_in_m_s": 30889.04952067739,
+      "vinf_out_m_s": 8051.3091628835655,
+      "speed_mismatch_m_s": -22837.740357793824,
+      "required_turn_deg": 76.23121258744395,
+      "maximum_unpowered_turn_deg": 1.412716580741402,
+      "turn_margin_deg": -74.81849600670255,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 27834.038815592256,
+      "optimistic_postflyby_asymptotic_correction_m_s": 29811.079167125892,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        23204.99514087262,
+        276.01193176364353,
+        20385.911758282047
+      ],
+      "vinf_out_vector_m_s": [
+        -1101.662913628974,
+        6862.12332350027,
+        4064.6256351773627
+      ],
+      "seed": 9587,
+      "optimizer_success": false,
+      "evaluations": 4440,
+      "objective_m_s": 29811.079167125892,
+      "optimizer_message": "Maximum number of iterations has been exceeded."
+    },
+    {
+      "launch_tdb": "2035-06-27T11:19:44.219228",
+      "mars_tdb": "2036-03-16T23:59:59.368640",
+      "ceres_tdb": "2036-12-04T16:40:48.029927",
+      "incoming_prograde": false,
+      "outgoing_prograde": true,
+      "earth_departure_C3_km2_s2": 1921.1298343671237,
+      "gooding_max_endpoint_velocity_error_m_s": 2.997368083517867e-11,
+      "states": [
+        [
+          13741744954.825176,
+          -151449310987.08566,
+          12463989.193342626,
+          29180.54414407167,
+          2567.0162969189405,
+          0.6314501238856574
+        ],
+        [
+          -21380073649.903965,
+          235632187967.2752,
+          5462856245.068609,
+          -23215.94319966809,
+          -128.41787291525543,
+          566.1023462384472
+        ],
+        [
+          -372130197071.9452,
+          62058671183.40495,
+          70569183517.21544,
+          -3543.4637681215463,
+          -18930.661700042732,
+          34.235142189169565
+        ]
+      ],
+      "incoming_v1_m_s": [
+        -69.18011995713084,
+        762.4387985497987,
+        -32592.726230510805
+      ],
+      "incoming_v2_m_s": [
+        -13.527457760360186,
+        149.08959202297308,
+        20951.937531841508
+      ],
+      "outgoing_v1_m_s": [
+        -24319.765024606728,
+        6718.92776972737,
+        4628.059786126209
+      ],
+      "outgoing_v2_m_s": [
+        -5213.40561287231,
+        -14143.789699873256,
+        897.5317211899282
+      ],
+      "vinf_in_m_s": 30887.07468939064,
+      "vinf_out_m_s": 8037.665283805201,
+      "speed_mismatch_m_s": -22849.409405585437,
+      "required_turn_deg": 76.2292425833057,
+      "maximum_unpowered_turn_deg": 1.4128950182792324,
+      "turn_margin_deg": -74.81634756502648,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 27839.191968003146,
+      "optimistic_postflyby_asymptotic_correction_m_s": 29808.89142028624,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        23202.41574190773,
+        277.5074649382285,
+        20385.83518560306
+      ],
+      "vinf_out_vector_m_s": [
+        -1103.8218249386373,
+        6847.3456426426255,
+        4061.957439887761
+      ],
+      "seed": 2036,
+      "optimizer_success": false,
+      "evaluations": 4440,
+      "objective_m_s": 29808.89142028624,
+      "optimizer_message": "Maximum number of iterations has been exceeded."
+    },
+    {
+      "launch_tdb": "2035-06-27T11:19:44.229402",
+      "mars_tdb": "2036-03-16T23:59:59.385735",
+      "ceres_tdb": "2036-12-04T16:32:35.101872",
+      "incoming_prograde": false,
+      "outgoing_prograde": true,
+      "earth_departure_C3_km2_s2": 1921.1298581973576,
+      "gooding_max_endpoint_velocity_error_m_s": 3.358480491520007e-11,
+      "states": [
+        [
+          13741745251.71604,
+          -151449310960.96817,
+          12463989.199772477,
+          29180.544139118356,
+          2567.0163550073817,
+          0.631450112713039
+        ],
+        [
+          -21380074046.765976,
+          235632187965.07996,
+          5462856254.745781,
+          -23215.943196006167,
+          -128.4179132429122,
+          566.1023453034051
+        ],
+        [
+          -372128450293.1146,
+          62068002619.95524,
+          70569166621.62762,
+          -3543.8943638027645,
+          -18930.589854863298,
+          34.316800204011955
+        ]
+      ],
+      "incoming_v1_m_s": [
+        -69.18052533136346,
+        762.4387585509611,
+        -32592.7262313169
+      ],
+      "incoming_v2_m_s": [
+        -13.527197856519678,
+        149.08961139736033,
+        20951.93752939963
+      ],
+      "outgoing_v1_m_s": [
+        -24319.754167860545,
+        6719.014104737011,
+        4628.0748202408695
+      ],
+      "outgoing_v2_m_s": [
+        -5213.943788224862,
+        -14143.62375521615,
+        897.6387826968773
+      ],
+      "vinf_in_m_s": 30887.074881421813,
+      "vinf_out_m_s": 8037.744975401514,
+      "speed_mismatch_m_s": -22849.3299060203,
+      "required_turn_deg": 76.22924350377075,
+      "maximum_unpowered_turn_deg": 1.4128950009264583,
+      "turn_margin_deg": -74.81634850284429,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 27839.190877139677,
+      "optimistic_postflyby_asymptotic_correction_m_s": 29808.891598119884,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        23202.41599814965,
+        277.50752464027255,
+        20385.835184096224
+      ],
+      "vinf_out_vector_m_s": [
+        -1103.8109718543783,
+        6847.432017979923,
+        4061.9724749374645
+      ],
+      "seed": 4193,
+      "optimizer_success": false,
+      "evaluations": 4440,
+      "objective_m_s": 29808.891598119884,
+      "optimizer_message": "Maximum number of iterations has been exceeded."
+    },
+    {
+      "launch_tdb": "2035-05-02T00:00:00.000367",
+      "mars_tdb": "2036-03-16T23:59:59.994058",
+      "ceres_tdb": "2037-02-19T23:59:59.926518",
+      "incoming_prograde": false,
+      "outgoing_prograde": false,
+      "earth_departure_C3_km2_s2": 3668.2208506014595,
+      "gooding_max_endpoint_velocity_error_m_s": 1.9339130258302953e-11,
+      "states": [
+        [
+          -113828013374.46716,
+          -98807980440.18266,
+          8831268.825262785,
+          19037.352675135302,
+          -22619.177061301576,
+          2.772921828780639
+        ],
+        [
+          -21380088169.560402,
+          235632187886.9599,
+          5462856599.118903,
+          -23215.943065692412,
+          -128.41934834929802,
+          566.102312028848
+        ],
+        [
+          -376236536025.74713,
+          -65411313760.94435,
+          67161327502.1387,
+          2294.705607691594,
+          -18910.003625098812,
+          -1040.4075117098666
+        ]
+      ],
+      "incoming_v1_m_s": [
+        -29769.187202136076,
+        13233.835629248464,
+        841.8181059732624
+      ],
+      "incoming_v2_m_s": [
+        19472.609079931066,
+        -6574.294477483272,
+        -505.9141009092018
+      ],
+      "outgoing_v1_m_s": [
+        21012.294993711,
+        -14793.426171540026,
+        -3877.75048765703
+      ],
+      "outgoing_v2_m_s": [
+        -11253.651537980286,
+        10362.555948162786,
+        2093.6049749477297
+      ],
+      "vinf_in_m_s": 43185.77323216075,
+      "vinf_out_m_s": 46807.555957011544,
+      "speed_mismatch_m_s": 3621.7827248507965,
+      "required_turn_deg": 10.537184610541926,
+      "maximum_unpowered_turn_deg": 0.7271055254328053,
+      "turn_margin_deg": -9.810079085109122,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 227122.46494108974,
+      "optimistic_postflyby_asymptotic_correction_m_s": 8498.939292840234,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        42688.55214562348,
+        -6445.875129133974,
+        -1072.0164129380498
+      ],
+      "vinf_out_vector_m_s": [
+        44228.23805940341,
+        -14665.006823190728,
+        -4443.852799685878
+      ],
+      "seed": 9587,
+      "optimizer_success": false,
+      "evaluations": 4360,
+      "objective_m_s": 8498.939292840234,
+      "optimizer_message": "Maximum number of iterations has been exceeded."
+    },
+    {
+      "launch_tdb": "2035-05-02T00:00:00.000365",
+      "mars_tdb": "2036-03-16T23:59:59.986608",
+      "ceres_tdb": "2037-02-19T23:59:59.985704",
+      "incoming_prograde": false,
+      "outgoing_prograde": false,
+      "earth_departure_C3_km2_s2": 3668.2208508938656,
+      "gooding_max_endpoint_velocity_error_m_s": 1.325024848877862e-11,
+      "states": [
+        [
+          -113828013374.50803,
+          -98807980440.13411,
+          8831268.825270236,
+          19037.35267512578,
+          -22619.177061309758,
+          2.7729218287841917
+        ],
+        [
+          -21380087996.60475,
+          235632187887.9166,
+          5462856594.901517,
+          -23215.943067288306,
+          -128.41933077418156,
+          566.1023124363468
+        ],
+        [
+          -376236535889.93384,
+          -65411314880.142456,
+          67161327440.56165,
+          2294.705658389146,
+          -18910.00361628862,
+          -1040.4075207599215
+        ]
+      ],
+      "incoming_v1_m_s": [
+        -29769.187196408744,
+        13233.835641127826,
+        841.8181059672471
+      ],
+      "incoming_v2_m_s": [
+        19472.609078928326,
+        -6574.294483751696,
+        -505.91410093255564
+      ],
+      "outgoing_v1_m_s": [
+        21012.295017116357,
+        -14793.426135577649,
+        -3877.7504921686304
+      ],
+      "outgoing_v2_m_s": [
+        -11253.651534343864,
+        10362.555942615249,
+        2093.6049748430332
+      ],
+      "vinf_in_m_s": 43185.773236316636,
+      "vinf_out_m_s": 46807.55597534131,
+      "speed_mismatch_m_s": 3621.782739024675,
+      "required_turn_deg": 10.537184554379817,
+      "maximum_unpowered_turn_deg": 0.7271055252937485,
+      "turn_margin_deg": -9.810079029086069,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 227122.4662265533,
+      "optimistic_postflyby_asymptotic_correction_m_s": 8498.939260952598,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        42688.552146216636,
+        -6445.8751529775145,
+        -1072.0164133689025
+      ],
+      "vinf_out_vector_m_s": [
+        44228.238084404664,
+        -14665.006804803468,
+        -4443.852804604977
+      ],
+      "seed": 2036,
+      "optimizer_success": false,
+      "evaluations": 4360,
+      "objective_m_s": 8498.939260952598,
+      "optimizer_message": "Maximum number of iterations has been exceeded."
+    },
+    {
+      "launch_tdb": "2035-05-02T00:00:00.054998",
+      "mars_tdb": "2036-03-16T23:59:59.978832",
+      "ceres_tdb": "2037-02-19T23:59:59.975156",
+      "incoming_prograde": false,
+      "outgoing_prograde": false,
+      "earth_departure_C3_km2_s2": 3668.2208553309556,
+      "gooding_max_endpoint_velocity_error_m_s": 1.129568986323122e-11,
+      "states": [
+        [
+          -113828012334.4331,
+          -98807981675.89618,
+          8831268.97676289,
+          19037.352917567063,
+          -22619.176853098845,
+          2.7729218548842027
+        ],
+        [
+          -21380087816.093678,
+          235632187888.91513,
+          5462856590.499893,
+          -23215.94306895392,
+          -128.41931243131043,
+          566.1023128616471
+        ],
+        [
+          -376236535914.1381,
+          -65411314680.68209,
+          67161327451.53573,
+          2294.705649353969,
+          -18910.003617858747,
+          -1040.4075191470472
+        ]
+      ],
+      "incoming_v1_m_s": [
+        -29769.187259581486,
+        13233.835494985402,
+        841.8181145939784
+      ],
+      "incoming_v2_m_s": [
+        19472.609118570977,
+        -6574.294386321754,
+        -505.9141065841709
+      ],
+      "outgoing_v1_m_s": [
+        21012.295007482637,
+        -14793.426152443726,
+        -3877.750492984032
+      ],
+      "outgoing_v2_m_s": [
+        -11253.651530377354,
+        10362.555948765737,
+        2093.6049757569685
+      ],
+      "vinf_in_m_s": 43185.77326549566,
+      "vinf_out_m_s": 46807.555978961194,
+      "speed_mismatch_m_s": 3621.782713465531,
+      "required_turn_deg": 10.53718469606577,
+      "maximum_unpowered_turn_deg": 0.7271055243174134,
+      "turn_margin_deg": -9.810079171748356,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 227122.46256638528,
+      "optimistic_postflyby_asymptotic_correction_m_s": 8498.939353582506,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        42688.552187524896,
+        -6445.875073890444,
+        -1072.016419445818
+      ],
+      "vinf_out_vector_m_s": [
+        44228.23807643655,
+        -14665.006840012416,
+        -4443.8528058456795
+      ],
+      "seed": 4193,
+      "optimizer_success": false,
+      "evaluations": 4360,
+      "objective_m_s": 8498.939353582506,
+      "optimizer_message": "Maximum number of iterations has been exceeded."
+    }
+  ],
+  "minimum": {
+    "launch_tdb": "2035-05-11T10:46:02.287010",
+    "mars_tdb": "2035-12-21T12:39:04.185374",
+    "ceres_tdb": "2036-11-25T12:39:04.184410",
+    "incoming_prograde": true,
+    "outgoing_prograde": true,
+    "earth_departure_C3_km2_s2": 47.168172827750624,
+    "gooding_max_endpoint_velocity_error_m_s": 4.011892366334971e-10,
+    "states": [
+      [
+        -96880121178.83835,
+        -115922539217.71498,
+        10574116.215184331,
+        22385.418763348272,
+        -19214.90053022699,
+        0.8899681466738585
+      ],
+      [
+        140761068228.22134,
+        169456991620.86478,
+        103133662.25901246,
+        -17721.47145003498,
+        17549.896774169283,
+        802.0811608813476
+      ],
+      [
+        -369049876023.65393,
+        77004286372.87108,
+        70490069608.43349,
+        -4233.402593773924,
+        -18801.15853565233,
+        165.54495950361937
+      ]
+    ],
+    "incoming_v1_m_s": [
+      26092.43459744972,
+      -18323.134424035798,
+      -5711.461530607616
+    ],
+    "incoming_v2_m_s": [
+      -15063.351418071597,
+      15965.057451875791,
+      3917.96999768405
+    ],
+    "outgoing_v1_m_s": [
+      -18147.149374658802,
+      20254.328084125136,
+      5701.543355045576
+    ],
+    "outgoing_v2_m_s": [
+      -6497.273061843542,
+      -14702.252117937976,
+      -938.7177920735752
+    ],
+    "vinf_in_m_s": 4391.592083188557,
+    "vinf_out_m_s": 5612.4754073248405,
+    "speed_mismatch_m_s": 1220.8833241362836,
+    "required_turn_deg": 66.4484340357886,
+    "maximum_unpowered_turn_deg": 44.886190842381126,
+    "turn_margin_deg": -21.562243193407472,
+    "safety_altitude_m": 200000.0,
+    "turn_only_rp_at_incoming_speed_m": 1832277.5687625725,
+    "optimistic_postflyby_asymptotic_correction_m_s": 2222.679509165986,
+    "ballistic_status": "SPEED_MISMATCH",
+    "powered_tangential_status": "TURN_OUT_OF_RANGE",
+    "powered_tangential_delta_v_m_s": null,
+    "powered_tangential_rp_m": null,
+    "vinf_in_vector_m_s": [
+      2658.1200319633826,
+      -1584.839322293492,
+      3115.888836802703
+    ],
+    "vinf_out_vector_m_s": [
+      -425.67792462382204,
+      2704.431309955853,
+      4899.462194164229
+    ],
+    "seed": 9587,
+    "optimizer_success": true,
+    "evaluations": 3612,
+    "objective_m_s": 2222.679509165986,
+    "optimizer_message": "Optimization terminated successfully."
+  },
+  "seconds": 6.183280325996748,
+  "limitation": "Repeated stochastic searches of the stated finite box; not a global proof. M=0 only. Objective is an asymptotic patch correction, not optimized powered-flyby delta-v."
+}

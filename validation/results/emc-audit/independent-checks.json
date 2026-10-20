@@ -1,0 +1,568 @@
+{
+  "sampled_population_checks": {
+    "incoming": 128,
+    "outgoing": 128
+  },
+  "independent_gooding_speed_roots_checked": 439,
+  "sampled_root_magnitude_comparisons": 101,
+  "maxima": {
+    "sampled_velocity_error_m_s": 1.991938744613991e-10,
+    "speed_root_velocity_error_m_s": 4.019966581836343e-10,
+    "speed_root_mismatch_m_s": 3.420609573367983e-09
+  },
+  "root_altitude_sensitivity": {
+    "0.0": {
+      "max_turn_margin_deg": -42.378910016623514,
+      "largest_inferred_periapsis_m": 799533.40224121
+    },
+    "100000.0": {
+      "max_turn_margin_deg": -43.005514462488016,
+      "largest_inferred_periapsis_m": 799533.40224121
+    },
+    "200000.0": {
+      "max_turn_margin_deg": -43.604610464196796,
+      "largest_inferred_periapsis_m": 799533.40224121
+    },
+    "500000.0": {
+      "max_turn_margin_deg": -45.253990315708826,
+      "largest_inferred_periapsis_m": 799533.40224121
+    },
+    "1000000.0": {
+      "max_turn_margin_deg": -47.59329114506711,
+      "largest_inferred_periapsis_m": 799533.40224121
+    }
+  },
+  "nominal_altitude_sensitivity": [
+    {
+      "scenario": "durations_first",
+      "encounter": 0,
+      "table": [
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5956.102568092084,
+          "speed_mismatch_m_s": 3336.937517137366,
+          "required_turn_deg": 124.3809475523249,
+          "maximum_unpowered_turn_deg": 80.7329851525135,
+          "turn_margin_deg": -43.6479623998114,
+          "safety_altitude_m": 0.0,
+          "turn_only_rp_at_incoming_speed_m": 815221.1862994344,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4445.111662601398,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -716.134698833539,
+            4319.514239439803,
+            4037.834274711692
+          ]
+        },
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5956.102568092084,
+          "speed_mismatch_m_s": 3336.937517137366,
+          "required_turn_deg": 124.3809475523249,
+          "maximum_unpowered_turn_deg": 79.73649380129828,
+          "turn_margin_deg": -44.644453751026624,
+          "safety_altitude_m": 100000.0,
+          "turn_only_rp_at_incoming_speed_m": 815221.1862994344,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4487.421541402837,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -716.134698833539,
+            4319.514239439803,
+            4037.834274711692
+          ]
+        },
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5956.102568092084,
+          "speed_mismatch_m_s": 3336.937517137366,
+          "required_turn_deg": 124.3809475523249,
+          "maximum_unpowered_turn_deg": 78.76722707794887,
+          "turn_margin_deg": -45.61372047437603,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 815221.1862994344,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4528.907586042832,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -716.134698833539,
+            4319.514239439803,
+            4037.834274711692
+          ]
+        },
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5956.102568092084,
+          "speed_mismatch_m_s": 3336.937517137366,
+          "required_turn_deg": 124.3809475523249,
+          "maximum_unpowered_turn_deg": 76.01081864810283,
+          "turn_margin_deg": -48.37012890422207,
+          "safety_altitude_m": 500000.0,
+          "turn_only_rp_at_incoming_speed_m": 815221.1862994344,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4648.4947839028555,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -716.134698833539,
+            4319.514239439803,
+            4037.834274711692
+          ]
+        },
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5956.102568092084,
+          "speed_mismatch_m_s": 3336.937517137366,
+          "required_turn_deg": 124.3809475523249,
+          "maximum_unpowered_turn_deg": 71.86039811918288,
+          "turn_margin_deg": -52.520549433142016,
+          "safety_altitude_m": 1000000.0,
+          "turn_only_rp_at_incoming_speed_m": 815221.1862994344,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4832.254812376228,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -716.134698833539,
+            4319.514239439803,
+            4037.834274711692
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "durations_first",
+      "encounter": 1,
+      "table": [
+        {
+          "vinf_in_m_s": 12199.125548588285,
+          "vinf_out_m_s": 21353.013570194817,
+          "speed_mismatch_m_s": 9153.888021606532,
+          "required_turn_deg": 156.99071615444703,
+          "maximum_unpowered_turn_deg": 8.960890992656505,
+          "turn_margin_deg": -148.02982516179054,
+          "safety_altitude_m": 0.0,
+          "turn_only_rp_at_incoming_speed_m": 5900.651037164509,
+          "optimistic_postflyby_asymptotic_correction_m_s": 32353.150795527323,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            3732.8657585413093,
+            11101.751859343438,
+            3411.082384301759
+          ],
+          "vinf_out_vector_m_s": [
+            -619.6643105952462,
+            -21343.515975288487,
+            -146.73269473300223
+          ]
+        },
+        {
+          "vinf_in_m_s": 12199.125548588285,
+          "vinf_out_m_s": 21353.013570194817,
+          "speed_mismatch_m_s": 9153.888021606532,
+          "required_turn_deg": 156.99071615444703,
+          "maximum_unpowered_turn_deg": 8.723615484137838,
+          "turn_margin_deg": -148.2671006703092,
+          "safety_altitude_m": 100000.0,
+          "turn_only_rp_at_incoming_speed_m": 5900.651037164509,
+          "optimistic_postflyby_asymptotic_correction_m_s": 32370.74164503683,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            3732.8657585413093,
+            11101.751859343438,
+            3411.082384301759
+          ],
+          "vinf_out_vector_m_s": [
+            -619.6643105952462,
+            -21343.515975288487,
+            -146.73269473300223
+          ]
+        },
+        {
+          "vinf_in_m_s": 12199.125548588285,
+          "vinf_out_m_s": 21353.013570194817,
+          "speed_mismatch_m_s": 9153.888021606532,
+          "required_turn_deg": 156.99071615444703,
+          "maximum_unpowered_turn_deg": 8.498592751333689,
+          "turn_margin_deg": -148.49212340311334,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 5900.651037164509,
+          "optimistic_postflyby_asymptotic_correction_m_s": 32387.306906928723,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            3732.8657585413093,
+            11101.751859343438,
+            3411.082384301759
+          ],
+          "vinf_out_vector_m_s": [
+            -619.6643105952462,
+            -21343.515975288487,
+            -146.73269473300223
+          ]
+        },
+        {
+          "vinf_in_m_s": 12199.125548588285,
+          "vinf_out_m_s": 21353.013570194817,
+          "speed_mismatch_m_s": 9153.888021606532,
+          "required_turn_deg": 156.99071615444703,
+          "maximum_unpowered_turn_deg": 7.8882256154898736,
+          "turn_margin_deg": -149.10249053895717,
+          "safety_altitude_m": 500000.0,
+          "turn_only_rp_at_incoming_speed_m": 5900.651037164509,
+          "optimistic_postflyby_asymptotic_correction_m_s": 32431.664533542535,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            3732.8657585413093,
+            11101.751859343438,
+            3411.082384301759
+          ],
+          "vinf_out_vector_m_s": [
+            -619.6643105952462,
+            -21343.515975288487,
+            -146.73269473300223
+          ]
+        },
+        {
+          "vinf_in_m_s": 12199.125548588285,
+          "vinf_out_m_s": 21353.013570194817,
+          "speed_mismatch_m_s": 9153.888021606532,
+          "required_turn_deg": 156.99071615444703,
+          "maximum_unpowered_turn_deg": 7.045057878361196,
+          "turn_margin_deg": -149.94565827608582,
+          "safety_altitude_m": 1000000.0,
+          "turn_only_rp_at_incoming_speed_m": 5900.651037164509,
+          "optimistic_postflyby_asymptotic_correction_m_s": 32491.555894522902,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            3732.8657585413093,
+            11101.751859343438,
+            3411.082384301759
+          ],
+          "vinf_out_vector_m_s": [
+            -619.6643105952462,
+            -21343.515975288487,
+            -146.73269473300223
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "calendar_first",
+      "encounter": 0,
+      "table": [
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5948.566532555325,
+          "speed_mismatch_m_s": 3329.4014816006065,
+          "required_turn_deg": 124.29206923071354,
+          "maximum_unpowered_turn_deg": 80.7329851525135,
+          "turn_margin_deg": -43.55908407820004,
+          "safety_altitude_m": 0.0,
+          "turn_only_rp_at_incoming_speed_m": 818112.0661778114,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4434.470913035868,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -704.5214389522516,
+            4307.302629720998,
+            4041.8111522302115
+          ]
+        },
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5948.566532555325,
+          "speed_mismatch_m_s": 3329.4014816006065,
+          "required_turn_deg": 124.29206923071354,
+          "maximum_unpowered_turn_deg": 79.73649380129828,
+          "turn_margin_deg": -44.55557542941526,
+          "safety_altitude_m": 100000.0,
+          "turn_only_rp_at_incoming_speed_m": 818112.0661778114,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4476.760525506042,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -704.5214389522516,
+            4307.302629720998,
+            4041.8111522302115
+          ]
+        },
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5948.566532555325,
+          "speed_mismatch_m_s": 3329.4014816006065,
+          "required_turn_deg": 124.29206923071354,
+          "maximum_unpowered_turn_deg": 78.76722707794887,
+          "turn_margin_deg": -45.52484215276466,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 818112.0661778114,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4518.228194252665,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -704.5214389522516,
+            4307.302629720998,
+            4041.8111522302115
+          ]
+        },
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5948.566532555325,
+          "speed_mismatch_m_s": 3329.4014816006065,
+          "required_turn_deg": 124.29206923071354,
+          "maximum_unpowered_turn_deg": 76.01081864810283,
+          "turn_margin_deg": -48.2812505826107,
+          "safety_altitude_m": 500000.0,
+          "turn_only_rp_at_incoming_speed_m": 818112.0661778114,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4637.769926661572,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -704.5214389522516,
+            4307.302629720998,
+            4041.8111522302115
+          ]
+        },
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5948.566532555325,
+          "speed_mismatch_m_s": 3329.4014816006065,
+          "required_turn_deg": 124.29206923071354,
+          "maximum_unpowered_turn_deg": 71.86039811918288,
+          "turn_margin_deg": -52.431671111530655,
+          "safety_altitude_m": 1000000.0,
+          "turn_only_rp_at_incoming_speed_m": 818112.0661778114,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4821.478716304044,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -704.5214389522516,
+            4307.302629720998,
+            4041.8111522302115
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "calendar_first",
+      "encounter": 1,
+      "table": [
+        {
+          "vinf_in_m_s": 12000.142633952848,
+          "vinf_out_m_s": 18559.899833166637,
+          "speed_mismatch_m_s": 6559.757199213789,
+          "required_turn_deg": 160.13601781628648,
+          "maximum_unpowered_turn_deg": 9.236990914712033,
+          "turn_margin_deg": -150.89902690157444,
+          "safety_altitude_m": 0.0,
+          "turn_only_rp_at_incoming_speed_m": 4525.080748103733,
+          "optimistic_postflyby_asymptotic_correction_m_s": 29625.753162161873,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            5881.097605115723,
+            9903.331674656667,
+            3367.5118316134967
+          ],
+          "vinf_out_vector_m_s": [
+            -5378.495182941744,
+            -17753.349887577453,
+            -600.1992614999036
+          ]
+        },
+        {
+          "vinf_in_m_s": 12000.142633952848,
+          "vinf_out_m_s": 18559.899833166637,
+          "speed_mismatch_m_s": 6559.757199213789,
+          "required_turn_deg": 160.13601781628648,
+          "maximum_unpowered_turn_deg": 8.992994962575654,
+          "turn_margin_deg": -151.14302285371082,
+          "safety_altitude_m": 100000.0,
+          "turn_only_rp_at_incoming_speed_m": 4525.080748103733,
+          "optimistic_postflyby_asymptotic_correction_m_s": 29641.25996457414,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            5881.097605115723,
+            9903.331674656667,
+            3367.5118316134967
+          ],
+          "vinf_out_vector_m_s": [
+            -5378.495182941744,
+            -17753.349887577453,
+            -600.1992614999036
+          ]
+        },
+        {
+          "vinf_in_m_s": 12000.142633952848,
+          "vinf_out_m_s": 18559.899833166637,
+          "speed_mismatch_m_s": 6559.757199213789,
+          "required_turn_deg": 160.13601781628648,
+          "maximum_unpowered_turn_deg": 8.761569925060565,
+          "turn_margin_deg": -151.3744478912259,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 4525.080748103733,
+          "optimistic_postflyby_asymptotic_correction_m_s": 29655.8501275291,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            5881.097605115723,
+            9903.331674656667,
+            3367.5118316134967
+          ],
+          "vinf_out_vector_m_s": [
+            -5378.495182941744,
+            -17753.349887577453,
+            -600.1992614999036
+          ]
+        },
+        {
+          "vinf_in_m_s": 12000.142633952848,
+          "vinf_out_m_s": 18559.899833166637,
+          "speed_mismatch_m_s": 6559.757199213789,
+          "required_turn_deg": 160.13601781628648,
+          "maximum_unpowered_turn_deg": 8.13369461667715,
+          "turn_margin_deg": -152.00232319960932,
+          "safety_altitude_m": 500000.0,
+          "turn_only_rp_at_incoming_speed_m": 4525.080748103733,
+          "optimistic_postflyby_asymptotic_correction_m_s": 29694.856660524572,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            5881.097605115723,
+            9903.331674656667,
+            3367.5118316134967
+          ],
+          "vinf_out_vector_m_s": [
+            -5378.495182941744,
+            -17753.349887577453,
+            -600.1992614999036
+          ]
+        },
+        {
+          "vinf_in_m_s": 12000.142633952848,
+          "vinf_out_m_s": 18559.899833166637,
+          "speed_mismatch_m_s": 6559.757199213789,
+          "required_turn_deg": 160.13601781628648,
+          "maximum_unpowered_turn_deg": 7.265997552729756,
+          "turn_margin_deg": -152.8700202635567,
+          "safety_altitude_m": 1000000.0,
+          "turn_only_rp_at_incoming_speed_m": 4525.080748103733,
+          "optimistic_postflyby_asymptotic_correction_m_s": 29747.37028974618,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            5881.097605115723,
+            9903.331674656667,
+            3367.5118316134967
+          ],
+          "vinf_out_vector_m_s": [
+            -5378.495182941744,
+            -17753.349887577453,
+            -600.1992614999036
+          ]
+        }
+      ]
+    }
+  ],
+  "mars_reference_radius_m": 3396200.0,
+  "source_sha256": {
+    "nominal.json": "548031b32381e0600740d1e5e498f83a65a864eb48570c7936092804f3f0621a",
+    "neighborhood.json": "6d76fb82a3fad163842b46a62335ab9bd7a4d25f09f33e82963508102ec28e36",
+    "speed-equality-roots.csv": "516be225de10a5bab1694c9967c52253bb3f40f262168dbd1937e151f13ea5a3",
+    "search-populations.npz": "e51413ef920f8541d80b493ca83a50af3ac3108ae307dd3b080e65aec1e72774"
+  }
+}

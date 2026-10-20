@@ -1,0 +1,241 @@
+{
+  "domain": {
+    "earth_departure_start": "2035-05-02T00:00:00",
+    "earth_departure_end": "2035-08-30T00:00:00",
+    "mars_encounter_start": "2035-11-18T00:00:00",
+    "mars_encounter_end": "2036-03-17T00:00:00",
+    "outgoing_tof_min_days": 160.0,
+    "outgoing_tof_max_days": 340.0,
+    "date_spacing_days": 1,
+    "revolutions": [
+      0,
+      1,
+      2
+    ],
+    "orientations": [
+      "short",
+      "long"
+    ],
+    "altitude_m": 200000.0
+  },
+  "diagnostics": {
+    "incoming": {
+      "count": 146410,
+      "status_counts": {
+        "0": 29282,
+        "2": 117128
+      },
+      "root_status_counts": {
+        "0": 29282,
+        "8": 117128
+      },
+      "feasible_by_revolution": {
+        "0": 29282,
+        "1": 0,
+        "2": 0
+      }
+    },
+    "outgoing": {
+      "count": 219010,
+      "status_counts": {
+        "0": 43802,
+        "2": 175208
+      },
+      "root_status_counts": {
+        "0": 43802,
+        "8": 175208
+      },
+      "feasible_by_revolution": {
+        "0": 43802,
+        "1": 0,
+        "2": 0
+      }
+    }
+  },
+  "sampled_candidate_pairs": 10600084,
+  "best_sampled_asymptotic_correction": {
+    "prograde": {
+      "launch_tdb": "2035-05-14T00:00:00",
+      "mars_tdb": "2035-12-27T00:00:00",
+      "ceres_tdb": "2036-12-01T00:00:00",
+      "tof_in_days": 227.0,
+      "tof_out_days": 340.0,
+      "incoming_policy": [
+        true,
+        0,
+        0
+      ],
+      "outgoing_policy": [
+        false,
+        0,
+        0
+      ],
+      "vinf_in_m_s": 4212.093950706587,
+      "vinf_out_m_s": 5610.816628628336,
+      "speed_mismatch_m_s": 1398.722677921749,
+      "required_turn_deg": 68.2035112392795,
+      "maximum_unpowered_turn_deg": 47.36267967813317,
+      "turn_margin_deg": -20.84083156114634,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 1891598.481238457,
+      "optimistic_postflyby_asymptotic_correction_m_s": 2246.9901730474326,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        2576.1814473754093,
+        -1556.3177456661015,
+        2946.6760382340212
+      ],
+      "vinf_out_vector_m_s": [
+        -376.2526582836035,
+        2855.5223932911285,
+        4815.152026534539
+      ]
+    },
+    "all": {
+      "launch_tdb": "2035-05-14T00:00:00",
+      "mars_tdb": "2035-12-27T00:00:00",
+      "ceres_tdb": "2036-12-01T00:00:00",
+      "tof_in_days": 227.0,
+      "tof_out_days": 340.0,
+      "incoming_policy": [
+        true,
+        0,
+        0
+      ],
+      "outgoing_policy": [
+        false,
+        0,
+        0
+      ],
+      "vinf_in_m_s": 4212.093950706587,
+      "vinf_out_m_s": 5610.816628628336,
+      "speed_mismatch_m_s": 1398.722677921749,
+      "required_turn_deg": 68.2035112392795,
+      "maximum_unpowered_turn_deg": 47.36267967813317,
+      "turn_margin_deg": -20.84083156114634,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 1891598.481238457,
+      "optimistic_postflyby_asymptotic_correction_m_s": 2246.9901730474326,
+      "ballistic_status": "SPEED_MISMATCH",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        2576.1814473754093,
+        -1556.3177456661015,
+        2946.6760382340212
+      ],
+      "vinf_out_vector_m_s": [
+        -376.2526582836035,
+        2855.5223932911285,
+        4815.152026534539
+      ]
+    }
+  },
+  "refined_speed_equality_roots": 439,
+  "refinement_failures": [],
+  "feasible_speed_matched_counts": {
+    "all": 0,
+    "prograde": 0
+  },
+  "best_speed_matched_turn_margin": {
+    "all": {
+      "launch_tdb": "2035-06-08T00:00:00",
+      "mars_tdb": "2036-02-15T00:00:00",
+      "ceres_tdb": "2037-01-18T21:06:03.306746",
+      "tof_in_days": 252.0,
+      "tof_out_days": 338.87920493918836,
+      "incoming_policy": [
+        true,
+        0,
+        0
+      ],
+      "outgoing_policy": [
+        false,
+        0,
+        0
+      ],
+      "prograde_pair": true,
+      "earth_departure_C3_km2_s2": 88.59724518263528,
+      "heliocentric_plane_change_deg": 5.39478311865946,
+      "ceres_arrival_vinf_m_s": 3999.829532808152,
+      "vinf_in_m_s": 6257.784255861007,
+      "vinf_out_m_s": 6257.78425586195,
+      "speed_mismatch_m_s": 9.431460057385266e-10,
+      "required_turn_deg": 70.57570215517643,
+      "maximum_unpowered_turn_deg": 26.971091690979282,
+      "turn_margin_deg": -43.604610464197144,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 799533.402241202,
+      "optimistic_postflyby_asymptotic_correction_m_s": 4648.347124163275,
+      "ballistic_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        2977.41080521452,
+        -1587.034694701977,
+        5270.3139913771665
+      ],
+      "vinf_out_vector_m_s": [
+        -604.905771698006,
+        4600.959615568374,
+        4198.228604565153
+      ]
+    },
+    "prograde": {
+      "launch_tdb": "2035-06-08T00:00:00",
+      "mars_tdb": "2036-02-15T00:00:00",
+      "ceres_tdb": "2037-01-18T21:06:03.306746",
+      "tof_in_days": 252.0,
+      "tof_out_days": 338.87920493918836,
+      "incoming_policy": [
+        true,
+        0,
+        0
+      ],
+      "outgoing_policy": [
+        false,
+        0,
+        0
+      ],
+      "prograde_pair": true,
+      "earth_departure_C3_km2_s2": 88.59724518263528,
+      "heliocentric_plane_change_deg": 5.39478311865946,
+      "ceres_arrival_vinf_m_s": 3999.829532808152,
+      "vinf_in_m_s": 6257.784255861007,
+      "vinf_out_m_s": 6257.78425586195,
+      "speed_mismatch_m_s": 9.431460057385266e-10,
+      "required_turn_deg": 70.57570215517643,
+      "maximum_unpowered_turn_deg": 26.971091690979282,
+      "turn_margin_deg": -43.604610464197144,
+      "safety_altitude_m": 200000.0,
+      "turn_only_rp_at_incoming_speed_m": 799533.402241202,
+      "optimistic_postflyby_asymptotic_correction_m_s": 4648.347124163275,
+      "ballistic_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_status": "TURN_OUT_OF_RANGE",
+      "powered_tangential_delta_v_m_s": null,
+      "powered_tangential_rp_m": null,
+      "vinf_in_vector_m_s": [
+        2977.41080521452,
+        -1587.034694701977,
+        5270.3139913771665
+      ],
+      "vinf_out_vector_m_s": [
+        -604.905771698006,
+        4600.959615568374,
+        4198.228604565153
+      ]
+    }
+  },
+  "seconds": 1.614488868995977,
+  "limitations": [
+    "Launch and Mars epochs remain on a daily grid; TOF is continuously refined only at sign crossings.",
+    "Tangential zeros, crossings outside the TOF window and disconnected feasibility islands may be missed.",
+    "A bounded search without a valid solution is not a proof of global infeasibility.",
+    "Encounter matching uses two-body patched conics and an assumed 200 km minimum altitude."
+  ]
+}

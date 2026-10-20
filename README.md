@@ -11,6 +11,9 @@ propagation, inverse matching and tangential powered encounters in Python, C++
 and CUDA, with saved CLI batches and a Juno Earth-flyby validation. Run
 `python run.py flyby --config examples/flyby-earth.json --backend cuda`.
 Full multi-leg mission search remains a subsequent increment.
+The [EMC trajectory audit](docs/emc-trajectory-audit.md) checks the manuscript’s
+nominal itinerary with body-centred ephemerides, full encounter vectors,
+independent Gooding/Horizons comparisons, and a bounded date search.
 
 The zero- and multi-revolution native engine runs in **CUDA C++**, with a shared C++ CPU path and
 NumPy batch bindings in `src/lambert_native.py`. See the

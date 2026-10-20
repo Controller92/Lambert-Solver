@@ -1,0 +1,43 @@
+{
+  "audit_date_local": "2026-10-19",
+  "timezone": "America/Denver",
+  "solver_parent_commit": "7313c244edf460e4fa8f825eeb218b791bb885ac",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "platform": "Linux-7.1.5-76070105-generic-x86_64-with-glibc2.39",
+  "packages": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "spiceypy": "8.3.0",
+    "lamberthub": "1.0.0",
+    "mpmath": "1.3.0",
+    "matplotlib": "3.11.2"
+  },
+  "source_pdf_sha256": "a6906644767ad5851cf880b9c1aaba1f12f1f598cd992069e819f185ef796858",
+  "scripts_sha256": {
+    "audit_emc.py": "fadd010b2aae389b0c79c52084d70595c2bb1ae537647b13ed6088dd52d71711",
+    "audit_emc_continuous.py": "63f9a3e4eda763d0ba1961c92cc659abe318a9d4911b253fbc0ee8c745fffcb7",
+    "audit_emc_horizons.py": "46a4a9ac837ffc23103ec6248ff21c209e53bc1f1fcd6b83289c65608b2d1f2c",
+    "check_emc_audit.py": "75991cfeb4fae818c96261b392a8983634ca22ab69942518e0c7a3720c64c79d",
+    "plot_emc_audit.py": "63170a4a0efe1de7513eea6c9f7b83d525459ae88b8097bbefaf95ce4248af6b"
+  },
+  "native_library_sha256": {
+    "liblambert_cpu.so": "b422d1cbabdc87db083ec693a7a2c402ee48eaf16048c2f8ed4c230553a6b6d3",
+    "liblambert_cuda.so": "6ea14f08a4ced3ca758d06a95b0131cb4ea09016442e3850d9f9d29acca01ddc"
+  },
+  "artifact_sha256": {
+    "speed-equality-roots.csv": "516be225de10a5bab1694c9967c52253bb3f40f262168dbd1937e151f13ea5a3",
+    "horizons-crosscheck.json": "10a4998c5f7c8a7d1934348c5779495552c9a8ed9f63d9486a29e47a6436a922",
+    "independent-checks.json": "fc99084a8347e8e8592059ca626803f894b10d123ce9b964fb8c3682a4375be2",
+    "nominal.json": "548031b32381e0600740d1e5e498f83a65a864eb48570c7936092804f3f0621a",
+    "neighborhood.json": "6d76fb82a3fad163842b46a62335ab9bd7a4d25f09f33e82963508102ec28e36",
+    "search-populations.npz": "e51413ef920f8541d80b493ca83a50af3ac3108ae307dd3b080e65aec1e72774",
+    "continuous-search.json": "46334d46c4b1acc32584aaed2293c80d1ab3590e86a8f826f38096e4fb10b221"
+  },
+  "cuda_device": {
+    "name": "NVIDIA RTX PRO 2000 Blackwell Generation Laptop GPU",
+    "major": 12,
+    "minor": 0,
+    "driver": 13040,
+    "runtime": 12080
+  }
+}

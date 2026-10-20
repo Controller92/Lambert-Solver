@@ -1,0 +1,2401 @@
+{
+  "schema_version": 1,
+  "backend": "cuda",
+  "frame": "ECLIPJ2000",
+  "time_scale": "TDB",
+  "units": "SI",
+  "solar_mu_m3_s2": 1.3271244004127939e+20,
+  "mars_mu_m3_s2": 42828373620699.086,
+  "ceres_mu_m3_s2": 62628888644.40993,
+  "kernels": [
+    {
+      "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/naif0012.tls",
+      "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
+    },
+    {
+      "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/de440s.bsp",
+      "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
+    },
+    {
+      "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/gm_de440.tpc",
+      "sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140"
+    },
+    {
+      "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/20000001.bsp",
+      "sha256": "a00a5d6e014e06b5f7888d035522909b67fcd50f129cb871c836a289a8bde9f5"
+    },
+    {
+      "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/mar099s.bsp",
+      "sha256": "997dc93ba640e476da7a494d2237dcdeb145e528db37be8ccee588c615e4e1ff"
+    }
+  ],
+  "mars_radius_m": 3396200.0,
+  "ceres_radius_assumption_m": 482100.0,
+  "source_pdf_sha256": "a6906644767ad5851cf880b9c1aaba1f12f1f598cd992069e819f185ef796858",
+  "scenarios": [
+    {
+      "name": "durations_first",
+      "epochs_tdb": [
+        "2035-07-01T00:00:00",
+        "2036-01-17T00:00:00",
+        "2036-09-23T00:00:00",
+        "2036-10-23T00:00:00",
+        "2038-01-16T00:00:00",
+        "2038-05-21T00:00:00"
+      ],
+      "legs": [
+        {
+          "label": "durations_first-earth-mars",
+          "origin": "399",
+          "destination": "499",
+          "departure_tdb": "2035-07-01T00:00:00",
+          "arrival_tdb": "2036-01-17T00:00:00",
+          "tof_days": 200.0,
+          "departure_state_si": [
+            22608672271.1567,
+            -150401774091.4276,
+            12570425.510041416,
+            28981.24718918803,
+            4305.509938953052,
+            -0.04325568238261468
+          ],
+          "arrival_state_si": [
+            96205619350.30652,
+            203828813738.75534,
+            1915293424.2886007,
+            -20996.778524261776,
+            12406.760480523055,
+            774.5093933056788
+          ],
+          "attempted_branches": [
+            {
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 728.7799251520136
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 728.7799251520136
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1239.9379424329043
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1239.9379424329043
+            },
+            {
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 729.4423636009842
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 729.4423636009842
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1240.600440680535
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1240.600440680535
+            }
+          ],
+          "candidates": [
+            {
+              "id": "durations_first-earth-mars-0",
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "v1_m_s": [
+                32188.38190267576,
+                4236.328528316467,
+                499.69568967138645
+              ],
+              "v2_m_s": [
+                -18691.488634134705,
+                11715.568788277837,
+                -258.8918507383458
+              ],
+              "vinf_departure_m_s": [
+                3207.1347134877287,
+                -69.1814106365855,
+                499.73894535376905
+              ],
+              "vinf_arrival_m_s": [
+                2305.289890127071,
+                -691.1916922452183,
+                -1033.4012440440247
+              ],
+              "C3_departure_km2_s2": 10.540238151538981,
+              "arrival_vinf_m_s": 2619.165050954718,
+              "heliocentric_inclination_deg": 0.8818653711562499,
+              "transfer_vs_departure_body_plane_deg": 0.8819453975721543,
+              "transfer_vs_arrival_body_plane_deg": 2.5168020519892376,
+              "solar_perihelion_m": 151943363950.07144,
+              "gooding_max_endpoint_velocity_error_m_s": 1.1251120579258907e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.09311883035105968,
+              "ode_velocity_closure_m_s": 1.447703045619513e-08
+            },
+            {
+              "id": "durations_first-earth-mars-5",
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "v1_m_s": [
+                -31900.9992918295,
+                6105.78668171015,
+                -472.49913098569937
+              ],
+              "v2_m_s": [
+                22003.80965562569,
+                -1818.1135372114031,
+                331.1883785200972
+              ],
+              "vinf_departure_m_s": [
+                -60882.24648101753,
+                1800.276742757098,
+                -472.45587530331676
+              ],
+              "vinf_arrival_m_s": [
+                43000.58817988746,
+                -14224.874017734459,
+                -443.3210147855816
+              ],
+              "C3_departure_km2_s2": 3710.112147479992,
+              "arrival_vinf_m_s": 45294.526801356966,
+              "heliocentric_inclination_deg": 179.11813462884376,
+              "transfer_vs_departure_body_plane_deg": 179.11805460242786,
+              "transfer_vs_arrival_body_plane_deg": 177.48319794801077,
+              "solar_perihelion_m": 118070962620.60452,
+              "gooding_max_endpoint_velocity_error_m_s": 9.095657532711635e-12,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.2862895313360672,
+              "ode_velocity_closure_m_s": 3.0742126296359496e-08
+            }
+          ],
+          "maximum_gooding_error_m_s": 1.1251120579258907e-11
+        },
+        {
+          "label": "durations_first-mars-ceres",
+          "origin": "499",
+          "destination": "20000001",
+          "departure_tdb": "2036-01-17T00:00:00",
+          "arrival_tdb": "2036-09-23T00:00:00",
+          "tof_days": 250.0,
+          "departure_state_si": [
+            96205619350.30652,
+            203828813738.75534,
+            1915293424.2886007,
+            -20996.778524261776,
+            12406.760480523055,
+            774.5093933056788
+          ],
+          "arrival_state_si": [
+            -333043428773.92474,
+            176255770778.45816,
+            67100421152.02085,
+            -8813.550758106308,
+            -17147.896799004142,
+            1063.1854702710211
+          ],
+          "attempted_branches": [
+            {
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1209.4030455468912
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1209.4030455468912
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2066.1750500998996
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2066.1750500998996
+            },
+            {
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1234.8092227339887
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1234.8092227339887
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2091.6014567511306
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2091.6014567511306
+            }
+          ],
+          "candidates": [
+            {
+              "id": "durations_first-mars-ceres-0",
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "v1_m_s": [
+                -21712.913223095315,
+                16726.274719962857,
+                4812.343668017371
+              ],
+              "v2_m_s": [
+                -12551.031572183714,
+                -11478.044272443376,
+                1013.7368648955929
+              ],
+              "vinf_departure_m_s": [
+                -716.134698833539,
+                4319.514239439803,
+                4037.834274711692
+              ],
+              "vinf_arrival_m_s": [
+                -3737.4808140774057,
+                5669.852526560766,
+                -49.4486053754282
+              ],
+              "C3_departure_km2_s2": 35.47515780163312,
+              "arrival_vinf_m_s": 6791.05556398398,
+              "heliocentric_inclination_deg": 10.097182432248122,
+              "transfer_vs_departure_body_plane_deg": 8.304054766405155,
+              "transfer_vs_arrival_body_plane_deg": 3.247656135347664,
+              "solar_perihelion_m": 206070881346.12677,
+              "gooding_max_endpoint_velocity_error_m_s": 1.8639094861936606e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.016992461816173903,
+              "ode_velocity_closure_m_s": 7.879505714506795e-10
+            },
+            {
+              "id": "durations_first-mars-ceres-5",
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "v1_m_s": [
+                5384.42307915042,
+                -28288.97026572616,
+                -3211.7578792160634
+              ],
+              "v2_m_s": [
+                -9093.188934461563,
+                16279.515012576518,
+                2790.803339460245
+              ],
+              "vinf_departure_m_s": [
+                26381.201603412195,
+                -40695.73074624922,
+                -3986.267272521742
+              ],
+              "vinf_arrival_m_s": [
+                -279.6381763552545,
+                33427.41181158066,
+                1727.6178691892237
+              ],
+              "C3_departure_km2_s2": 2368.00062577907,
+              "arrival_vinf_m_s": 33473.19407275947,
+              "heliocentric_inclination_deg": 169.9028175677519,
+              "transfer_vs_departure_body_plane_deg": 171.69594523359484,
+              "transfer_vs_arrival_body_plane_deg": 176.75234386465235,
+              "solar_perihelion_m": 61511083019.55904,
+              "gooding_max_endpoint_velocity_error_m_s": 1.4580309236299762e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.40519013762410383,
+              "ode_velocity_closure_m_s": 3.388292345782494e-08
+            }
+          ],
+          "maximum_gooding_error_m_s": 1.8639094861936606e-11
+        },
+        {
+          "label": "durations_first-ceres-mars",
+          "origin": "20000001",
+          "destination": "499",
+          "departure_tdb": "2036-10-23T00:00:00",
+          "arrival_tdb": "2038-01-16T00:00:00",
+          "tof_days": 450.0,
+          "departure_state_si": [
+            -353182787153.06726,
+            130526178841.62347,
+            69315989561.25787,
+            -6705.808725371277,
+            -18090.369019416416,
+            644.1595809276981
+          ],
+          "arrival_state_si": [
+            12796124512.607473,
+            233265755414.38434,
+            4575894747.018308,
+            -23278.00754926812,
+            3385.0103944034436,
+            641.1645365888678
+          ],
+          "attempted_branches": [
+            {
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1130.6465103023475
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1130.6465103023475
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1937.318526802012
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1937.318526802012
+            },
+            {
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1170.6795056046703
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1170.6795056046703
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1977.3985278975613
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1977.3985278975613
+            }
+          ],
+          "candidates": [
+            {
+              "id": "durations_first-ceres-mars-0",
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "v1_m_s": [
+                -2144.7793806684585,
+                12911.08837816735,
+                781.8127880841804
+              ],
+              "v2_m_s": [
+                17401.64733940897,
+                -17256.467711318117,
+                -3737.6322548968983
+              ],
+              "vinf_departure_m_s": [
+                4561.029344702819,
+                31001.457397583763,
+                137.65320715648227
+              ],
+              "vinf_arrival_m_s": [
+                40679.65488867709,
+                -20641.47810572156,
+                -4378.796791485766
+              ],
+              "C3_departure_km2_s2": 981.9122978628817,
+              "arrival_vinf_m_s": 45826.61673735012,
+              "heliocentric_inclination_deg": 169.37294879152773,
+              "transfer_vs_departure_body_plane_deg": 179.82667774060442,
+              "transfer_vs_arrival_body_plane_deg": 170.8982581651015,
+              "solar_perihelion_m": 85960297992.1416,
+              "gooding_max_endpoint_velocity_error_m_s": 1.1148268342486756e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.0968319132020325,
+              "ode_velocity_closure_m_s": 1.1106288145543752e-08
+            },
+            {
+              "id": "durations_first-ceres-mars-5",
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "v1_m_s": [
+                -1912.5875899309972,
+                -12726.962048456073,
+                -24.68032617635862
+              ],
+              "v2_m_s": [
+                -19545.14179072681,
+                14486.762253746881,
+                4052.246920890627
+              ],
+              "vinf_departure_m_s": [
+                4793.221135440281,
+                5363.406970960343,
+                -668.8399071040567
+              ],
+              "vinf_arrival_m_s": [
+                3732.8657585413093,
+                11101.751859343438,
+                3411.082384301759
+              ],
+              "C3_departure_km2_s2": 52.18845001071238,
+              "arrival_vinf_m_s": 12199.125548588285,
+              "heliocentric_inclination_deg": 10.627051208472277,
+              "transfer_vs_departure_body_plane_deg": 0.17332225939559479,
+              "transfer_vs_arrival_body_plane_deg": 9.101741834898478,
+              "solar_perihelion_m": 113329095737.52269,
+              "gooding_max_endpoint_velocity_error_m_s": 1.0449298582058015e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.751943451844155,
+              "ode_velocity_closure_m_s": 8.409680022561548e-08
+            }
+          ],
+          "maximum_gooding_error_m_s": 1.1148268342486756e-11
+        },
+        {
+          "label": "durations_first-mars-earth",
+          "origin": "499",
+          "destination": "399",
+          "departure_tdb": "2038-01-16T00:00:00",
+          "arrival_tdb": "2038-05-21T00:00:00",
+          "tof_days": 125.0,
+          "departure_state_si": [
+            12796124512.607473,
+            233265755414.38434,
+            4575894747.018308,
+            -23278.00754926812,
+            3385.0103944034436,
+            641.1645365888678
+          ],
+          "arrival_state_si": [
+            -76743967623.42719,
+            -130486287463.05028,
+            11798738.654002547,
+            25180.903628704982,
+            -15212.856829035898,
+            2.2623417385378986
+          ],
+          "attempted_branches": [
+            {
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 759.3013351297146
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 759.3013351297146
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1291.7499022957204
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1291.7499022957204
+            },
+            {
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 759.6581874803245
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 759.6581874803245
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1292.1067753110865
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1292.1067753110865
+            }
+          ],
+          "candidates": [
+            {
+              "id": "durations_first-mars-earth-0",
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "v1_m_s": [
+                -23897.671859863367,
+                -17958.505580885045,
+                494.43184185586557
+              ],
+              "v2_m_s": [
+                22220.084319159596,
+                -31862.99811391569,
+                -1510.766449782304
+              ],
+              "vinf_departure_m_s": [
+                -619.6643105952462,
+                -21343.515975288487,
+                -146.73269473300223
+              ],
+              "vinf_arrival_m_s": [
+                -2960.819309545386,
+                -16650.14128487979,
+                -1513.028791520842
+              ],
+              "C3_departure_km2_s2": 455.9511885289239,
+              "arrival_vinf_m_s": 16978.896074662993,
+              "heliocentric_inclination_deg": 2.452259621152547,
+              "transfer_vs_departure_body_plane_deg": 0.7140255317395431,
+              "transfer_vs_arrival_body_plane_deg": 2.4566091372965233,
+              "solar_perihelion_m": 121223914200.4454,
+              "gooding_max_endpoint_velocity_error_m_s": 8.134767913360665e-12,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.01068760638230418,
+              "ode_velocity_closure_m_s": 3.358333324457799e-09
+            },
+            {
+              "id": "durations_first-mars-earth-5",
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "v1_m_s": [
+                17604.196963402108,
+                -24236.079965420045,
+                -1175.113525498085
+              ],
+              "v2_m_s": [
+                -38204.99512359661,
+                -7409.621808266333,
+                1251.4680322893855
+              ],
+              "vinf_departure_m_s": [
+                40882.20451267023,
+                -27621.090359823487,
+                -1816.2780620869528
+              ],
+              "vinf_arrival_m_s": [
+                -63385.89875230159,
+                7803.235020769565,
+                1249.2056905508475
+              ],
+              "C3_departure_km2_s2": 2437.5781444801464,
+              "arrival_vinf_m_s": 63876.624459059334,
+              "heliocentric_inclination_deg": 177.54774037884746,
+              "transfer_vs_departure_body_plane_deg": 179.28597446826046,
+              "transfer_vs_arrival_body_plane_deg": 177.5433908627035,
+              "solar_perihelion_m": 79237761873.81792,
+              "gooding_max_endpoint_velocity_error_m_s": 2.648586147802733e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.022669989358577575,
+              "ode_velocity_closure_m_s": 1.0003911552724813e-08
+            }
+          ],
+          "maximum_gooding_error_m_s": 2.648586147802733e-11
+        }
+      ],
+      "mars_encounters": [
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5956.102568092084,
+          "speed_mismatch_m_s": 3336.937517137366,
+          "required_turn_deg": 124.3809475523249,
+          "maximum_unpowered_turn_deg": 78.76722707794887,
+          "turn_margin_deg": -45.61372047437603,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 815221.1862994344,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4528.907586042832,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -716.134698833539,
+            4319.514239439803,
+            4037.834274711692
+          ],
+          "incoming_id": "durations_first-earth-mars-0",
+          "outgoing_id": "durations_first-mars-ceres-0",
+          "encounter_index": 0,
+          "prograde_pair": true,
+          "heliocentric_transfer_plane_change_deg": 10.820856818394391
+        },
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 48662.106672225666,
+          "speed_mismatch_m_s": 46042.94162127095,
+          "required_turn_deg": 43.09860910766795,
+          "maximum_unpowered_turn_deg": 78.76722707794887,
+          "turn_margin_deg": 35.66861797028093,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 10754234.509712862,
+          "optimistic_postflyby_asymptotic_correction_m_s": 46042.94162127095,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            26381.201603412195,
+            -40695.73074624922,
+            -3986.267272521742
+          ],
+          "incoming_id": "durations_first-earth-mars-0",
+          "outgoing_id": "durations_first-mars-ceres-5",
+          "encounter_index": 0,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 169.1791431816056
+        },
+        {
+          "vinf_in_m_s": 45294.526801356966,
+          "vinf_out_m_s": 5956.102568092084,
+          "speed_mismatch_m_s": -39338.42423326488,
+          "required_turn_deg": 110.39806282436457,
+          "maximum_unpowered_turn_deg": 0.6613594680726795,
+          "turn_margin_deg": -109.73670335629188,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 4547.130777564686,
+          "optimistic_postflyby_asymptotic_correction_m_s": 47636.92923400736,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            43000.58817988746,
+            -14224.874017734459,
+            -443.3210147855816
+          ],
+          "vinf_out_vector_m_s": [
+            -716.134698833539,
+            4319.514239439803,
+            4037.834274711692
+          ],
+          "incoming_id": "durations_first-earth-mars-5",
+          "outgoing_id": "durations_first-mars-ceres-0",
+          "encounter_index": 0,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 169.1791431816056
+        },
+        {
+          "vinf_in_m_s": 45294.526801356966,
+          "vinf_out_m_s": 48662.106672225666,
+          "speed_mismatch_m_s": 3367.5798708687,
+          "required_turn_deg": 38.91162175231426,
+          "maximum_unpowered_turn_deg": 0.6613594680726795,
+          "turn_margin_deg": -38.25026228424158,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 41798.991124433946,
+          "optimistic_postflyby_asymptotic_correction_m_s": 30947.223240697604,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            43000.58817988746,
+            -14224.874017734459,
+            -443.3210147855816
+          ],
+          "vinf_out_vector_m_s": [
+            26381.201603412195,
+            -40695.73074624922,
+            -3986.267272521742
+          ],
+          "incoming_id": "durations_first-earth-mars-5",
+          "outgoing_id": "durations_first-mars-ceres-5",
+          "encounter_index": 0,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 10.820856818394388
+        },
+        {
+          "vinf_in_m_s": 45826.61673735012,
+          "vinf_out_m_s": 21353.013570194817,
+          "speed_mismatch_m_s": -24473.603167155306,
+          "required_turn_deg": 64.84166836684423,
+          "maximum_unpowered_turn_deg": 0.6461765599830221,
+          "turn_margin_deg": -64.19549180686121,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 17644.75246072877,
+          "optimistic_postflyby_asymptotic_correction_m_s": 41280.89673334465,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            40679.65488867709,
+            -20641.47810572156,
+            -4378.796791485766
+          ],
+          "vinf_out_vector_m_s": [
+            -619.6643105952462,
+            -21343.515975288487,
+            -146.73269473300223
+          ],
+          "incoming_id": "durations_first-ceres-mars-0",
+          "outgoing_id": "durations_first-mars-earth-0",
+          "encounter_index": 1,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 171.61228369684108
+        },
+        {
+          "vinf_in_m_s": 45826.61673735012,
+          "vinf_out_m_s": 49371.83553889957,
+          "speed_mismatch_m_s": 3545.2188015494467,
+          "required_turn_deg": 7.88233162174929,
+          "maximum_unpowered_turn_deg": 0.6461765599830221,
+          "turn_margin_deg": -7.236155061766268,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 276319.218427329,
+          "optimistic_postflyby_asymptotic_correction_m_s": 6972.017316821113,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            40679.65488867709,
+            -20641.47810572156,
+            -4378.796791485766
+          ],
+          "vinf_out_vector_m_s": [
+            40882.20451267023,
+            -27621.090359823487,
+            -1816.2780620869528
+          ],
+          "incoming_id": "durations_first-ceres-mars-0",
+          "outgoing_id": "durations_first-mars-earth-5",
+          "encounter_index": 1,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 8.38771630315894
+        },
+        {
+          "vinf_in_m_s": 12199.125548588285,
+          "vinf_out_m_s": 21353.013570194817,
+          "speed_mismatch_m_s": 9153.888021606532,
+          "required_turn_deg": 156.99071615444703,
+          "maximum_unpowered_turn_deg": 8.498592751333689,
+          "turn_margin_deg": -148.49212340311334,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 5900.651037164509,
+          "optimistic_postflyby_asymptotic_correction_m_s": 32387.306906928723,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            3732.8657585413093,
+            11101.751859343438,
+            3411.082384301759
+          ],
+          "vinf_out_vector_m_s": [
+            -619.6643105952462,
+            -21343.515975288487,
+            -146.73269473300223
+          ],
+          "incoming_id": "durations_first-ceres-mars-5",
+          "outgoing_id": "durations_first-mars-earth-0",
+          "encounter_index": 1,
+          "prograde_pair": true,
+          "heliocentric_transfer_plane_change_deg": 8.387716303158937
+        },
+        {
+          "vinf_in_m_s": 12199.125548588285,
+          "vinf_out_m_s": 49371.83553889957,
+          "speed_mismatch_m_s": 37172.70999031128,
+          "required_turn_deg": 105.42837361974568,
+          "maximum_unpowered_turn_deg": 8.498592751333689,
+          "turn_margin_deg": -96.929780868412,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 73926.05441706536,
+          "optimistic_postflyby_asymptotic_correction_m_s": 52265.9886960184,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            3732.8657585413093,
+            11101.751859343438,
+            3411.082384301759
+          ],
+          "vinf_out_vector_m_s": [
+            40882.20451267023,
+            -27621.090359823487,
+            -1816.2780620869528
+          ],
+          "incoming_id": "durations_first-ceres-mars-5",
+          "outgoing_id": "durations_first-mars-earth-5",
+          "encounter_index": 1,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 171.61228369684108
+        }
+      ],
+      "ceres_visit": [
+        {
+          "incoming_id": "durations_first-mars-ceres-0",
+          "outgoing_id": "durations_first-ceres-mars-0",
+          "prograde_pair": false,
+          "arrival_vinf_m_s": 6791.05556398398,
+          "departure_vinf_m_s": 31335.479856911104,
+          "optimistic_capture_escape_sum_m_s": 37130.338411989025
+        },
+        {
+          "incoming_id": "durations_first-mars-ceres-0",
+          "outgoing_id": "durations_first-ceres-mars-5",
+          "prograde_pair": true,
+          "arrival_vinf_m_s": 6791.05556398398,
+          "departure_vinf_m_s": 7224.1573910534635,
+          "optimistic_capture_escape_sum_m_s": 13032.830675312554
+        },
+        {
+          "incoming_id": "durations_first-mars-ceres-5",
+          "outgoing_id": "durations_first-ceres-mars-0",
+          "prograde_pair": false,
+          "arrival_vinf_m_s": 33473.19407275947,
+          "departure_vinf_m_s": 31335.479856911104,
+          "optimistic_capture_escape_sum_m_s": 63797.25518020793
+        },
+        {
+          "incoming_id": "durations_first-mars-ceres-5",
+          "outgoing_id": "durations_first-ceres-mars-5",
+          "prograde_pair": false,
+          "arrival_vinf_m_s": 33473.19407275947,
+          "departure_vinf_m_s": 7224.1573910534635,
+          "optimistic_capture_escape_sum_m_s": 39699.74744353146
+        }
+      ]
+    },
+    {
+      "name": "calendar_first",
+      "epochs_tdb": [
+        "2035-07-01T00:00:00",
+        "2036-01-17T00:00:00",
+        "2036-09-24T00:00:00",
+        "2036-10-24T00:00:00",
+        "2037-12-18T00:00:00",
+        "2038-04-22T00:00:00"
+      ],
+      "legs": [
+        {
+          "label": "calendar_first-earth-mars",
+          "origin": "399",
+          "destination": "499",
+          "departure_tdb": "2035-07-01T00:00:00",
+          "arrival_tdb": "2036-01-17T00:00:00",
+          "tof_days": 200.0,
+          "departure_state_si": [
+            22608672271.1567,
+            -150401774091.4276,
+            12570425.510041416,
+            28981.24718918803,
+            4305.509938953052,
+            -0.04325568238261468
+          ],
+          "arrival_state_si": [
+            96205619350.30652,
+            203828813738.75534,
+            1915293424.2886007,
+            -20996.778524261776,
+            12406.760480523055,
+            774.5093933056788
+          ],
+          "attempted_branches": [
+            {
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 728.7799251520136
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 728.7799251520136
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1239.9379424329043
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1239.9379424329043
+            },
+            {
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 729.4423636009842
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 729.4423636009842
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1240.600440680535
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1240.600440680535
+            }
+          ],
+          "candidates": [
+            {
+              "id": "calendar_first-earth-mars-0",
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "v1_m_s": [
+                32188.38190267576,
+                4236.328528316467,
+                499.69568967138645
+              ],
+              "v2_m_s": [
+                -18691.488634134705,
+                11715.568788277837,
+                -258.8918507383458
+              ],
+              "vinf_departure_m_s": [
+                3207.1347134877287,
+                -69.1814106365855,
+                499.73894535376905
+              ],
+              "vinf_arrival_m_s": [
+                2305.289890127071,
+                -691.1916922452183,
+                -1033.4012440440247
+              ],
+              "C3_departure_km2_s2": 10.540238151538981,
+              "arrival_vinf_m_s": 2619.165050954718,
+              "heliocentric_inclination_deg": 0.8818653711562499,
+              "transfer_vs_departure_body_plane_deg": 0.8819453975721543,
+              "transfer_vs_arrival_body_plane_deg": 2.5168020519892376,
+              "solar_perihelion_m": 151943363950.07144,
+              "gooding_max_endpoint_velocity_error_m_s": 1.1251120579258907e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.09311883035105968,
+              "ode_velocity_closure_m_s": 1.447703045619513e-08
+            },
+            {
+              "id": "calendar_first-earth-mars-5",
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "v1_m_s": [
+                -31900.9992918295,
+                6105.78668171015,
+                -472.49913098569937
+              ],
+              "v2_m_s": [
+                22003.80965562569,
+                -1818.1135372114031,
+                331.1883785200972
+              ],
+              "vinf_departure_m_s": [
+                -60882.24648101753,
+                1800.276742757098,
+                -472.45587530331676
+              ],
+              "vinf_arrival_m_s": [
+                43000.58817988746,
+                -14224.874017734459,
+                -443.3210147855816
+              ],
+              "C3_departure_km2_s2": 3710.112147479992,
+              "arrival_vinf_m_s": 45294.526801356966,
+              "heliocentric_inclination_deg": 179.11813462884376,
+              "transfer_vs_departure_body_plane_deg": 179.11805460242786,
+              "transfer_vs_arrival_body_plane_deg": 177.48319794801077,
+              "solar_perihelion_m": 118070962620.60452,
+              "gooding_max_endpoint_velocity_error_m_s": 9.095657532711635e-12,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.2862895313360672,
+              "ode_velocity_closure_m_s": 3.0742126296359496e-08
+            }
+          ],
+          "maximum_gooding_error_m_s": 1.1251120579258907e-11
+        },
+        {
+          "label": "calendar_first-mars-ceres",
+          "origin": "499",
+          "destination": "20000001",
+          "departure_tdb": "2036-01-17T00:00:00",
+          "arrival_tdb": "2036-09-24T00:00:00",
+          "tof_days": 251.0,
+          "departure_state_si": [
+            96205619350.30652,
+            203828813738.75534,
+            1915293424.2886007,
+            -20996.778524261776,
+            12406.760480523055,
+            774.5093933056788
+          ],
+          "arrival_state_si": [
+            -333801974642.3164,
+            174772639266.68408,
+            67191687183.229355,
+            -8745.355208211706,
+            -17183.800775826352,
+            1049.4509688558553
+          ],
+          "attempted_branches": [
+            {
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1211.0049300136748
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1211.0049300136748
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2068.830831073688
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2068.830831073688
+            },
+            {
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1236.2134607265152
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1236.2134607265152
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2094.0593003800927
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2094.0593003800927
+            }
+          ],
+          "candidates": [
+            {
+              "id": "calendar_first-mars-ceres-0",
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "v1_m_s": [
+                -21701.299963214027,
+                16714.063110244053,
+                4816.32054553589
+              ],
+              "v2_m_s": [
+                -12453.105813965482,
+                -11548.388398326832,
+                994.0736044963261
+              ],
+              "vinf_departure_m_s": [
+                -704.5214389522516,
+                4307.302629720998,
+                4041.8111522302115
+              ],
+              "vinf_arrival_m_s": [
+                -3707.7506057537757,
+                5635.4123774995205,
+                -55.377364359529224
+              ],
+              "C3_departure_km2_s2": 35.38544379223728,
+              "arrival_vinf_m_s": 6745.9879833443,
+              "heliocentric_inclination_deg": 10.11132743492745,
+              "transfer_vs_departure_body_plane_deg": 8.31821638953208,
+              "transfer_vs_arrival_body_plane_deg": 3.2470256510354716,
+              "solar_perihelion_m": 206033820924.41934,
+              "gooding_max_endpoint_velocity_error_m_s": 1.3148412376541238e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.017322255921691763,
+              "ode_velocity_closure_m_s": 8.063696404702141e-10
+            },
+            {
+              "id": "calendar_first-mars-ceres-5",
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "v1_m_s": [
+                5488.1646226797675,
+                -28227.206395746605,
+                -3227.2431966570257
+              ],
+              "v2_m_s": [
+                -9059.348395001443,
+                16229.946492412288,
+                2785.194067766466
+              ],
+              "vinf_departure_m_s": [
+                26484.943146941543,
+                -40633.96687626966,
+                -4001.7525899627044
+              ],
+              "vinf_arrival_m_s": [
+                -313.9931867897376,
+                33413.74726823864,
+                1735.7430989106108
+              ],
+              "C3_departure_km2_s2": 2368.585501389779,
+              "arrival_vinf_m_s": 33460.273494585956,
+              "heliocentric_inclination_deg": 169.88867256507254,
+              "transfer_vs_departure_body_plane_deg": 171.6817836104679,
+              "transfer_vs_arrival_body_plane_deg": 176.75297434896453,
+              "solar_perihelion_m": 62092832882.5787,
+              "gooding_max_endpoint_velocity_error_m_s": 9.890101487568039e-12,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.41090898023035,
+              "ode_velocity_closure_m_s": 3.441481613895889e-08
+            }
+          ],
+          "maximum_gooding_error_m_s": 1.3148412376541238e-11
+        },
+        {
+          "label": "calendar_first-ceres-mars",
+          "origin": "20000001",
+          "destination": "499",
+          "departure_tdb": "2036-10-24T00:00:00",
+          "arrival_tdb": "2037-12-18T00:00:00",
+          "tof_days": 420.0,
+          "departure_state_si": [
+            -353759049718.82874,
+            128962023149.63797,
+            69371032898.20566,
+            -6633.584016062656,
+            -18116.884986979312,
+            629.9900844867788
+          ],
+          "arrival_state_si": [
+            70040291489.39351,
+            217125475090.0301,
+            2835324595.5408516,
+            -22143.521991256282,
+            9498.484485315243,
+            741.53238538551
+          ],
+          "attempted_branches": [
+            {
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1219.6242914400686
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1219.6242914400686
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2083.558028739694
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2083.558028739694
+            },
+            {
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1245.0186370519984
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1245.0186370519984
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2108.972463608647
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 2108.972463608647
+            }
+          ],
+          "candidates": [
+            {
+              "id": "calendar_first-ceres-mars-0",
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "v1_m_s": [
+                764.4401531054909,
+                13641.729214456424,
+                800.6544579275215
+              ],
+              "v2_m_s": [
+                16488.42515149369,
+                -19194.833988492366,
+                -4133.602526046781
+              ],
+              "vinf_departure_m_s": [
+                7398.024169168147,
+                31758.614201435736,
+                170.6643734407428
+              ],
+              "vinf_arrival_m_s": [
+                38631.947142749974,
+                -28693.31847380761,
+                -4875.134911432291
+              ],
+              "C3_departure_km2_s2": 1063.3694639315936,
+              "arrival_vinf_m_s": 48368.38642630373,
+              "heliocentric_inclination_deg": 169.5565045586603,
+              "transfer_vs_departure_body_plane_deg": 177.8644578260551,
+              "transfer_vs_arrival_body_plane_deg": 171.28436469263957,
+              "solar_perihelion_m": 123577312839.75597,
+              "gooding_max_endpoint_velocity_error_m_s": 1.0951766470309208e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.656598711184638,
+              "ode_velocity_closure_m_s": 6.106816381278673e-08
+            },
+            {
+              "id": "calendar_first-ceres-mars-5",
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "v1_m_s": [
+                -427.2647978001255,
+                -13666.914108126235,
+                -860.0998517040409
+              ],
+              "v2_m_s": [
+                -16262.42438614056,
+                19401.81615997191,
+                4109.0442169990065
+              ],
+              "vinf_departure_m_s": [
+                6206.31921826253,
+                4449.970878853077,
+                -1490.0899361908196
+              ],
+              "vinf_arrival_m_s": [
+                5881.097605115723,
+                9903.331674656667,
+                3367.5118316134967
+              ],
+              "C3_departure_km2_s2": 60.54100707955241,
+              "arrival_vinf_m_s": 12000.142633952848,
+              "heliocentric_inclination_deg": 10.443495441339719,
+              "transfer_vs_departure_body_plane_deg": 2.135542173944932,
+              "transfer_vs_arrival_body_plane_deg": 8.715635307360458,
+              "solar_perihelion_m": 121060768589.13756,
+              "gooding_max_endpoint_velocity_error_m_s": 1.1682670973336944e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.6208407950208712,
+              "ode_velocity_closure_m_s": 7.273587889992823e-08
+            }
+          ],
+          "maximum_gooding_error_m_s": 1.1682670973336944e-11
+        },
+        {
+          "label": "calendar_first-mars-earth",
+          "origin": "499",
+          "destination": "399",
+          "departure_tdb": "2037-12-18T00:00:00",
+          "arrival_tdb": "2038-04-22T00:00:00",
+          "tof_days": 125.0,
+          "departure_state_si": [
+            70040291489.39351,
+            217125475090.0301,
+            2835324595.5408516,
+            -22143.521991256282,
+            9498.484485315243,
+            741.53238538551
+          ],
+          "arrival_state_si": [
+            -128259394140.43976,
+            -78436939609.99066,
+            7531862.462721765,
+            15046.482971601941,
+            -25519.764606255394,
+            3.0010151209385327
+          ],
+          "attempted_branches": [
+            {
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 721.3645713648338
+            },
+            {
+              "long_way": false,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 721.3645713648338
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1227.4933607734654
+            },
+            {
+              "long_way": false,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": true,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1227.4933607734654
+            },
+            {
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "status": 0,
+              "root_status": 0,
+              "minimum_time_days": null
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 722.5105584220183
+            },
+            {
+              "long_way": true,
+              "revolutions": 1,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 722.5105584220183
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "left",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1228.639498726348
+            },
+            {
+              "long_way": true,
+              "revolutions": 2,
+              "branch": "right",
+              "prograde": false,
+              "status": 2,
+              "root_status": 8,
+              "minimum_time_days": 1228.639498726348
+            }
+          ],
+          "candidates": [
+            {
+              "id": "calendar_first-mars-earth-0",
+              "long_way": false,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": true,
+              "v1_m_s": [
+                -27522.017174198027,
+                -8254.86540226221,
+                141.33312388560634
+              ],
+              "v2_m_s": [
+                8695.864584724293,
+                -36765.18902741416,
+                -686.09681226661
+              ],
+              "vinf_departure_m_s": [
+                -5378.495182941744,
+                -17753.349887577453,
+                -600.1992614999036
+              ],
+              "vinf_arrival_m_s": [
+                -6350.618386877648,
+                -11245.424421158768,
+                -689.0978273875485
+              ],
+              "C3_departure_km2_s2": 344.469881817179,
+              "arrival_vinf_m_s": 12933.088576339866,
+              "heliocentric_inclination_deg": 1.0957550610613174,
+              "transfer_vs_departure_body_plane_deg": 0.8709219039730032,
+              "transfer_vs_arrival_body_plane_deg": 1.1015097727443335,
+              "solar_perihelion_m": 131956436999.98862,
+              "gooding_max_endpoint_velocity_error_m_s": 1.5001494105678543e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.04907951004480578,
+              "ode_velocity_closure_m_s": 7.094620090600327e-09
+            },
+            {
+              "id": "calendar_first-mars-earth-5",
+              "long_way": true,
+              "revolutions": 0,
+              "branch": null,
+              "prograde": false,
+              "v1_m_s": [
+                10419.085190490867,
+                -27030.62554554849,
+                -544.7782367948907
+              ],
+              "v2_m_s": [
+                -36624.344754999634,
+                10001.452175360362,
+                529.9710402411472
+              ],
+              "vinf_departure_m_s": [
+                32562.60718174715,
+                -36529.11003086373,
+                -1286.3106221804007
+              ],
+              "vinf_arrival_m_s": [
+                -51670.82772660158,
+                35521.21678161576,
+                526.9700251202087
+              ],
+              "C3_departure_km2_s2": 2396.3538611364547,
+              "arrival_vinf_m_s": 62704.93582650456,
+              "heliocentric_inclination_deg": 178.9042449389387,
+              "transfer_vs_departure_body_plane_deg": 179.129078096027,
+              "transfer_vs_arrival_body_plane_deg": 178.89849022725568,
+              "solar_perihelion_m": 71280559192.65549,
+              "gooding_max_endpoint_velocity_error_m_s": 4.880860748016399e-11,
+              "root_precision_limited": 0,
+              "ode_position_closure_m": 0.06091420001718509,
+              "ode_velocity_closure_m_s": 2.414708019673893e-08
+            }
+          ],
+          "maximum_gooding_error_m_s": 4.880860748016399e-11
+        }
+      ],
+      "mars_encounters": [
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 5948.566532555325,
+          "speed_mismatch_m_s": 3329.4014816006065,
+          "required_turn_deg": 124.29206923071354,
+          "maximum_unpowered_turn_deg": 78.76722707794887,
+          "turn_margin_deg": -45.52484215276466,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 818112.0661778114,
+          "optimistic_postflyby_asymptotic_correction_m_s": 4518.228194252665,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            -704.5214389522516,
+            4307.302629720998,
+            4041.8111522302115
+          ],
+          "incoming_id": "calendar_first-earth-mars-0",
+          "outgoing_id": "calendar_first-mars-ceres-0",
+          "encounter_index": 0,
+          "prograde_pair": true,
+          "heliocentric_transfer_plane_change_deg": 10.835018441521319
+        },
+        {
+          "vinf_in_m_s": 2619.165050954718,
+          "vinf_out_m_s": 48668.115860281454,
+          "speed_mismatch_m_s": 46048.950809326736,
+          "required_turn_deg": 42.96623342036615,
+          "maximum_unpowered_turn_deg": 78.76722707794887,
+          "turn_margin_deg": 35.800993657582715,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 10804113.48300149,
+          "optimistic_postflyby_asymptotic_correction_m_s": 46048.950809326736,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            2305.289890127071,
+            -691.1916922452183,
+            -1033.4012440440247
+          ],
+          "vinf_out_vector_m_s": [
+            26484.943146941543,
+            -40633.96687626966,
+            -4001.7525899627044
+          ],
+          "incoming_id": "calendar_first-earth-mars-0",
+          "outgoing_id": "calendar_first-mars-ceres-5",
+          "encounter_index": 0,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 169.1649815584787
+        },
+        {
+          "vinf_in_m_s": 45294.526801356966,
+          "vinf_out_m_s": 5948.566532555325,
+          "speed_mismatch_m_s": -39345.96026880164,
+          "required_turn_deg": 110.27279828040596,
+          "maximum_unpowered_turn_deg": 0.6613594680726795,
+          "turn_margin_deg": -109.61143881233329,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 4566.476374021565,
+          "optimistic_postflyby_asymptotic_correction_m_s": 47621.921603175804,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            43000.58817988746,
+            -14224.874017734459,
+            -443.3210147855816
+          ],
+          "vinf_out_vector_m_s": [
+            -704.5214389522516,
+            4307.302629720998,
+            4041.8111522302115
+          ],
+          "incoming_id": "calendar_first-earth-mars-5",
+          "outgoing_id": "calendar_first-mars-ceres-0",
+          "encounter_index": 0,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 169.1649815584787
+        },
+        {
+          "vinf_in_m_s": 45294.526801356966,
+          "vinf_out_m_s": 48668.115860281454,
+          "speed_mismatch_m_s": 3373.589058924488,
+          "required_turn_deg": 38.771651830981554,
+          "maximum_unpowered_turn_deg": 0.6613594680726795,
+          "turn_margin_deg": -38.11029236290888,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 42016.50600679613,
+          "optimistic_postflyby_asymptotic_correction_m_s": 30842.023362555738,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            43000.58817988746,
+            -14224.874017734459,
+            -443.3210147855816
+          ],
+          "vinf_out_vector_m_s": [
+            26484.943146941543,
+            -40633.96687626966,
+            -4001.7525899627044
+          ],
+          "incoming_id": "calendar_first-earth-mars-5",
+          "outgoing_id": "calendar_first-mars-ceres-5",
+          "encounter_index": 0,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 10.83501844152132
+        },
+        {
+          "vinf_in_m_s": 48368.38642630373,
+          "vinf_out_m_s": 18559.899833166637,
+          "speed_mismatch_m_s": -29808.486593137095,
+          "required_turn_deg": 70.16895593916419,
+          "maximum_unpowered_turn_deg": 0.5803818771924364,
+          "turn_margin_deg": -69.58857406197176,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 13542.974084726686,
+          "optimistic_postflyby_asymptotic_correction_m_s": 45362.98279622073,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            38631.947142749974,
+            -28693.31847380761,
+            -4875.134911432291
+          ],
+          "vinf_out_vector_m_s": [
+            -5378.495182941744,
+            -17753.349887577453,
+            -600.1992614999036
+          ],
+          "incoming_id": "calendar_first-ceres-mars-0",
+          "outgoing_id": "calendar_first-mars-earth-0",
+          "encounter_index": 1,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 170.41344278866654
+        },
+        {
+          "vinf_in_m_s": 48368.38642630373,
+          "vinf_out_m_s": 48952.5674621511,
+          "speed_mismatch_m_s": 584.1810358473667,
+          "required_turn_deg": 12.417239258647674,
+          "maximum_unpowered_turn_deg": 0.5803818771924364,
+          "turn_margin_deg": -11.836857381455237,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 150965.79548594673,
+          "optimistic_postflyby_asymptotic_correction_m_s": 10051.812829265718,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            38631.947142749974,
+            -28693.31847380761,
+            -4875.134911432291
+          ],
+          "vinf_out_vector_m_s": [
+            32562.60718174715,
+            -36529.11003086373,
+            -1286.3106221804007
+          ],
+          "incoming_id": "calendar_first-ceres-mars-0",
+          "outgoing_id": "calendar_first-mars-earth-5",
+          "encounter_index": 1,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 9.58655721133346
+        },
+        {
+          "vinf_in_m_s": 12000.142633952848,
+          "vinf_out_m_s": 18559.899833166637,
+          "speed_mismatch_m_s": 6559.757199213789,
+          "required_turn_deg": 160.13601781628648,
+          "maximum_unpowered_turn_deg": 8.761569925060565,
+          "turn_margin_deg": -151.3744478912259,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 4525.080748103733,
+          "optimistic_postflyby_asymptotic_correction_m_s": 29655.8501275291,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            5881.097605115723,
+            9903.331674656667,
+            3367.5118316134967
+          ],
+          "vinf_out_vector_m_s": [
+            -5378.495182941744,
+            -17753.349887577453,
+            -600.1992614999036
+          ],
+          "incoming_id": "calendar_first-ceres-mars-5",
+          "outgoing_id": "calendar_first-mars-earth-0",
+          "encounter_index": 1,
+          "prograde_pair": true,
+          "heliocentric_transfer_plane_change_deg": 9.58655721133346
+        },
+        {
+          "vinf_in_m_s": 12000.142633952848,
+          "vinf_out_m_s": 48952.5674621511,
+          "speed_mismatch_m_s": 36952.42482819825,
+          "required_turn_deg": 107.28962610836871,
+          "maximum_unpowered_turn_deg": 8.761569925060565,
+          "turn_margin_deg": -98.52805618330815,
+          "safety_altitude_m": 200000.0,
+          "turn_only_rp_at_incoming_speed_m": 71879.85965662694,
+          "optimistic_postflyby_asymptotic_correction_m_s": 52101.66904300616,
+          "ballistic_status": "SPEED_MISMATCH",
+          "powered_tangential_status": "TURN_OUT_OF_RANGE",
+          "powered_tangential_delta_v_m_s": null,
+          "powered_tangential_rp_m": null,
+          "vinf_in_vector_m_s": [
+            5881.097605115723,
+            9903.331674656667,
+            3367.5118316134967
+          ],
+          "vinf_out_vector_m_s": [
+            32562.60718174715,
+            -36529.11003086373,
+            -1286.3106221804007
+          ],
+          "incoming_id": "calendar_first-ceres-mars-5",
+          "outgoing_id": "calendar_first-mars-earth-5",
+          "encounter_index": 1,
+          "prograde_pair": false,
+          "heliocentric_transfer_plane_change_deg": 170.41344278866654
+        }
+      ],
+      "ceres_visit": [
+        {
+          "incoming_id": "calendar_first-mars-ceres-0",
+          "outgoing_id": "calendar_first-ceres-mars-0",
+          "prograde_pair": false,
+          "arrival_vinf_m_s": 6745.9879833443,
+          "departure_vinf_m_s": 32609.346266547473,
+          "optimistic_capture_escape_sum_m_s": 38359.10257657925
+        },
+        {
+          "incoming_id": "calendar_first-mars-ceres-0",
+          "outgoing_id": "calendar_first-ceres-mars-5",
+          "prograde_pair": true,
+          "arrival_vinf_m_s": 6745.9879833443,
+          "departure_vinf_m_s": 7780.810181436918,
+          "optimistic_capture_escape_sum_m_s": 13543.261090978722
+        },
+        {
+          "incoming_id": "calendar_first-mars-ceres-5",
+          "outgoing_id": "calendar_first-ceres-mars-0",
+          "prograde_pair": false,
+          "arrival_vinf_m_s": 33460.273494585956,
+          "departure_vinf_m_s": 32609.346266547473,
+          "optimistic_capture_escape_sum_m_s": 65058.040590158445
+        },
+        {
+          "incoming_id": "calendar_first-mars-ceres-5",
+          "outgoing_id": "calendar_first-ceres-mars-5",
+          "prograde_pair": false,
+          "arrival_vinf_m_s": 33460.273494585956,
+          "departure_vinf_m_s": 7780.810181436918,
+          "optimistic_capture_escape_sum_m_s": 40242.19910455791
+        }
+      ]
+    }
+  ],
+  "neighborhood_search": {
+    "domain": {
+      "earth_departure_start": "2035-05-02T00:00:00",
+      "earth_departure_end": "2035-08-30T00:00:00",
+      "mars_encounter_start": "2035-11-18T00:00:00",
+      "mars_encounter_end": "2036-03-17T00:00:00",
+      "outgoing_tof_min_days": 160.0,
+      "outgoing_tof_max_days": 340.0,
+      "date_spacing_days": 1,
+      "revolutions": [
+        0,
+        1,
+        2
+      ],
+      "orientations": [
+        "short",
+        "long"
+      ],
+      "altitude_m": 200000.0
+    },
+    "diagnostics": {
+      "incoming": {
+        "count": 146410,
+        "status_counts": {
+          "0": 29282,
+          "2": 117128
+        },
+        "root_status_counts": {
+          "0": 29282,
+          "8": 117128
+        },
+        "feasible_by_revolution": {
+          "0": 29282,
+          "1": 0,
+          "2": 0
+        }
+      },
+      "outgoing": {
+        "count": 219010,
+        "status_counts": {
+          "0": 43802,
+          "2": 175208
+        },
+        "root_status_counts": {
+          "0": 43802,
+          "8": 175208
+        },
+        "feasible_by_revolution": {
+          "0": 43802,
+          "1": 0,
+          "2": 0
+        }
+      }
+    },
+    "sampled_candidate_pairs": 10600084,
+    "best_sampled_asymptotic_correction": {
+      "prograde": {
+        "launch_tdb": "2035-05-14T00:00:00",
+        "mars_tdb": "2035-12-27T00:00:00",
+        "ceres_tdb": "2036-12-01T00:00:00",
+        "tof_in_days": 227.0,
+        "tof_out_days": 340.0,
+        "incoming_policy": [
+          true,
+          0,
+          0
+        ],
+        "outgoing_policy": [
+          false,
+          0,
+          0
+        ],
+        "vinf_in_m_s": 4212.093950706587,
+        "vinf_out_m_s": 5610.816628628336,
+        "speed_mismatch_m_s": 1398.722677921749,
+        "required_turn_deg": 68.2035112392795,
+        "maximum_unpowered_turn_deg": 47.36267967813317,
+        "turn_margin_deg": -20.84083156114634,
+        "safety_altitude_m": 200000.0,
+        "turn_only_rp_at_incoming_speed_m": 1891598.481238457,
+        "optimistic_postflyby_asymptotic_correction_m_s": 2246.9901730474326,
+        "ballistic_status": "SPEED_MISMATCH",
+        "powered_tangential_status": "TURN_OUT_OF_RANGE",
+        "powered_tangential_delta_v_m_s": null,
+        "powered_tangential_rp_m": null,
+        "vinf_in_vector_m_s": [
+          2576.1814473754093,
+          -1556.3177456661015,
+          2946.6760382340212
+        ],
+        "vinf_out_vector_m_s": [
+          -376.2526582836035,
+          2855.5223932911285,
+          4815.152026534539
+        ]
+      },
+      "all": {
+        "launch_tdb": "2035-05-14T00:00:00",
+        "mars_tdb": "2035-12-27T00:00:00",
+        "ceres_tdb": "2036-12-01T00:00:00",
+        "tof_in_days": 227.0,
+        "tof_out_days": 340.0,
+        "incoming_policy": [
+          true,
+          0,
+          0
+        ],
+        "outgoing_policy": [
+          false,
+          0,
+          0
+        ],
+        "vinf_in_m_s": 4212.093950706587,
+        "vinf_out_m_s": 5610.816628628336,
+        "speed_mismatch_m_s": 1398.722677921749,
+        "required_turn_deg": 68.2035112392795,
+        "maximum_unpowered_turn_deg": 47.36267967813317,
+        "turn_margin_deg": -20.84083156114634,
+        "safety_altitude_m": 200000.0,
+        "turn_only_rp_at_incoming_speed_m": 1891598.481238457,
+        "optimistic_postflyby_asymptotic_correction_m_s": 2246.9901730474326,
+        "ballistic_status": "SPEED_MISMATCH",
+        "powered_tangential_status": "TURN_OUT_OF_RANGE",
+        "powered_tangential_delta_v_m_s": null,
+        "powered_tangential_rp_m": null,
+        "vinf_in_vector_m_s": [
+          2576.1814473754093,
+          -1556.3177456661015,
+          2946.6760382340212
+        ],
+        "vinf_out_vector_m_s": [
+          -376.2526582836035,
+          2855.5223932911285,
+          4815.152026534539
+        ]
+      }
+    },
+    "refined_speed_equality_roots": 439,
+    "refinement_failures": [],
+    "feasible_speed_matched_counts": {
+      "all": 0,
+      "prograde": 0
+    },
+    "best_speed_matched_turn_margin": {
+      "all": {
+        "launch_tdb": "2035-06-08T00:00:00",
+        "mars_tdb": "2036-02-15T00:00:00",
+        "ceres_tdb": "2037-01-18T21:06:03.306746",
+        "tof_in_days": 252.0,
+        "tof_out_days": 338.87920493918836,
+        "incoming_policy": [
+          true,
+          0,
+          0
+        ],
+        "outgoing_policy": [
+          false,
+          0,
+          0
+        ],
+        "prograde_pair": true,
+        "earth_departure_C3_km2_s2": 88.59724518263528,
+        "heliocentric_plane_change_deg": 5.39478311865946,
+        "ceres_arrival_vinf_m_s": 3999.829532808152,
+        "vinf_in_m_s": 6257.784255861007,
+        "vinf_out_m_s": 6257.78425586195,
+        "speed_mismatch_m_s": 9.431460057385266e-10,
+        "required_turn_deg": 70.57570215517643,
+        "maximum_unpowered_turn_deg": 26.971091690979282,
+        "turn_margin_deg": -43.604610464197144,
+        "safety_altitude_m": 200000.0,
+        "turn_only_rp_at_incoming_speed_m": 799533.402241202,
+        "optimistic_postflyby_asymptotic_correction_m_s": 4648.347124163275,
+        "ballistic_status": "TURN_OUT_OF_RANGE",
+        "powered_tangential_status": "TURN_OUT_OF_RANGE",
+        "powered_tangential_delta_v_m_s": null,
+        "powered_tangential_rp_m": null,
+        "vinf_in_vector_m_s": [
+          2977.41080521452,
+          -1587.034694701977,
+          5270.3139913771665
+        ],
+        "vinf_out_vector_m_s": [
+          -604.905771698006,
+          4600.959615568374,
+          4198.228604565153
+        ]
+      },
+      "prograde": {
+        "launch_tdb": "2035-06-08T00:00:00",
+        "mars_tdb": "2036-02-15T00:00:00",
+        "ceres_tdb": "2037-01-18T21:06:03.306746",
+        "tof_in_days": 252.0,
+        "tof_out_days": 338.87920493918836,
+        "incoming_policy": [
+          true,
+          0,
+          0
+        ],
+        "outgoing_policy": [
+          false,
+          0,
+          0
+        ],
+        "prograde_pair": true,
+        "earth_departure_C3_km2_s2": 88.59724518263528,
+        "heliocentric_plane_change_deg": 5.39478311865946,
+        "ceres_arrival_vinf_m_s": 3999.829532808152,
+        "vinf_in_m_s": 6257.784255861007,
+        "vinf_out_m_s": 6257.78425586195,
+        "speed_mismatch_m_s": 9.431460057385266e-10,
+        "required_turn_deg": 70.57570215517643,
+        "maximum_unpowered_turn_deg": 26.971091690979282,
+        "turn_margin_deg": -43.604610464197144,
+        "safety_altitude_m": 200000.0,
+        "turn_only_rp_at_incoming_speed_m": 799533.402241202,
+        "optimistic_postflyby_asymptotic_correction_m_s": 4648.347124163275,
+        "ballistic_status": "TURN_OUT_OF_RANGE",
+        "powered_tangential_status": "TURN_OUT_OF_RANGE",
+        "powered_tangential_delta_v_m_s": null,
+        "powered_tangential_rp_m": null,
+        "vinf_in_vector_m_s": [
+          2977.41080521452,
+          -1587.034694701977,
+          5270.3139913771665
+        ],
+        "vinf_out_vector_m_s": [
+          -604.905771698006,
+          4600.959615568374,
+          4198.228604565153
+        ]
+      }
+    },
+    "seconds": 1.614488868995977,
+    "limitations": [
+      "Launch and Mars epochs remain on a daily grid; TOF is continuously refined only at sign crossings.",
+      "Tangential zeros, crossings outside the TOF window and disconnected feasibility islands may be missed.",
+      "A bounded search without a valid solution is not a proof of global infeasibility.",
+      "Encounter matching uses two-body patched conics and an assumed 200 km minimum altitude."
+    ]
+  },
+  "wall_seconds": 3.4541011529945536
+}
