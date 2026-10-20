@@ -21,10 +21,12 @@ def digest(path):
     return value.hexdigest()
 
 
-def fetch(directory):
+def fetch(directory, mission=False):
     directory=Path(directory)
     directory.mkdir(parents=True,exist_ok=True)
     manifest=json.loads((ROOT/'configs/kernel-sources.json').read_text())
+    if mission:
+        manifest['kernels'] += json.loads((ROOT/'examples/missions/kernel-sources.json').read_text())['kernels']
     for item in manifest['kernels']:
         path=directory/item['filename']
         if path.exists():
@@ -51,5 +53,6 @@ def fetch(directory):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--directory',type=Path,default=ROOT/'data/kernels')
+    parser.add_argument('--mission',action='store_true',help='Include Mars body-centre SPK and surface orientation PCK')
     args=parser.parse_args()
-    fetch(args.directory)
+    fetch(args.directory,args.mission)

@@ -25,6 +25,11 @@ This opens the menu:
 5. View Saved Configurations
 6. Exit
 7. Flyby Encounters
+8. Complete Mission Search
+
+The [mission planner](mission-planner.md) jointly searches complete encounter
+chains, including rotating-surface Ceres stays, and supplies separate commands
+for independent validation, Horizons comparisons and trajectory plots.
 
 Choose a backend explicitly. CUDA failures do not fall back to CPU. The CPU
 backend is the shared native C++ engine, not PyKEP or the Python reference.

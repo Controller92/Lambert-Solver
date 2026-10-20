@@ -1,0 +1,152 @@
+tests
+test_analytical_circular_quarter_and_three_quarter_arcs (test_lambert_geometry.GeometryTests.test_analytical_circular_quarter_and_three_quarter_arcs) ... ok
+test_independent_decimal_geometry_and_basis (test_lambert_geometry.GeometryTests.test_independent_decimal_geometry_and_basis) ... ok
+test_invalid_unsupported_and_degenerate_statuses (test_lambert_geometry.GeometryTests.test_invalid_unsupported_and_degenerate_statuses) ... ok
+test_nearly_antiparallel_and_unequal_nearly_parallel (test_lambert_geometry.GeometryTests.test_nearly_antiparallel_and_unequal_nearly_parallel) ... ok
+test_rotation_and_endpoint_reversal (test_lambert_geometry.GeometryTests.test_rotation_and_endpoint_reversal) ... ok
+test_similarity_scaling (test_lambert_geometry.GeometryTests.test_similarity_scaling) ... ok
+test_three_four_five_triangle (test_lambert_geometry.GeometryTests.test_three_four_five_triangle) ... ok
+test_bisection_safeguard_with_disabled_halley (test_lambert_multirev.MultiRevolutionTests.test_bisection_safeguard_with_disabled_halley) ... ok
+test_elliptic_domain_and_count_contract (test_lambert_multirev.MultiRevolutionTests.test_elliptic_domain_and_count_contract) ... ok
+test_exhausted_budget_and_bad_options_have_no_minimum (test_lambert_multirev.MultiRevolutionTests.test_exhausted_budget_and_bad_options_have_no_minimum) ... ok
+test_feasibility_does_not_invent_a_merged_root (test_lambert_multirev.MultiRevolutionTests.test_feasibility_does_not_invent_a_merged_root) ... ok
+test_minimum_against_independent_high_precision_fixture (test_lambert_multirev.MultiRevolutionTests.test_minimum_against_independent_high_precision_fixture) ... ok
+test_minimum_bracket_and_stationarity_over_shapes_and_counts (test_lambert_multirev.MultiRevolutionTests.test_minimum_bracket_and_stationarity_over_shapes_and_counts) ... ok
+test_minimum_energy_identities_for_every_revolution_count (test_lambert_multirev.MultiRevolutionTests.test_minimum_energy_identities_for_every_revolution_count) ... ok
+test_retained_shape_and_explicit_derivative_range_failure (test_lambert_multirev.MultiRevolutionTests.test_retained_shape_and_explicit_derivative_range_failure) ... ok
+test_revolution_increment_and_reflection_identities (test_lambert_multirev.MultiRevolutionTests.test_revolution_increment_and_reflection_identities) ... ok
+test_rounded_zero_quarter_probe_regressions (test_lambert_multirev.MultiRevolutionTests.test_rounded_zero_quarter_probe_regressions) ... ok
+test_all_actual_forward_calls_are_counted_once (test_lambert_multirev_solver.MultiRevolutionSolverTests.test_all_actual_forward_calls_are_counted_once) ... ok
+test_branch_identity_does_not_depend_on_sign_of_x (test_lambert_multirev_solver.MultiRevolutionSolverTests.test_branch_identity_does_not_depend_on_sign_of_x) ... ok
+test_circular_orbits_multiple_counts_and_orientations (test_lambert_multirev_solver.MultiRevolutionSolverTests.test_circular_orbits_multiple_counts_and_orientations) ... ok
+test_disabled_derivatives_use_bisection_and_report_unknown_precision (test_lambert_multirev_solver.MultiRevolutionSolverTests.test_disabled_derivatives_use_bisection_and_report_unknown_precision) ... ok
+test_failures_never_publish_velocities_or_substitute_a_branch (test_lambert_multirev_solver.MultiRevolutionSolverTests.test_failures_never_publish_velocities_or_substitute_a_branch) ... ok
+test_infeasible_and_unresolved_full_transfers_publish_no_velocities (test_lambert_multirev_solver.MultiRevolutionSolverTests.test_infeasible_and_unresolved_full_transfers_publish_no_velocities) ... ok
+test_near_minimum_is_explicit_and_resolved_neighbors_are_separate (test_lambert_multirev_solver.MultiRevolutionSolverTests.test_near_minimum_is_explicit_and_resolved_neighbors_are_separate) ... ok
+test_open_endpoints_and_invalid_root_requests (test_lambert_multirev_solver.MultiRevolutionSolverTests.test_open_endpoints_and_invalid_root_requests) ... ok
+test_pair_retains_successful_sibling_when_one_branch_exhausts_budget (test_lambert_multirev_solver.MultiRevolutionSolverTests.test_pair_retains_successful_sibling_when_one_branch_exhausts_budget) ... ok
+test_time_reversal_and_dimensional_similarity (test_lambert_multirev_solver.MultiRevolutionSolverTests.test_time_reversal_and_dimensional_similarity) ... ok
+test_general_3d_geometry_against_actual_decimal_inputs (test_lambert_precision.PrecisionTests.test_general_3d_geometry_against_actual_decimal_inputs) ... ok
+test_invalid_or_inconsistent_q_is_rejected_at_every_layer (test_lambert_precision.PrecisionTests.test_invalid_or_inconsistent_q_is_rejected_at_every_layer) ... ok
+test_parabolic_limits_retain_q_when_lambda_rounds (test_lambert_precision.PrecisionTests.test_parabolic_limits_retain_q_when_lambda_rounds) ... ok
+test_actual_tof_evaluation_count (test_lambert_root.RootTests.test_actual_tof_evaluation_count) ... ok
+test_analytic_points_and_actual_zero_step (test_lambert_root.RootTests.test_analytic_points_and_actual_zero_step) ... ok
+test_analytical_circular_short_and_long_arcs (test_lambert_root.RootTests.test_analytical_circular_short_and_long_arcs) ... ok
+test_five_unrepresentable_starters_recover_known_x (test_lambert_root.RootTests.test_five_unrepresentable_starters_recover_known_x) ... ok
+test_flat_long_arc_reports_x_conditioning (test_lambert_root.RootTests.test_flat_long_arc_reports_x_conditioning) ... ok
+test_forward_failure_is_reported (test_lambert_root.RootTests.test_forward_failure_is_reported) ... ok
+test_invalid_inputs_options_and_unrepresentable_upper_range (test_lambert_root.RootTests.test_invalid_inputs_options_and_unrepresentable_upper_range) ... ok
+test_iteration_budget_never_claims_success (test_lambert_root.RootTests.test_iteration_budget_never_claims_success) ... ok
+test_poor_starter_and_large_hyperbolic_derivative_underflow (test_lambert_root.RootTests.test_poor_starter_and_large_hyperbolic_derivative_underflow) ... ok
+test_unsafe_steps_and_unavailable_derivatives_use_bisection (test_lambert_root.RootTests.test_unsafe_steps_and_unavailable_derivatives_use_bisection) ... ok
+test_zero_step_without_small_residual_is_resolution_failure (test_lambert_root.RootTests.test_zero_step_without_small_residual_is_resolution_failure) ... ok
+test_all_failure_paths_return_no_partial_values (test_lambert_root_preparation.RootPreparationTests.test_all_failure_paths_return_no_partial_values) ... ok
+test_exact_parabolic_derivatives_against_decimal_limits (test_lambert_root_preparation.RootPreparationTests.test_exact_parabolic_derivatives_against_decimal_limits) ... ok
+test_parabolic_neighbors_and_series_switches (test_lambert_root_preparation.RootPreparationTests.test_parabolic_neighbors_and_series_switches) ... ok
+test_regular_minimum_energy_point (test_lambert_root_preparation.RootPreparationTests.test_regular_minimum_energy_point) ... ok
+test_short_time_starter_matches_inverse_parabolic_slope (test_lambert_root_preparation.RootPreparationTests.test_short_time_starter_matches_inverse_parabolic_slope) ... ok
+test_starter_continuity_and_monotonicity (test_lambert_root_preparation.RootPreparationTests.test_starter_continuity_and_monotonicity) ... ok
+test_starter_thresholds_and_correct_middle_inversion (test_lambert_root_preparation.RootPreparationTests.test_starter_thresholds_and_correct_middle_inversion) ... ok
+test_circular_arcs_scales_and_planes (test_lambert_solver.SolverTests.test_circular_arcs_scales_and_planes) ... ok
+test_elliptic_anomaly_long_arc (test_lambert_solver.SolverTests.test_elliptic_anomaly_long_arc) ... ok
+test_failures_never_have_velocities (test_lambert_solver.SolverTests.test_failures_never_have_velocities) ... ok
+test_hyperbolic_anomaly_time (test_lambert_solver.SolverTests.test_hyperbolic_anomaly_time) ... ok
+test_parabolic_barker_time (test_lambert_solver.SolverTests.test_parabolic_barker_time) ... ok
+test_root_conditioning_diagnostics_are_preserved (test_lambert_solver.SolverTests.test_root_conditioning_diagnostics_are_preserved) ... ok
+test_time_reversal (test_lambert_solver.SolverTests.test_time_reversal) ... ok
+test_tiny_circular_arcs_recover_both_velocities (test_lambert_solver.SolverTests.test_tiny_circular_arcs_recover_both_velocities) ... ok
+test_both_circular_arcs_reproduce_elapsed_time (test_lambert_tof.TimeOfFlightTests.test_both_circular_arcs_reproduce_elapsed_time) ... ok
+test_closed_hyperbolic_case (test_lambert_tof.TimeOfFlightTests.test_closed_hyperbolic_case) ... ok
+test_exhausted_series_reports_failure (test_lambert_tof.TimeOfFlightTests.test_exhausted_series_reports_failure) ... ok
+test_invalid_and_range_failures_have_no_values (test_lambert_tof.TimeOfFlightTests.test_invalid_and_range_failures_have_no_values) ... ok
+test_minimum_energy_identity (test_lambert_tof.TimeOfFlightTests.test_minimum_energy_identity) ... ok
+test_parabolic_identity_with_independent_decimal_arithmetic (test_lambert_tof.TimeOfFlightTests.test_parabolic_identity_with_independent_decimal_arithmetic) ... ok
+test_parabolic_neighbors_and_method_switches (test_lambert_tof.TimeOfFlightTests.test_parabolic_neighbors_and_method_switches) ... ok
+test_positive_decreasing_curve_on_representative_domains (test_lambert_tof.TimeOfFlightTests.test_positive_decreasing_curve_on_representative_domains) ... ok
+
+----------------------------------------------------------------------
+Ran 64 tests in 0.127s
+
+OK
+500-case Decimal/basis max length_relative: 2.220e-16
+500-case Decimal/basis max lambda_absolute: 2.220e-16
+500-case Decimal/basis max T_relative: 4.441e-16
+500-case Decimal/basis max rho_absolute: 2.220e-16
+500-case Decimal/basis max sigma_absolute: 4.441e-16
+500-case Decimal/basis max basis_absolute: 3.331e-16
+L-similarity max absolute lambda/T error: 5.551e-17
+Analytical circular maximum velocity error / circular speed: 3.519e-16
+Tiny circular maximum velocity error / circular speed: 3.331e-16
+Circular short/long T absolute errors: 2.220e-16, 4.441e-16
+native/tests
+test_bad_python_layouts_never_reach_native_code (test_bindings.CudaTests.test_bad_python_layouts_never_reach_native_code) ... skipped 'explicit GPU test opt-in required'
+test_cpu_circular_and_noncontiguous_batches (test_bindings.CudaTests.test_cpu_circular_and_noncontiguous_batches) ... skipped 'explicit GPU test opt-in required'
+test_explicit_numerical_and_input_failures (test_bindings.CudaTests.test_explicit_numerical_and_input_failures) ... skipped 'explicit GPU test opt-in required'
+test_independent_contexts_and_zero_iteration_status (test_bindings.CudaTests.test_independent_contexts_and_zero_iteration_status) ... skipped 'explicit GPU test opt-in required'
+test_nearly_antiparallel_device_roundoff (test_bindings.CudaTests.test_nearly_antiparallel_device_roundoff) ... skipped 'explicit GPU test opt-in required'
+test_reuse_empty_tail_statuses_and_owned_lifetime (test_bindings.CudaTests.test_reuse_empty_tail_statuses_and_owned_lifetime) ... skipped 'explicit GPU test opt-in required'
+test_root_precision_tristate_and_budget (test_bindings.CudaTests.test_root_precision_tristate_and_budget) ... skipped 'explicit GPU test opt-in required'
+test_bad_python_layouts_never_reach_native_code (test_bindings.NativeTests.test_bad_python_layouts_never_reach_native_code) ... ok
+test_cpu_circular_and_noncontiguous_batches (test_bindings.NativeTests.test_cpu_circular_and_noncontiguous_batches) ... ok
+test_explicit_numerical_and_input_failures (test_bindings.NativeTests.test_explicit_numerical_and_input_failures) ... ok
+test_root_precision_tristate_and_budget (test_bindings.NativeTests.test_root_precision_tristate_and_budget) ... ok
+test_branches_counts_scales_and_reversal (test_multirev.MultiCudaTests.test_branches_counts_scales_and_reversal) ... skipped 'explicit GPU opt-in required'
+test_failures_minimum_budget_and_no_fake_velocities (test_multirev.MultiCudaTests.test_failures_minimum_budget_and_no_fake_velocities) ... skipped 'explicit GPU opt-in required'
+test_invalid_branches_and_options (test_multirev.MultiCudaTests.test_invalid_branches_and_options) ... skipped 'explicit GPU opt-in required'
+test_minimum_rounded_zero_probe_regressions (test_multirev.MultiCudaTests.test_minimum_rounded_zero_probe_regressions) ... skipped 'explicit GPU opt-in required'
+test_mixed_tail_and_context_reuse (test_multirev.MultiCudaTests.test_mixed_tail_and_context_reuse) ... skipped 'explicit GPU opt-in required'
+test_tiny_arc_and_partial_branch_budget (test_multirev.MultiCudaTests.test_tiny_arc_and_partial_branch_budget) ... skipped 'explicit GPU opt-in required'
+test_branches_counts_scales_and_reversal (test_multirev.MultiTests.test_branches_counts_scales_and_reversal) ... ok
+test_failures_minimum_budget_and_no_fake_velocities (test_multirev.MultiTests.test_failures_minimum_budget_and_no_fake_velocities) ... ok
+test_invalid_branches_and_options (test_multirev.MultiTests.test_invalid_branches_and_options) ... ok
+test_minimum_rounded_zero_probe_regressions (test_multirev.MultiTests.test_minimum_rounded_zero_probe_regressions) ... ok
+test_mixed_tail_and_context_reuse (test_multirev.MultiTests.test_mixed_tail_and_context_reuse) ... ok
+test_tiny_arc_and_partial_branch_budget (test_multirev.MultiTests.test_tiny_arc_and_partial_branch_budget) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.022s
+
+OK (skipped=13)
+research_tests
+test_cli_help_menu_exit_and_dry_run_without_ephemerides (test_workflow.ConfigTests.test_cli_help_menu_exit_and_dry_run_without_ephemerides) ... ok
+test_closed_fractional_grid_and_legacy_roundtrip (test_workflow.ConfigTests.test_closed_fractional_grid_and_legacy_roundtrip) ... ok
+test_reject_invalid_or_misleading_specs (test_workflow.ConfigTests.test_reject_invalid_or_misleading_specs) ... ok
+test_failures_do_not_create_zero_energy_minima (test_workflow.CudaGridTests.test_failures_do_not_create_zero_energy_minima) ... skipped 'explicit GPU opt-in required'
+test_fixed_axis_orientation_is_not_short_long (test_workflow.CudaGridTests.test_fixed_axis_orientation_is_not_short_long) ... skipped 'explicit GPU opt-in required'
+test_native_reduction_matches_reference_all_candidates (test_workflow.CudaGridTests.test_native_reduction_matches_reference_all_candidates) ... skipped 'explicit GPU opt-in required'
+test_postprocessing_overflow_retains_explicit_failure (test_workflow.CudaGridTests.test_postprocessing_overflow_retains_explicit_failure) ... skipped 'explicit GPU opt-in required'
+test_real_cache_integrity_and_owned_kernel_lifetime (test_workflow.EphemerisTests.test_real_cache_integrity_and_owned_kernel_lifetime) ... skipped 'explicit SPICE kernel directory required'
+test_failures_do_not_create_zero_energy_minima (test_workflow.GridTests.test_failures_do_not_create_zero_energy_minima) ... ok
+test_fixed_axis_orientation_is_not_short_long (test_workflow.GridTests.test_fixed_axis_orientation_is_not_short_long) ... ok
+test_native_reduction_matches_reference_all_candidates (test_workflow.GridTests.test_native_reduction_matches_reference_all_candidates) ... ok
+test_postprocessing_overflow_retains_explicit_failure (test_workflow.GridTests.test_postprocessing_overflow_retains_explicit_failure) ... ok
+test_saved_plot_regeneration_and_hash_validation (test_workflow.PlotTests.test_saved_plot_regeneration_and_hash_validation) ... /home/josh/.config/matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /tmp/matplotlib-e3j70yny because there was an issue with the default path (/home/josh/.config/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 3.310s
+
+OK (skipped=5)
+flyby_tests
+test_context_lifecycle_and_reupload (test_native.CUDA.test_context_lifecycle_and_reupload) ... skipped 'explicit GPU opt-in'
+test_empty_tail_and_invalid_layout (test_native.CUDA.test_empty_tail_and_invalid_layout) ... skipped 'explicit GPU opt-in'
+test_reference_physics_and_status_parity (test_native.CUDA.test_reference_physics_and_status_parity) ... skipped 'explicit GPU opt-in'
+test_empty_tail_and_invalid_layout (test_native.Native.test_empty_tail_and_invalid_layout) ... ok
+test_reference_physics_and_status_parity (test_native.Native.test_reference_physics_and_status_parity) ... ok
+test_actual_numerical_two_body_integration_through_encounter (test_physics.Physics.test_actual_numerical_two_body_integration_through_encounter) ... ok
+test_declared_speed_tolerance_preserves_incoming_energy (test_physics.Physics.test_declared_speed_tolerance_preserves_incoming_energy) ... ok
+test_energy_angular_momentum_and_conic_asymptotes (test_physics.Physics.test_energy_angular_momentum_and_conic_asymptotes) ... ok
+test_failures_never_publish_velocities (test_physics.Physics.test_failures_never_publish_velocities) ... ok
+test_inclusive_bounds_and_extreme_turns (test_physics.Physics.test_inclusive_bounds_and_extreme_turns) ... ok
+test_inverse_and_tangential_powered_recover_periapsis (test_physics.Physics.test_inverse_and_tangential_powered_recover_periapsis) ... ok
+test_rotation_units_and_time_reversal (test_physics.Physics.test_rotation_units_and_time_reversal) ... ok
+test_small_dimensionless_parameter_without_intermediate_overflow (test_physics.Physics.test_small_dimensionless_parameter_without_intermediate_overflow) ... ok
+test_cuda_saved_batch (test_workflow.Workflow.test_cuda_saved_batch) ... skipped 'explicit GPU opt-in'
+test_inertial_transform_and_saved_batch (test_workflow.Workflow.test_inertial_transform_and_saved_batch) ... ok
+test_invalid_provenance_and_schema (test_workflow.Workflow.test_invalid_provenance_and_schema) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 1.400s
+
+OK (skipped=4)

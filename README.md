@@ -10,7 +10,11 @@ The [custom flyby encounter engine](docs/flyby-solver.md) now supplies unpowered
 propagation, inverse matching and tangential powered encounters in Python, C++
 and CUDA, with saved CLI batches and a Juno Earth-flyby validation. Run
 `python run.py flyby --config examples/flyby-earth.json --backend cuda`.
-Full multi-leg mission search remains a subsequent increment.
+The [complete mission planner](docs/mission-planner.md) now searches consistent
+Earth–Mars–Ceres–Mars–Earth chains with a rotating Ceres surface stay, separate
+ballistic/powered encounters, all configured Lambert branches, checkpoints and
+independent trajectory validation. Run `python run.py mission-search --config
+examples/missions/emc-ten-year.json --model both` or choose menu option 8.
 The [EMC trajectory audit](docs/emc-trajectory-audit.md) checks the manuscript’s
 nominal itinerary with body-centred ephemerides, full encounter vectors,
 independent Gooding/Horizons comparisons, and a bounded date search.

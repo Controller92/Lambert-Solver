@@ -1,0 +1,31 @@
+{
+  "description": "Complete-chain search points, re-evaluated with final code and all short/long M=0..2 policies before independent acceptance.",
+  "cases": [
+    {
+      "model": "ballistic",
+      "decisions_days": [
+        1097.7784283978522,
+        126.60083811717618,
+        1003.9348522954883,
+        665.7704249022506,
+        161.96192757981345,
+        149.87905124770452
+      ],
+      "source_run": "mission-ballistic-b9dd4e6e3f39",
+      "source_candidate_sha256": "15edf5c36340771f132b64482175e15fd0e5298dfc27b66b06a30a894694f3c9"
+    },
+    {
+      "model": "powered",
+      "decisions_days": [
+        587.5002062152238,
+        388.26949262436966,
+        1456.6044544953309,
+        1220.0179574569845,
+        140.06030584590866,
+        30.188064876268186
+      ],
+      "source_run": "mission-powered-c7858a847c8d",
+      "source_candidate_sha256": "039f8307a3590cf6de1fe3cd4cb98ddefb311e4f354950f832c57005f54f5767"
+    }
+  ]
+}

@@ -41,6 +41,28 @@ def parser():
     flyby.add_argument('--backend',choices=('cpu','cuda'),default='cpu')
     flyby.add_argument('--batch-size',type=int,default=65536)
     flyby.add_argument('--outdir',type=Path,default='results')
+    mission = sub.add_parser('mission-search',help='Jointly search complete encounter chains')
+    mission.add_argument('--config',type=Path,required=True)
+    mission.add_argument('--model',choices=('ballistic','powered','both'))
+    mission.add_argument('--backend',choices=('cpu','cuda'))
+    mission.add_argument('--outdir',type=Path,default='results')
+    mission.add_argument('--resume',type=Path,help='Warm continuation of one saved run')
+    mission.add_argument('--dry-run',action='store_true')
+    validate = sub.add_parser('mission-validate',help='Independently check an exported mission candidate')
+    validate.add_argument('candidate',type=Path)
+    validate.add_argument('--config',type=Path)
+    validate.add_argument('--output',type=Path)
+    horizons = sub.add_parser('mission-horizons',help='Compare candidate endpoint states against cached JPL Horizons')
+    horizons.add_argument('candidate',type=Path)
+    horizons.add_argument('--refresh',action='store_true',help='Explicitly fetch fresh public JPL snapshots')
+    mission_plot = sub.add_parser('mission-plot',help='Plot an exported mission in heliocentric projections')
+    mission_plot.add_argument('candidate',type=Path)
+    mission_plot.add_argument('--output',type=Path)
+    evaluate = sub.add_parser('mission-evaluate',help='Evaluate one complete set of event times')
+    evaluate.add_argument('--config',type=Path,required=True)
+    evaluate.add_argument('--days',type=float,nargs='+',required=True,
+        help='Launch offset, leg durations, then surface stays, all in days')
+    evaluate.add_argument('--output',type=Path,required=True)
     plot = sub.add_parser('plot',help='Regenerate a figure from grid.npz without recomputing')
     plot.add_argument('grid',type=Path);plot.add_argument('--output',type=Path)
     configs = sub.add_parser('configs',help='List saved grid configurations')
@@ -127,10 +149,16 @@ def interactive():
     print('Welcome to LambertLab Interactive Simulation Runner!')
     print('Custom Lambert and flyby engines | CPU or CUDA | saved research configurations')
     while True:
-        print('\n1. Two Body Grid (Porkchop Plot)\n2. Run Saved Configuration\n3. Run EMC Paper Presets\n4. Regenerate Saved Plot\n5. View Saved Configurations\n6. Exit\n7. Flyby Encounters')
+        print('\n1. Two Body Grid (Porkchop Plot)\n2. Run Saved Configuration\n3. Run EMC Paper Presets\n4. Regenerate Saved Plot\n5. View Saved Configurations\n6. Exit\n7. Flyby Encounters\n8. Complete Mission Search')
         try:
             choice = prompt('Select an option',6)
             if choice=='6':return 0
+            if choice=='8':
+                from .mission_config import load_mission
+                config = load_mission(prompt('Mission configuration',str(ROOT/'examples/missions/emc-ten-year.json')))
+                model = prompt('Mars encounters: ballistic/powered/both','both')
+                execute_missions(config,prompt('Output directory','results'),model)
+                continue
             if choice=='7':
                 from .flyby import run_encounters
                 run_encounters(prompt('Encounter configuration',str(ROOT/'examples/flyby-earth.json')),
@@ -181,10 +209,55 @@ def interactive():
             print(f'Error: {error}',file=sys.stderr)
 
 
+def execute_missions(config,outdir,model=None,resume=None):
+    from copy import deepcopy
+    from .mission_search import run_mission_search
+    mode = model or config.model
+    if mode not in ('both','ballistic','powered'): raise ValueError('Invalid mission model')
+    if mode == 'both' and resume: raise ValueError('Resume one explicitly selected model at a time')
+    for selected in (('ballistic','powered') if mode == 'both' else (mode,)):
+        current = deepcopy(config);current.model = selected
+        run,summary = run_mission_search(current,outdir,resume,progress=lambda x:print(json.dumps(x),flush=True))
+        print(json.dumps(dict(run=str(run.resolve()),**summary),indent=2))
+
+
 def main(argv=None):
     args = parser().parse_args(argv)
     try:
         if args.command in (None,'interactive'):return interactive()
+        if args.command=='mission-plot':
+            from .mission_plot import plot_candidate
+            print(plot_candidate(args.candidate,args.output));return 0
+        if args.command=='mission-horizons':
+            from .mission_horizons import crosscheck_candidate
+            report = crosscheck_candidate(args.candidate,args.refresh)
+            print(report['status']);return 0 if report['status']=='consistent_ephemerides' else 2
+        if args.command=='mission-validate':
+            from .mission_validation import validate_candidate
+            report = validate_candidate(args.candidate,args.config,args.output)
+            print(report['status'])
+            for check in report['checks']:
+                if not check['passed']: print(json.dumps(check))
+            return 0 if report['status']=='passed_patched_conic' else 2
+        if args.command in ('mission-search','mission-evaluate'):
+            from .mission_config import load_mission
+            config = load_mission(args.config)
+            if args.command=='mission-evaluate':
+                from .mission_dynamics import MissionEvaluator
+                from .mission_search import write_json,fingerprint
+                with MissionEvaluator(config,args.output.parent/'state-cache') as evaluator:
+                    candidate = evaluator.candidate(args.days,False)
+                    candidate['fingerprint'] = fingerprint(config,evaluator)
+                    write_json(args.output,candidate)
+                print(f'Saved {args.output}; feasible={candidate["feasible"]}; independent validation required')
+                return 0
+            if args.backend:config.backend = args.backend
+            config.validate()
+            if args.dry_run:
+                mode = args.model or config.model
+                print(json.dumps(dict(models=['ballistic','powered'] if mode=='both' else [mode],
+                                      configuration=config.to_dict()),indent=2));return 0
+            execute_missions(config,args.outdir,args.model,args.resume);return 0
         if args.command=='flyby':
             from .flyby import run_encounters
             run_encounters(args.config,args.outdir,args.backend,args.batch_size);return 0

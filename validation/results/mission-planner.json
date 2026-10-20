@@ -1,0 +1,155 @@
+{
+  "scope": "Independently validated impulsive patched-conic feasibility examples; not optimal or N-body corrected",
+  "accepted": [
+    {
+      "model": "ballistic",
+      "delta_v_m_s": 52739.0124325204,
+      "duration_days": 2108.147094142434,
+      "launch_c3_km2_s2": 429.0860163238075,
+      "independent_validation": "passed_patched_conic",
+      "independent_check_count": 177,
+      "ode_position_error_m": 0.004526179699682358,
+      "gooding_velocity_error_m_s": 3.092281986027956e-11,
+      "horizons_max_position_difference_m": 5.203895148695998,
+      "legs": [
+        {
+          "departure_tdb": "2037-01-02T18:40:56.213574",
+          "arrival_tdb": "2037-05-09T09:06:08.626899",
+          "policy": {
+            "orientation": "long",
+            "revolutions": 0,
+            "branch": 0
+          }
+        },
+        {
+          "departure_tdb": "2037-05-09T09:06:08.626899",
+          "arrival_tdb": "2040-02-07T07:32:19.865229",
+          "policy": {
+            "orientation": "short",
+            "revolutions": 0,
+            "branch": 0
+          }
+        },
+        {
+          "departure_tdb": "2040-07-06T04:38:09.893030",
+          "arrival_tdb": "2042-05-02T23:07:34.604585",
+          "policy": {
+            "orientation": "short",
+            "revolutions": 0,
+            "branch": 0
+          }
+        },
+        {
+          "departure_tdb": "2042-05-02T23:07:34.604585",
+          "arrival_tdb": "2042-10-11T22:12:45.147481",
+          "policy": {
+            "orientation": "long",
+            "revolutions": 0,
+            "branch": 0
+          }
+        }
+      ],
+      "cost_items": [
+        {
+          "name": "departure parking injection",
+          "delta_v_m_s": 15713.049687974562
+        },
+        {
+          "name": "flyby 1 impulse",
+          "delta_v_m_s": 0.0
+        },
+        {
+          "name": "20000001 landing",
+          "delta_v_m_s": 11716.830073368106
+        },
+        {
+          "name": "20000001 departure",
+          "delta_v_m_s": 11590.891504037761
+        },
+        {
+          "name": "flyby 3 impulse",
+          "delta_v_m_s": 0.0
+        },
+        {
+          "name": "arrival parking capture",
+          "delta_v_m_s": 13718.241167139971
+        }
+      ]
+    },
+    {
+      "model": "powered",
+      "delta_v_m_s": 26999.33631874196,
+      "duration_days": 3235.1402752988593,
+      "launch_c3_km2_s2": 18.210298588984628,
+      "independent_validation": "passed_patched_conic",
+      "independent_check_count": 173,
+      "ode_position_error_m": 0.014077120135292423,
+      "gooding_velocity_error_m_s": 1.4559018921847493e-11,
+      "horizons_max_position_difference_m": 4.837900559477637,
+      "legs": [
+        {
+          "departure_tdb": "2035-08-11T12:00:17.816995",
+          "arrival_tdb": "2036-09-02T18:28:21.979741",
+          "policy": {
+            "orientation": "long",
+            "revolutions": 0,
+            "branch": 0
+          }
+        },
+        {
+          "departure_tdb": "2036-09-02T18:28:21.979741",
+          "arrival_tdb": "2040-08-29T08:58:46.848137",
+          "policy": {
+            "orientation": "long",
+            "revolutions": 1,
+            "branch": 0
+          }
+        },
+        {
+          "departure_tdb": "2040-09-28T13:29:35.653447",
+          "arrival_tdb": "2044-01-31T13:55:27.177730",
+          "policy": {
+            "orientation": "short",
+            "revolutions": 1,
+            "branch": 1
+          }
+        },
+        {
+          "departure_tdb": "2044-01-31T13:55:27.177730",
+          "arrival_tdb": "2044-06-19T15:22:17.602817",
+          "policy": {
+            "orientation": "short",
+            "revolutions": 0,
+            "branch": 0
+          }
+        }
+      ],
+      "cost_items": [
+        {
+          "name": "departure parking injection",
+          "delta_v_m_s": 3985.791532848716
+        },
+        {
+          "name": "flyby 1 impulse",
+          "delta_v_m_s": 5124.735676623031
+        },
+        {
+          "name": "20000001 landing",
+          "delta_v_m_s": 6068.773463957105
+        },
+        {
+          "name": "20000001 departure",
+          "delta_v_m_s": 6729.505298221442
+        },
+        {
+          "name": "flyby 3 impulse",
+          "delta_v_m_s": 1.844819722626297e-05
+        },
+        {
+          "name": "arrival parking capture",
+          "delta_v_m_s": 5090.530328643469
+        }
+      ]
+    }
+  ]
+}

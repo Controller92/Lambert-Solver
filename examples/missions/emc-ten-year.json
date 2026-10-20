@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "name": "EMC complete rotating-surface mission, 10-year limit",
+  "launch_window": [
+    "2034-01-01",
+    "2038-12-31"
+  ],
+  "visits": [
+    {
+      "body": "399",
+      "gm_body": "EARTH",
+      "kind": "departure",
+      "radius_m": 6378137.0,
+      "parking_altitude_m": 400000.0
+    },
+    {
+      "body": "499",
+      "gm_body": "MARS",
+      "kind": "flyby",
+      "radius_m": 3396200.0,
+      "minimum_altitude_m": 200000.0,
+      "maximum_periapsis_m": 300000000.0
+    },
+    {
+      "body": "20000001",
+      "gm_body": "2000001",
+      "kind": "surface",
+      "radius_m": 482100.0,
+      "stay_days": [
+        30.0,
+        365.0
+      ],
+      "body_frame": "IAU_CERES"
+    },
+    {
+      "body": "499",
+      "gm_body": "MARS",
+      "kind": "flyby",
+      "radius_m": 3396200.0,
+      "minimum_altitude_m": 200000.0,
+      "maximum_periapsis_m": 300000000.0
+    },
+    {
+      "body": "399",
+      "gm_body": "EARTH",
+      "kind": "arrival",
+      "radius_m": 6378137.0,
+      "parking_altitude_m": 400000.0
+    }
+  ],
+  "tof_days": [
+    [
+      100.0,
+      450.0
+    ],
+    [
+      200.0,
+      1600.0
+    ],
+    [
+      200.0,
+      1600.0
+    ],
+    [
+      100.0,
+      500.0
+    ]
+  ],
+  "max_duration_days": 3652.5,
+  "orientation": "both",
+  "max_revolutions": 2,
+  "model": "powered",
+  "backend": "cuda",
+  "kernels": [
+    "../../data/kernels/naif0012.tls",
+    "../../data/kernels/de440s.bsp",
+    "../../data/kernels/gm_de440.tpc",
+    "../../data/kernels/20000001.bsp",
+    "../../data/kernels/mar099s.bsp",
+    "../../data/kernels/pck00011.tpc"
+  ],
+  "generations": 180,
+  "popsize": 12,
+  "seeds": [
+    9587,
+    2036,
+    4193
+  ],
+  "refine_starts": 12,
+  "refine_iterations": 160
+}
