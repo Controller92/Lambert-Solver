@@ -1,0 +1,13 @@
+test_exact_nonbinary_endpoints_and_exact_step_budget (test_nbody.NativeTests.test_exact_nonbinary_endpoints_and_exact_step_budget) ... ok
+test_failure_nan_and_context_lifecycle (test_nbody.NativeTests.test_failure_nan_and_context_lifecycle) ... ok
+test_finite_hyperbolic_lift_energy_momentum_and_clock (test_nbody.NativeTests.test_finite_hyperbolic_lift_energy_momentum_and_clock) ... ok
+test_moving_hermite_body_and_coordinate_translation (test_nbody.NativeTests.test_moving_hermite_body_and_coordinate_translation) ... ok
+test_point_mass_force_gradient_and_symmetry (test_nbody.NativeTests.test_point_mass_force_gradient_and_symmetry) ... ok
+test_reject_invalid_arrays_and_options (test_nbody.NativeTests.test_reject_invalid_arrays_and_options) ... ok
+test_two_body_period_reverse_and_stm (test_nbody.NativeTests.test_two_body_period_reverse_and_stm) ... ok
+test_ballistic_and_powered_correction_and_complete_jacobian (test_nbody.RealEncounterTests.test_ballistic_and_powered_correction_and_complete_jacobian) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 12.094s
+
+OK

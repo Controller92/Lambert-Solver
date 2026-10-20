@@ -43,6 +43,9 @@ def build(cuda_root=None, arch='120'):
     commands.append([compiler, '-std=c++17', '-O3', '-fPIC', '-shared',
                      '-fno-fast-math', '-ffp-contract=off', '-Wall', '-Wextra',
                      str(ROOT/'native'/'flyby_cpu.cpp'), '-o', str(destination/'libflyby_cpu.so')])
+    commands.append([compiler, '-std=c++17', '-O3', '-fPIC', '-shared',
+                     '-fno-fast-math', '-ffp-contract=off', '-Wall', '-Wextra',
+                     str(ROOT/'native/nbody/cpu.cpp'), '-o', str(destination/'libnbody_cpu.so')])
     if cuda_root:
         flyby_command = commands[1].copy()
         flyby_command[-4:] = [str(ROOT/'native'/'flyby_cuda.cu'), str(ROOT/'native'/'flyby_cpu.cpp'),

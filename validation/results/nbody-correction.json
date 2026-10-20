@@ -1,0 +1,105 @@
+{
+  "scope": "Finite local Newtonian point-mass correction; full mission not reattached",
+  "cases": [
+    {
+      "model": "ballistic",
+      "node": 1,
+      "summary": {
+        "status": "passed_local_nbody_validation",
+        "model": "ballistic",
+        "local_correction_status": "locally_corrected",
+        "independent_validation": "passed_local_newtonian_nbody",
+        "external_validation": "passed_gmat_point_mass_comparison",
+        "full_mission_reattached": false,
+        "design_margin_added_m": 10000.0,
+        "periapsis_altitude_m": 210000.37977172993,
+        "entry_velocity_adjustment_m_s": 0.004417423764740354,
+        "exit_velocity_adjustment_m_s": 0.004410468986192737,
+        "native_join_position_m": 7.483078726614912e-08,
+        "native_terminal_position_m": 9.245927368097646e-08,
+        "check_count": 44,
+        "scope": "Local finite Newtonian point-mass encounter; not a complete high-fidelity mission replacement"
+      },
+      "continuous_independent_closure_m": 0.0029328581921892424,
+      "gmat_maximum_position_difference_m": 0.029595132021501703,
+      "gmat_maximum_velocity_difference_m_s": 5.214740234958394e-07,
+      "independent_check_count": 35,
+      "gmat_check_count": 9
+    },
+    {
+      "model": "ballistic",
+      "node": 3,
+      "summary": {
+        "status": "passed_local_nbody_validation",
+        "model": "ballistic",
+        "local_correction_status": "locally_corrected",
+        "independent_validation": "passed_local_newtonian_nbody",
+        "external_validation": "passed_gmat_point_mass_comparison",
+        "full_mission_reattached": false,
+        "design_margin_added_m": 10000.0,
+        "periapsis_altitude_m": 210000.37529548537,
+        "entry_velocity_adjustment_m_s": 0.0038700237743801587,
+        "exit_velocity_adjustment_m_s": 0.0038018302317805847,
+        "native_join_position_m": 3.05216647519744e-07,
+        "native_terminal_position_m": 1.6526187220825877e-07,
+        "check_count": 44,
+        "scope": "Local finite Newtonian point-mass encounter; not a complete high-fidelity mission replacement"
+      },
+      "continuous_independent_closure_m": 0.008097351312849351,
+      "gmat_maximum_position_difference_m": 0.028581173092271987,
+      "gmat_maximum_velocity_difference_m_s": 4.63036318693747e-06,
+      "independent_check_count": 35,
+      "gmat_check_count": 9
+    },
+    {
+      "model": "powered",
+      "node": 1,
+      "summary": {
+        "status": "passed_local_nbody_validation",
+        "model": "powered",
+        "local_correction_status": "locally_corrected",
+        "independent_validation": "passed_local_newtonian_nbody",
+        "external_validation": "passed_gmat_point_mass_comparison",
+        "full_mission_reattached": false,
+        "design_margin_added_m": 10000.0,
+        "periapsis_altitude_m": 209997.77434854442,
+        "entry_velocity_adjustment_m_s": 0.012494928298292187,
+        "exit_velocity_adjustment_m_s": 0.004999840557003486,
+        "native_join_position_m": 1.0609805684129883e-07,
+        "native_terminal_position_m": 1.4370159448672764e-07,
+        "check_count": 48,
+        "scope": "Local finite Newtonian point-mass encounter; not a complete high-fidelity mission replacement"
+      },
+      "continuous_independent_closure_m": 0.04744793862403193,
+      "gmat_maximum_position_difference_m": 0.012010573867152935,
+      "gmat_maximum_velocity_difference_m_s": 5.296582989516873e-06,
+      "independent_check_count": 36,
+      "gmat_check_count": 12
+    },
+    {
+      "model": "powered",
+      "node": 3,
+      "summary": {
+        "status": "passed_local_nbody_validation",
+        "model": "powered",
+        "local_correction_status": "locally_corrected",
+        "independent_validation": "passed_local_newtonian_nbody",
+        "external_validation": "passed_gmat_point_mass_comparison",
+        "full_mission_reattached": false,
+        "design_margin_added_m": 10000.0,
+        "periapsis_altitude_m": 1072330.6302991882,
+        "entry_velocity_adjustment_m_s": 0.005030325870359998,
+        "exit_velocity_adjustment_m_s": 0.0050847016852660935,
+        "native_join_position_m": 6.824450457477063e-08,
+        "native_terminal_position_m": 3.6052537699357703e-07,
+        "check_count": 48,
+        "scope": "Local finite Newtonian point-mass encounter; not a complete high-fidelity mission replacement"
+      },
+      "continuous_independent_closure_m": 0.02212545010394244,
+      "gmat_maximum_position_difference_m": 0.068809625605009,
+      "gmat_maximum_velocity_difference_m_s": 6.056550147453883e-06,
+      "independent_check_count": 36,
+      "gmat_check_count": 12
+    }
+  ]
+}

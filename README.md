@@ -15,6 +15,12 @@ Earth–Mars–Ceres–Mars–Earth chains with a rotating Ceres surface stay, s
 ballistic/powered encounters, all configured Lambert branches, checkpoints and
 independent trajectory validation. Run `python run.py mission-search --config
 examples/missions/emc-ten-year.json --model both` or choose menu option 8.
+The [N-body correction foundation](docs/nbody-correction.md) adds an FP64 C++
+propagator, state-transition matrices and finite Mars encounter correction,
+independently checked with direct-SPICE DOP853 and NASA GMAT RK89. Run
+`python run.py nbody-flyby /path/to/validated-mission/best.json`.
+Local corrected encounters still require full-mission reattachment and
+higher-order force/engineering models before becoming research replacements.
 The [EMC trajectory audit](docs/emc-trajectory-audit.md) checks the manuscript’s
 nominal itinerary with body-centred ephemerides, full encounter vectors,
 independent Gooding/Horizons comparisons, and a bounded date search.

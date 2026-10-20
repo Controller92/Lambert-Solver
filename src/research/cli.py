@@ -63,6 +63,15 @@ def parser():
     evaluate.add_argument('--days',type=float,nargs='+',required=True,
         help='Launch offset, leg durations, then surface stays, all in days')
     evaluate.add_argument('--output',type=Path,required=True)
+    nbody = sub.add_parser('nbody-flyby',help='Correct and independently validate one finite Mars encounter')
+    nbody.add_argument('candidate',type=Path)
+    nbody.add_argument('--config',type=Path,help='Source mission configuration; inferred by default')
+    nbody.add_argument('--node',type=int,default=1)
+    nbody.add_argument('--boundary-radius',type=float,default=1e8,help='Finite encounter boundary radius in metres')
+    nbody.add_argument('--design-margin',type=float,default=10000.,help='Explicit seed periapsis margin added in metres')
+    nbody.add_argument('--ephemeris-step',type=float,default=60.,help='SPICE table spacing in seconds')
+    nbody.add_argument('--gmat-console',type=Path,help='Installed GmatConsole executable; never downloaded implicitly')
+    nbody.add_argument('--outdir',type=Path,default=Path('results'))
     plot = sub.add_parser('plot',help='Regenerate a figure from grid.npz without recomputing')
     plot.add_argument('grid',type=Path);plot.add_argument('--output',type=Path)
     configs = sub.add_parser('configs',help='List saved grid configurations')
@@ -225,6 +234,12 @@ def main(argv=None):
     args = parser().parse_args(argv)
     try:
         if args.command in (None,'interactive'):return interactive()
+        if args.command=='nbody-flyby':
+            from .nbody_workflow import correct_encounter
+            run,summary=correct_encounter(args.candidate,args.outdir,args.config,args.node,args.boundary_radius,
+                args.design_margin,args.ephemeris_step,args.gmat_console,progress=lambda s:print(s,flush=True))
+            print(json.dumps(dict(run=str(run.resolve()),**summary),indent=2))
+            return 0 if summary['status']=='passed_local_nbody_validation' else 2
         if args.command=='mission-plot':
             from .mission_plot import plot_candidate
             print(plot_candidate(args.candidate,args.output));return 0

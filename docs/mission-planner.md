@@ -155,6 +155,11 @@ finite-thrust dynamics, launch/return geometry, mass/propulsion and operational
 constraints require subsequent correction and validation. Large maneuver
 budgets can make a mathematically feasible trajectory impractical.
 
+The [N-body correction foundation](nbody-correction.md) now supplies a C++
+Newtonian point-mass propagator and independently validated local finite Mars
+encounter corrector. Full-mission reattachment and higher-order force and
+engineering models remain subsequent work.
+
 The existing paper itinerary audit and this replacement search answer different
 questions. A new feasible trajectory cannot retroactively validate the paper's
 published dates, and an unsuccessful finite replacement search cannot rule out
