@@ -48,11 +48,11 @@ class NativeTests(unittest.TestCase):
             self.check_result(result)
 
     def test_explicit_numerical_and_input_failures(self):
-        inputs = [replace(self.problem, mu_m3_s2=0.), replace(self.problem, revolutions=1),
+        inputs = [replace(self.problem, mu_m3_s2=0.), replace(self.problem, revolutions=-1),
                   replace(self.problem, r2_m=(-1., 0., 0.)), replace(self.problem, tof_s=math.nan)]
         rows = pack_problems(inputs)
         output = self.engine.cpu(rows)
-        self.assertEqual(output['geometry_status'].tolist(), [1, 2, 3, 1])
+        self.assertEqual(output['geometry_status'].tolist(), [1, 1, 3, 1])
         self.assertTrue(np.all(output['root']['status'] == -1))
         self.assertTrue(np.isnan(output['v1']).all())
         self.assertTrue(np.isnan(output['v2']).all())
@@ -125,13 +125,13 @@ class CudaTests(NativeTests):
             for r in batch.download():
                 self.check_result(r)
             failed_inputs = [replace(self.problem, mu_m3_s2=-1.),
-                             replace(self.problem, revolutions=1),
+                             replace(self.problem, revolutions=-1),
                              replace(self.problem, r2_m=(-1., 0., 0.)),
                              replace(self.problem, tof_s=math.nan)]
             batch.upload(pack_problems(failed_inputs))
             batch.run()
             result = batch.download()
-            self.assertEqual(result['geometry_status'].tolist(), [1, 2, 3, 1])
+            self.assertEqual(result['geometry_status'].tolist(), [1, 1, 3, 1])
             self.assertTrue(np.all(result['root']['status'] == -1))
             self.assertTrue(np.isnan(result['v1']).all())
             self.assertTrue(np.isnan(result['v2']).all())

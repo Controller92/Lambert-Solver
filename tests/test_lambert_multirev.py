@@ -62,6 +62,20 @@ class MultiRevolutionTests(unittest.TestCase):
         self.assertIsNone(failed.first)
         self.assertIsNone(failed.time_nondim)
 
+    def test_rounded_zero_quarter_probe_regressions(self):
+        # Independent Lagrange stationary points, reproduced by validate_multirev.
+        for lam,q,x,time in (
+            (.5361549015100815,.7125379215867147,.1457245762499736,4.453634581006508),
+            (-.8035642912088069,.3542844298940877,.1498819294456678,5.017559990323802),
+            (.39965722053412844,.840274106074935,.14593459557999497,4.521924203692727),
+            (.39965722053412844,.8402741060749351,.14593459557999497,4.521924203692727)):
+            r=find_minimum_multi_rev(lam,1,q=q)
+            self.assertEqual(r.status,MinimumStatus.OK)
+            self.assertLessEqual(abs(r.x_min-x),1e-14+1e-14*abs(x))
+            self.assertLessEqual(abs(r.time_nondim-time),r.estimated_time_error)
+            self.assertLessEqual(r.first_lower,0.)
+            self.assertGreaterEqual(r.first_upper,0.)
+
     def test_minimum_against_independent_high_precision_fixture(self):
         # Lagrange TOF, 160-digit arithmetic and 220 derivative bisections;
         # reproduced by validation/validate_multirev.py (not this implementation).

@@ -114,6 +114,12 @@ def validate():
     cases += [(sign*math.sqrt(1-q), m, q) for q in (1e-16, 1e-100, math.ulp(0.))
               for sign in (-1, 1) for m in (1, 5, MAX_REVOLUTIONS)]
     cases.append((-.91, 5, None))  # Exercises the rounded-zero derivative probes on this libm.
+    # Larger native search batches exposed quarter probes crossing a rounded
+    # zero derivative. Check both host/device geometric q roundings.
+    cases += [(.5361549015100815,1,.7125379215867147),
+              (-.8035642912088069,1,.3542844298940877),
+              (.39965722053412844,1,.840274106074935),
+              (.39965722053412844,1,.8402741060749351)]
     x_error = time_ulps = calibration = 0.
     max_iterations = 0
     for lam, m, q in cases:

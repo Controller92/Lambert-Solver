@@ -309,8 +309,7 @@ def validate():
                   maximum_sample_angle_degrees=math.degrees(max(increments)),
                   minimum_projection_ratio=float(min(projection_ratio)), feasibility=feasibility,
                   reference_branches=branches, product_branches=product_records,
-                  limitation='Complete M>0 roots and velocities are implemented in Python only; '
-                  'native C++/CUDA still supports M=0. Differences from spacecraft ephemeris '
+                  limitation='Differences from spacecraft ephemeris '
                   'velocities include non-Keplerian gravity and maneuvers and are not numerical error tests.')
     print('Juno complete multi-revolution regression passed.', flush=True)
     return result

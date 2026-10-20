@@ -17,8 +17,9 @@ import time
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from src.lambert_native import NativeEngine, INPUT_DTYPE, RESULT_DTYPE, _options
+from src.lambert_native import NativeEngine, INPUT_DTYPE, RESULT_DTYPE, _options, _minimum_options
 from src.lambert_root import RootOptions
+from src.lambert_multirev import MinimumOptions
 
 
 def distribution(name, n):
@@ -86,9 +87,10 @@ def benchmark(sizes, scan_size):
             rows = distribution(name, n)
             reference = np.empty(n, dtype=RESULT_DTYPE)
             options = _options(RootOptions())
+            minimum_options = _minimum_options(MinimumOptions())
 
             def cpu_call():
-                status = cpu.lib.lb_cpu(rows.ctypes.data, reference.ctypes.data, n, ct.byref(options))
+                status = cpu.lib.lb_cpu(rows.ctypes.data, reference.ctypes.data, n, ct.byref(options), ct.byref(minimum_options))
                 if status:
                     raise RuntimeError('CPU benchmark call failed')
 

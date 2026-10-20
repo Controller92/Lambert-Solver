@@ -1,13 +1,15 @@
 # Lamberts-Problem Documentation
 
-The zero-revolution native engine runs in **CUDA C++**, with a shared C++ CPU path and
+The zero- and multi-revolution native engine runs in **CUDA C++**, with a shared C++ CPU path and
 NumPy batch bindings in `src/lambert_native.py`. See the
 [native engine walkthrough](docs/seventh-increment.md) for build instructions,
 API examples, independent accuracy checks and measured GPU performance.
 The [first optimization pass](docs/eighth-increment.md) reduces representative
 search kernel time by 17.9% and includes a reproducible baseline comparison.
 The Python mathematical implementation remains the independently validated
-reference. Native multi-revolution support and legacy GUI integration remain subsequent work.
+reference. The [native multi-revolution port](docs/eleventh-increment.md) adds explicit
+left/right branch rows, minimum diagnostics and complete velocities on the GPU.
+Legacy GUI integration remains subsequent work.
 
 The [multi-revolution preparation increment](docs/ninth-increment.md) adds Python
 TOF/derivatives, minimum-time detection and explicit feasibility diagnostics.

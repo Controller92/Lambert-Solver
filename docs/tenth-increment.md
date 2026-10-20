@@ -1,5 +1,9 @@
 # Tenth increment: complete Python multi-revolution transfers
 
+Native C++/CUDA multi-revolution roots and velocities are now available in
+[the eleventh increment](eleventh-increment.md). The Python implementation below
+remains the separate numerical reference.
+
 The custom Python solver now returns both endpoint velocities for an explicitly
 selected M>0 left or right root. `solve_multi_rev_pair` returns both branches in
 fixed order while preparing geometry and the minimum only once. The cached Juno

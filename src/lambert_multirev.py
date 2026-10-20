@@ -233,10 +233,15 @@ def find_minimum_multi_rev(lambda_: float, revolutions: int, *, q: float | None 
             va, vb = evaluate(a), evaluate(b)
             if va is None or vb is None:
                 return result
-            if va.first > 0 or vb.first < 0:
-                result.status = MinimumStatus.RESOLUTION_LIMIT
-                return result
-            lo, hi, left, right = a, b, va, vb
+            # A rounded zero does not locate the stationary point exactly.
+            # If a quarter probe crosses the computed sign change, keep the
+            # existing opposite-sign endpoint and narrow that side instead.
+            if va.first > 0:
+                hi, right = a, va
+            elif vb.first < 0:
+                lo, left = b, vb
+            else:
+                lo, hi, left, right = a, b, va, vb
             result.zero_derivative_steps += 1
         bracket(lo, hi, left, right)
         middle = lo+(hi-lo)/2

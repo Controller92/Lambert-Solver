@@ -1,0 +1,18 @@
+Building: /usr/bin/g++ -std=c++17 -O3 -fPIC -shared -fno-fast-math -ffp-contract=off -Wall -Wextra /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/native/cpu.cpp -o /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/build/native/liblambert_cpu.so
+Building: /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/work/cuda-12.8.1/toolkit/bin/nvcc -std=c++17 -O3 --shared --cudart=static -Xcompiler=-fPIC,-ffp-contract=off,-fno-fast-math,-Wall,-Wextra --fmad=false --prec-div=true --prec-sqrt=true --ftz=false -gencode=arch=compute_120,code=sm_120 -gencode=arch=compute_120,code=compute_120 --ptxas-options=-v,-warn-spills -lineinfo -ccbin /usr/bin/g++ -L/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/work/cuda-12.8.1/toolkit/lib /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/native/cuda.cu /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/native/cpu.cpp -o /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/build/native/liblambert_cuda.so
+ptxas info    : 0 bytes gmem
+ptxas info    : Compiling entry function '_ZN39_GLOBAL__N__929605eb_7_cuda_cu_7bab351712multi_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsENS0_14MinimumOptionsE' for 'sm_120'
+ptxas info    : Function properties for _ZN39_GLOBAL__N__929605eb_7_cuda_cu_7bab351712multi_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsENS0_14MinimumOptionsE
+    64 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 212 registers, used 0 barriers, 64 bytes cumulative stack size
+ptxas info    : Compile time = 861.235 ms
+ptxas info    : Function properties for _ZN7lambert17multi_derivativesEdNS_5ShapeEiNS_3TofE
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN7lambert9multi_tofEdNS_5ShapeEi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Compiling entry function '_ZN39_GLOBAL__N__929605eb_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE' for 'sm_120'
+ptxas info    : Function properties for _ZN39_GLOBAL__N__929605eb_7_cuda_cu_7bab351712solve_kernelEPKN7lambert5InputEPNS0_6ResultEmNS0_7OptionsE
+    32 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 197 registers, used 0 barriers, 32 bytes cumulative stack size
+ptxas info    : Compile time = 879.589 ms
+Libraries: /home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/build/native

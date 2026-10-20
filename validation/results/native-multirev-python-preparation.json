@@ -1,0 +1,16 @@
+{
+  "forward_cases": 685,
+  "max_relative_time_error": 4.29025758972739e-16,
+  "max_forward_ulps": 2.7358437475409807,
+  "derivative_maxima": [
+    1.1960774336605067e-15,
+    2.227330324169165e-15,
+    9.921020400186895e-15
+  ],
+  "expected_derivative_range_failures": 1,
+  "minimum_cases": 53,
+  "max_absolute_minimum_x_error": 5.465060153823203e-15,
+  "max_minimum_time_error_ulps": 2.5746181397475234,
+  "max_time_error_over_estimate": 0.14303434109708463,
+  "max_minimum_iterations": 48
+}

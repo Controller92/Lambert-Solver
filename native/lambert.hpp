@@ -1,5 +1,5 @@
 #pragma once
-// Binary64, M=0 Izzo reference shared by host C++ and CUDA. No heap, I/O or
+// Binary64 Izzo reference shared by host C++ and CUDA. No heap, I/O or
 // device runtime calls. Units and status values match the Python reference.
 #include <cmath>
 #include <cfloat>
@@ -23,11 +23,22 @@ struct Vec3 {
 struct Input {
     Vec3 r1, r2;
     double tof, mu;
-    int32_t long_way, revolutions;
+    int32_t long_way, revolutions, branch = 0; // M>0: left=0, right=1
 };
 struct Options {
     double x_atol = 1e-14, x_rtol = 1e-14, tof_atol = 0., tof_rtol = 5e-13;
     int32_t max_iterations = 128, max_bracket_expansions = 1024;
+};
+struct MinimumOptions {
+    double x_atol = 1e-14, x_rtol = 1e-14;
+    int32_t max_iterations = 128, max_bracket_expansions = 32;
+};
+struct Minimum {
+    int32_t status = -1, evaluation_status = -1;
+    double x = missing, time = missing, estimated_time_error = missing, first = missing;
+    double lower = missing, upper = missing, first_lower = missing, first_upper = missing;
+    int64_t iterations = 0, halley = 0, bisection = 0, zero_derivative = 0;
+    int64_t expansions = 0, evaluations = 0;
 };
 struct Root {
     int32_t status = 1, evaluation_status = -1, precision_limited = -1, fallback_guess = 0;
@@ -42,6 +53,8 @@ struct Result {
     Root root;
     Vec3 v1{missing, missing, missing}, v2{missing, missing, missing};
     double lambda = missing, q = missing, target = missing;
+    Minimum minimum;
+    int32_t branch = 0, revolutions = 0;
 };
 struct Tof {
     int32_t status = 1, method = -1, terms = 0, reserved = 0;
@@ -177,7 +190,7 @@ LB_HD Shape shape(double lambda) {
 LB_HD double eta(double x, Shape s, double y) {
     return s.lambda * x > 0. ? s.q / (y + s.lambda * x) : y - s.lambda * x;
 }
-LB_HD Geometry prepare(const Input &p) {
+LB_HD Geometry prepare(const Input &p, bool multi = false) {
     Geometry g;
     if (!finite(p.r1) || !finite(p.r2) || !finite(p.tof) || p.tof <= 0. || !finite(p.mu) ||
         p.mu <= 0. || p.long_way < 0 || p.long_way > 1 || p.revolutions < 0)
@@ -186,7 +199,7 @@ LB_HD Geometry prepare(const Input &p) {
     g.r2 = norm(p.r2);
     if (g.r1 == 0. || g.r2 == 0.)
         return g;
-    if (p.revolutions != 0) {
+    if (p.revolutions != 0 && !multi) {
         g.status = 2;
         return g;
     }
@@ -438,8 +451,8 @@ LB_HD Tof counted_tof(Root &r, double x, Shape s) {
     ++r.evaluations;
     return tof(x, s);
 }
-LB_HD double householder(double f, Derivatives d) {
-    if (d.status || d.first >= 0.)
+LB_HD double householder(double f, Derivatives d, bool decreasing = true) {
+    if (d.status || d.first == 0. || (d.first < 0.) != decreasing)
         return missing;
     double u = f / d.first, a = u * (d.second / d.first), b = (u * (d.third / d.first)) * u / 6.;
     double den = sum3(1., -a, b);
@@ -635,21 +648,7 @@ LB_HD Vec3 velocity(Vec3 radial, Vec3 transverse, double vr, double vt) {
     return {sum2(vr * radial.x, vt * transverse.x), sum2(vr * radial.y, vt * transverse.y),
             sum2(vr * radial.z, vt * transverse.z)};
 }
-LB_HD Result solve(const Input &p, Options o = Options{}) {
-    Result r;
-    r.root.status = -1;
-    Geometry g = prepare(p);
-    r.geometry_status = g.status;
-    if (g.status)
-        return r;
-    r.lambda = g.lambda;
-    r.q = g.q;
-    r.target = g.time;
-    r.root = solve_root(g.time, shape(g.lambda, g.q), o);
-    if (r.root.status) {
-        r.status = 2;
-        return r;
-    }
+LB_HD Result reconstruct(const Input &p, const Geometry &g, Result r) {
     double x = r.root.x, y = r.root.y, l = g.lambda, q = g.q;
     double minus = eta(x, shape(l, q), y), plus = l * x > 0. ? y + l * x : q / minus;
     double a = l * x > 0. ? sum2(l * minus, -q * x) : l * y - x;
@@ -666,5 +665,22 @@ LB_HD Result solve(const Input &p, Options o = Options{}) {
     r.v1 = v1;
     r.v2 = v2;
     return r;
+}
+LB_HD Result solve(const Input &p, Options o = Options{}) {
+    Result r;
+    r.root.status = -1;
+    Geometry g = prepare(p);
+    r.geometry_status = g.status;
+    if (g.status)
+        return r;
+    r.lambda = g.lambda;
+    r.q = g.q;
+    r.target = g.time;
+    r.root = solve_root(g.time, shape(g.lambda, g.q), o);
+    if (r.root.status) {
+        r.status = 2;
+        return r;
+    }
+    return reconstruct(p, g, r);
 }
 } // namespace lambert

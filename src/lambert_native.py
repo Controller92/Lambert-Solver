@@ -1,4 +1,4 @@
-"""NumPy/ctypes batch interface to the shared C++ and CUDA M=0 engine.
+"""NumPy/ctypes batch interface to the shared C++ and CUDA Izzo engine.
 
 Build explicitly with native/build.py first. CUDA errors raise, with no CPU
 fallback. Geometry/root failures remain individual output rows. Persistent
@@ -13,16 +13,21 @@ import numpy as np
 
 from .lambert_geometry import LambertInput
 from .lambert_root import RootOptions
+from .lambert_multirev import MinimumOptions
+from .lambert_multirev_root import RootBranch
 
 INPUT_DTYPE = np.dtype([('r1', 'f8', 3), ('r2', 'f8', 3), ('tof', 'f8'), ('mu', 'f8'),
-                        ('long_way', 'i4'), ('revolutions', 'i4')], align=True)
+                        ('long_way', 'i4'), ('revolutions', 'i4'), ('branch', 'i4')], align=True)
 ROOT_DTYPE = np.dtype([(n, 'i4') for n in ('status', 'evaluation_status', 'precision_limited', 'fallback_guess')]
                      + [(n, 'f8') for n in ('x', 'y', 'last_x', 'time', 'residual', 'relative_residual',
                                            'last_step', 'lower', 'upper', 'estimated_x_error')]
                      + [(n, 'i8') for n in ('iterations', 'householder', 'bisection', 'verification',
                                            'rejected_householder', 'derivative_failures', 'expansions', 'evaluations')], align=True)
+MINIMUM_DTYPE = np.dtype([(n, 'i4') for n in ('status', 'evaluation_status')]
+    + [(n, 'f8') for n in ('x', 'time', 'estimated_time_error', 'first', 'lower', 'upper', 'first_lower', 'first_upper')]
+    + [(n, 'i8') for n in ('iterations', 'halley', 'bisection', 'zero_derivative', 'expansions', 'evaluations')], align=True)
 RESULT_DTYPE = np.dtype([('status', 'i4'), ('geometry_status', 'i4'), ('root', ROOT_DTYPE),
-                         ('v1', 'f8', 3), ('v2', 'f8', 3), ('lambda', 'f8'), ('q', 'f8'), ('target', 'f8')], align=True)
+                         ('v1', 'f8', 3), ('v2', 'f8', 3), ('lambda', 'f8'), ('q', 'f8'), ('target', 'f8'), ('minimum', MINIMUM_DTYPE), ('branch', 'i4'), ('revolutions', 'i4')], align=True)
 TOF_DTYPE = np.dtype([(n, 'i4') for n in ('status', 'method', 'terms', 'reserved')]
                     + [('time', 'f8'), ('y', 'f8')], align=True)
 DERIVATIVE_DTYPE = np.dtype([(n, 'i4') for n in ('status', 'method', 'terms', 'reserved')]
@@ -34,9 +39,18 @@ class _Options(ct.Structure):
         ('max_iterations', ct.c_int32), ('max_bracket_expansions', ct.c_int32)]
 
 
+class _MinimumOptions(ct.Structure):
+    _fields_ = [('x_atol', ct.c_double), ('x_rtol', ct.c_double),
+                ('max_iterations', ct.c_int32), ('max_bracket_expansions', ct.c_int32)]
+
+
 class _Abi(ct.Structure):
     _fields_ = [(n, ct.c_uint32) for n in ('version', 'input_size', 'options_size', 'root_size',
                                          'result_size', 'tof_size', 'derivative_size')]
+
+
+class _MultiAbi(ct.Structure):
+    _fields_ = [(n, ct.c_uint32) for n in ('minimum_size', 'minimum_options_size')]
 
 
 class _DeviceInfo(ct.Structure):
@@ -45,13 +59,22 @@ class _DeviceInfo(ct.Structure):
         'active_blocks', 'threads_per_sm', 'max_threads_per_block')]
 
 
-def pack_problems(problems):
+def pack_problems(problems, branches=RootBranch.LEFT):
     """Pack fixed-shape inputs; invalid numerical values retain per-row status.
 
     Malformed Python types/shapes raise before native code sees a pointer.
     Native flags/revolution counts use signed int32; out-of-range counts raise.
+    M>0 branches are explicitly left/right of the minimum, independent of the
+    sign of x and long_way. A scalar branch is broadcast; a sequence is per row.
+    M=0 ignores the branch selector.
     """
     problems = list(problems)
+    if isinstance(branches, (str, RootBranch)):
+        branches = [RootBranch(branches)]*len(problems)
+    else:
+        branches = [RootBranch(b) for b in branches]
+    if len(branches) != len(problems):
+        raise ValueError('Expected one branch per problem')
     rows = np.empty(len(problems), dtype=INPUT_DTYPE)
     for i, p in enumerate(problems):
         if not isinstance(p, LambertInput) or type(p.long_way) is not bool or type(p.revolutions) is not int:
@@ -65,8 +88,36 @@ def pack_problems(problems):
         r1, r2 = np.asarray(p.r1_m, dtype='f8'), np.asarray(p.r2_m, dtype='f8')
         if r1.shape != (3,) or r2.shape != (3,):
             raise ValueError('Position vectors must have exactly three components')
-        rows[i] = (r1, r2, float(p.tof_s), float(p.mu_m3_s2), int(p.long_way), p.revolutions)
+        rows[i] = (r1, r2, float(p.tof_s), float(p.mu_m3_s2), int(p.long_way), p.revolutions, int(branches[i] == RootBranch.RIGHT))
     return rows
+
+
+def pack_multi_rev_pairs(problems):
+    """Return interleaved (left,right) rows. Reshape results to (n,2).
+
+    Each branch runs in its own GPU lane and computes its own minimum. This
+    avoids coupling branch iteration lifetimes; minimum counters are per row.
+    All problems must have a positive revolution count.
+    """
+    problems = list(problems)
+    if any(not isinstance(p, LambertInput) for p in problems):
+        raise TypeError('Expected LambertInput problems')
+    if any(type(p.revolutions) is not int or p.revolutions < 1 for p in problems):
+        raise ValueError('Pairs require positive revolutions')
+    return pack_problems([p for p in problems for _ in range(2)],
+                         [b for _ in problems for b in RootBranch])
+
+
+def _minimum_options(options):
+    if not isinstance(options, MinimumOptions):
+        raise TypeError('Expected MinimumOptions')
+    values = [getattr(options, n) for n, _ in _MinimumOptions._fields_]
+    if any(isinstance(v, bool) for v in values):
+        raise TypeError('Minimum options must not be bool')
+    for value in values[2:]:
+        if type(value) is not int or not -(2**31) <= value < 2**31:
+            raise ValueError('Minimum iteration budgets must be int32 integers')
+    return _MinimumOptions(*values)
 
 
 def _inputs(rows):
@@ -100,33 +151,39 @@ class NativeEngine:
         self.lib = ct.CDLL(str(path.resolve()))
         self.lib.lb_abi.restype = _Abi
         abi = self.lib.lb_abi()
-        expected = (1, INPUT_DTYPE.itemsize, ct.sizeof(_Options), ROOT_DTYPE.itemsize,
+        expected = (2, INPUT_DTYPE.itemsize, ct.sizeof(_Options), ROOT_DTYPE.itemsize,
                     RESULT_DTYPE.itemsize, TOF_DTYPE.itemsize, DERIVATIVE_DTYPE.itemsize)
         if tuple(getattr(abi, n) for n, _ in _Abi._fields_) != expected:
             raise RuntimeError('Native ABI mismatch; rebuild both libraries')
-        for name in ('lb_cpu', 'lb_roots'):
+        self.lib.lb_multi_abi.restype = _MultiAbi
+        multi_abi = self.lib.lb_multi_abi()
+        if (multi_abi.minimum_size, multi_abi.minimum_options_size) != (MINIMUM_DTYPE.itemsize, ct.sizeof(_MinimumOptions)):
+            raise RuntimeError('Native minimum ABI mismatch; rebuild both libraries')
+        for name in ('lb_cpu', 'lb_roots', 'lb_multi_roots'):
             function = getattr(self.lib, name)
-            function.argtypes = [ct.c_void_p, ct.c_void_p, ct.c_size_t, ct.POINTER(_Options)]
-            function.restype = ct.c_int
-        for name in ('lb_tof', 'lb_derivatives'):
+            args = [ct.c_void_p, ct.c_void_p, ct.c_size_t, ct.POINTER(_Options)]
+            if name != 'lb_roots':
+                args.append(ct.POINTER(_MinimumOptions))
+            function.argtypes, function.restype = args, ct.c_int
+        for name in ('lb_tof', 'lb_derivatives', 'lb_multi_tof', 'lb_multi_derivatives'):
             function = getattr(self.lib, name)
             function.argtypes = [ct.c_void_p, ct.c_void_p, ct.c_size_t]
             function.restype = ct.c_int
         if backend == 'cuda':
             error_args = [ct.c_char_p, ct.c_size_t]
             signatures = {
-                'lb_cuda_info': [ct.c_int, ct.c_int, ct.POINTER(_DeviceInfo)],
+                'lb_cuda_info': [ct.c_int, ct.c_int, ct.c_int, ct.POINTER(_DeviceInfo)],
                 'lb_cuda_create': [ct.c_size_t, ct.c_int, ct.c_int, ct.POINTER(ct.c_void_p)],
                 'lb_cuda_destroy': [ct.c_void_p],
                 'lb_cuda_upload': [ct.c_void_p, ct.c_void_p, ct.c_size_t],
-                'lb_cuda_run': [ct.c_void_p, ct.POINTER(_Options), ct.c_int, ct.POINTER(ct.c_float)],
+                'lb_cuda_run': [ct.c_void_p, ct.POINTER(_Options), ct.POINTER(_MinimumOptions), ct.c_int, ct.POINTER(ct.c_float)],
                 'lb_cuda_download': [ct.c_void_p, ct.c_void_p, ct.c_size_t],
             }
             for name, args in signatures.items():
                 function = getattr(self.lib, name)
                 function.argtypes, function.restype = args+error_args, ct.c_int
 
-    def cpu(self, rows, options=RootOptions(), out=None):
+    def cpu(self, rows, options=RootOptions(), out=None, *, minimum_options=MinimumOptions()):
         rows, opt = _inputs(rows), _options(options)
         output = np.empty(len(rows), dtype=RESULT_DTYPE) if out is None else out
         if (not isinstance(output, np.ndarray) or output.dtype != RESULT_DTYPE
@@ -134,23 +191,29 @@ class NativeEngine:
                 or not output.flags.aligned or not output.flags.writeable
                 or np.shares_memory(rows, output)):
             raise ValueError('Output must be a separate writable, aligned contiguous RESULT_DTYPE array')
-        if self.lib.lb_cpu(rows.ctypes.data, output.ctypes.data, len(rows), ct.byref(opt)):
+        if self.lib.lb_cpu(rows.ctypes.data, output.ctypes.data, len(rows), ct.byref(opt), ct.byref(_minimum_options(minimum_options))):
             raise RuntimeError('Invalid native batch arguments')
         return output
 
-    def probe(self, kind, triples, options=RootOptions()):
-        """CPU validation probes. NaN q in a triple means infer q from lambda."""
-        types = {'roots': ROOT_DTYPE, 'tof': TOF_DTYPE, 'derivatives': DERIVATIVE_DTYPE}
+    def probe(self, kind, triples, options=RootOptions(), *, minimum_options=MinimumOptions()):
+        """CPU validation probes. NaN q means infer q from lambda.
+
+        M>0 rows contain [x/target, lambda, q, M, branch], where branch is 0/1.
+        multi_roots returns RESULT_DTYPE with root/minimum only, no velocities."""
+        types = {'roots': ROOT_DTYPE, 'tof': TOF_DTYPE, 'derivatives': DERIVATIVE_DTYPE,
+                 'multi_roots': RESULT_DTYPE, 'multi_tof': TOF_DTYPE, 'multi_derivatives': DERIVATIVE_DTYPE}
         if kind not in types:
             raise ValueError('Unknown validation probe')
         rows = np.require(triples, dtype='f8', requirements=['C', 'A'])
-        if rows.ndim != 2 or rows.shape[1] != 3:
-            raise ValueError('Expected triples [x or target, lambda, q]')
+        if rows.ndim != 2 or rows.shape[1] != (5 if kind.startswith('multi_') else 3):
+            raise ValueError('Expected [x/target, lambda, q] rows, plus [M, branch] for multi probes')
         output = np.empty(len(rows), dtype=types[kind])
         args = [rows.ctypes.data, output.ctypes.data, len(rows)]
-        if kind == 'roots':
+        if kind in ('roots', 'multi_roots'):
             opt = _options(options)
             args.append(ct.byref(opt))
+        if kind == 'multi_roots':
+            args.append(ct.byref(_minimum_options(minimum_options)))
         if getattr(self.lib, 'lb_'+kind)(*args):
             raise RuntimeError('Invalid native validation arguments')
         return output
@@ -163,9 +226,9 @@ class NativeEngine:
         if code:
             raise RuntimeError(f'{name}: CUDA error {code}: {error.value.decode()}')
 
-    def device_info(self, device=0, threads=128):
+    def device_info(self, device=0, threads=128, *, multi=False):
         info = _DeviceInfo()
-        self._cuda_call('lb_cuda_info', device, threads, ct.byref(info))
+        self._cuda_call('lb_cuda_info', device, threads, int(multi), ct.byref(info))
         result = {n: getattr(info, n) for n, _ in info._fields_}
         result['name'] = info.name.decode()
         result['predicted_occupancy'] = info.active_blocks*threads/info.threads_per_sm
@@ -207,9 +270,11 @@ class CudaBatch:
             self._count = len(rows)
             self._uploaded = True
 
-    def run(self, options=RootOptions(), repetitions=1):
-        """Return CUDA-event milliseconds per launch, excluding upload/download."""
-        opt = _options(options)
+    def run(self, options=RootOptions(), repetitions=1, *, minimum_options=MinimumOptions()):
+        """Return CUDA-event milliseconds per batch solve, excluding upload/download.
+
+        A mixed M=0/M>0 solve includes both kernel launches."""
+        opt, mopt = _options(options), _minimum_options(minimum_options)
         if type(repetitions) is not int or not 1 <= repetitions < 2**31:
             raise ValueError('repetitions must be a positive int32')
         with self._lock:
@@ -218,7 +283,7 @@ class CudaBatch:
                 raise RuntimeError('Upload inputs before running')
             self._ready = False
             milliseconds = ct.c_float()
-            self.engine._cuda_call('lb_cuda_run', self._handle, ct.byref(opt), repetitions, ct.byref(milliseconds))
+            self.engine._cuda_call('lb_cuda_run', self._handle, ct.byref(opt), ct.byref(mopt), repetitions, ct.byref(milliseconds))
             self._ready = True
             return milliseconds.value
 

@@ -19,8 +19,9 @@ import time
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from src.lambert_native import NativeEngine, RESULT_DTYPE, _options
+from src.lambert_native import NativeEngine, RESULT_DTYPE, _options, _minimum_options
 from src.lambert_root import RootOptions
+from src.lambert_multirev import MinimumOptions
 from validation.benchmark_native import distribution, check
 
 
@@ -62,10 +63,11 @@ def compare(libraries, sizes, threads=128, rounds=7, repetitions=5):
             inputs = distribution(kind, n)
             outputs = {name: np.empty(n, dtype=RESULT_DTYPE) for name in names}
             options = _options(RootOptions())
+            minimum_options = _minimum_options(MinimumOptions())
 
             def cpu_call(name):
                 code = engines[name].lib.lb_cpu(inputs.ctypes.data, outputs[name].ctypes.data,
-                                                n, ct.byref(options))
+                                                n, ct.byref(options), ct.byref(minimum_options))
                 if code:
                     raise RuntimeError(f'{name}: C ABI CPU call failed: {code}')
 
