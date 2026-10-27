@@ -129,9 +129,11 @@ formal interval collision certificate.
 `full_mission_reattached` is true only when every numerical acceptance check
 passes. It means the finite phases meet within the published shooting tolerances.
 It does not certify one uninterrupted forward propagation through every encounter
-or imply flight readiness. Whole-mission GMAT acceptance is explicitly `not_run`;
-the earlier GMAT validation of isolated point-mass flybys does not validate this
-new full-chain/J2 result.
+or imply flight readiness. The saved original runs record whole-mission GMAT
+acceptance as `not_run`. A subsequent [complete-candidate GMAT replay](gmat-global-replay.md)
+executed both candidates but failed its external numerical comparison. The
+earlier GMAT validation of isolated point-mass flybys does not validate this
+full-chain/J2 result.
 
 These are candidate research trajectories, not publication-ready replacements.
 Modern higher-order gravity, Earth harmonics, relativity and solar radiation

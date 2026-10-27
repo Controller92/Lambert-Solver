@@ -1,0 +1,139 @@
+{
+  "status": "failed_gmat_complete_mission_numerical_comparison",
+  "scope": "Two continuous GMAT flight sequences with Mars impulses and a prescribed Ceres surface stay/launch; 14 pinned point masses. Integration origins switch at four saved leg midpoints. Degree-2 zonal Mars gravity is applied on Mars-centred segments; it is omitted on Earth/Ceres-centred cruise halves.",
+  "model_qualification": "Both trajectories use ICRF axes. GMAT body orientation and ephemeris evaluation may differ from native interpolated Mars J2/pinned SPICE. The position comparison shifts target states linearly to GMAT reported epochs. This is numerical comparison, not navigation accuracy.",
+  "limits": {
+    "epoch_s": 0.002,
+    "initial_position_m": 100.0,
+    "initial_velocity_m_s": 0.0002,
+    "event_position_m": 200.0,
+    "event_velocity_m_s": 0.0003
+  },
+  "records": [
+    {
+      "phase": 0,
+      "kind": "event",
+      "node": 0,
+      "leg": null,
+      "side": "after",
+      "epoch_offset_s": 0.0,
+      "position_difference_m": 0.0,
+      "velocity_difference_m_s": 0.0
+    },
+    {
+      "phase": 0,
+      "kind": "midpoint",
+      "node": null,
+      "leg": 0,
+      "side": null,
+      "epoch_offset_s": 0.0022068023681640625,
+      "position_difference_m": 27080.57289636789,
+      "velocity_difference_m_s": 0.003922810691642472
+    },
+    {
+      "phase": 0,
+      "kind": "event",
+      "node": 1,
+      "leg": null,
+      "side": "before",
+      "epoch_offset_s": -0.0004360675811767578,
+      "position_difference_m": 126078.66941187257,
+      "velocity_difference_m_s": 89.0655528084038
+    },
+    {
+      "phase": 0,
+      "kind": "event",
+      "node": 1,
+      "leg": null,
+      "side": "after",
+      "epoch_offset_s": -0.0004360675811767578,
+      "position_difference_m": 126077.12177877309,
+      "velocity_difference_m_s": 89.0670061815851
+    },
+    {
+      "phase": 0,
+      "kind": "midpoint",
+      "node": null,
+      "leg": 1,
+      "side": null,
+      "epoch_offset_s": -0.0004017353057861328,
+      "position_difference_m": 5555073043.470094,
+      "velocity_difference_m_s": 288.5535634115509
+    },
+    {
+      "phase": 0,
+      "kind": "event",
+      "node": 2,
+      "leg": null,
+      "side": "before",
+      "epoch_offset_s": -0.00036525726318359375,
+      "position_difference_m": 8748023978.113369,
+      "velocity_difference_m_s": 526.3430983869257
+    },
+    {
+      "phase": 1,
+      "kind": "event",
+      "node": 3,
+      "leg": null,
+      "side": "after",
+      "epoch_offset_s": -2.384185791015625e-07,
+      "position_difference_m": 0.007539818384888553,
+      "velocity_difference_m_s": 5.692726700096828e-10
+    },
+    {
+      "phase": 1,
+      "kind": "midpoint",
+      "node": null,
+      "leg": 2,
+      "side": null,
+      "epoch_offset_s": 0.002569913864135742,
+      "position_difference_m": 38496.344044826976,
+      "velocity_difference_m_s": 0.002298351536556986
+    },
+    {
+      "phase": 1,
+      "kind": "event",
+      "node": 4,
+      "leg": null,
+      "side": "before",
+      "epoch_offset_s": 0.002402782440185547,
+      "position_difference_m": 225898.99643475885,
+      "velocity_difference_m_s": 37.89190583491357
+    },
+    {
+      "phase": 1,
+      "kind": "event",
+      "node": 4,
+      "leg": null,
+      "side": "after",
+      "epoch_offset_s": 0.002402782440185547,
+      "position_difference_m": 225899.02220941996,
+      "velocity_difference_m_s": 37.891903295171176
+    },
+    {
+      "phase": 1,
+      "kind": "midpoint",
+      "node": null,
+      "leg": 3,
+      "side": null,
+      "epoch_offset_s": 0.003290891647338867,
+      "position_difference_m": 375689205.6828179,
+      "velocity_difference_m_s": 59.408038371489766
+    },
+    {
+      "phase": 1,
+      "kind": "event",
+      "node": 5,
+      "leg": null,
+      "side": "before",
+      "epoch_offset_s": 0.0020647048950195312,
+      "position_difference_m": 1042611455.0720524,
+      "velocity_difference_m_s": 8152.904133264847
+    }
+  ],
+  "gmat_executable_sha256": "f7cf5b3188902353ed4245bb21c22c1afa0451efdd221b7e19f6a74dc7ed1d93",
+  "gmat_script_sha256": "a9e49f6aa31eb8b819e8cb47a840fdb3b11a2d545faeebc3d345af2b889b936f",
+  "mars_j2_cof_sha256": "ba486ccca48c7850f8696948b96bddeb2d0fe99bbcf59a03f1b9335fddb07a3f",
+  "source_result_sha256": "d795e43ef6cd5dbc17d73a0ee84483bf6dfaeb84538dd682bc74e0a1e86560d1",
+  "source_ephemeris_sha256": "0b84f9e0ce35e01ec5771956ee76ab6522bd3dee53567dd0270223a93dcea298"
+}

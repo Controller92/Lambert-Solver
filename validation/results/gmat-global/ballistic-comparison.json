@@ -1,0 +1,119 @@
+{
+  "status": "failed_gmat_complete_mission_numerical_comparison",
+  "scope": "Two continuous GMAT flight sequences with Mars impulses and a prescribed Ceres surface stay/launch; 14 pinned point masses. Integration origins switch at four saved leg midpoints. Degree-2 zonal Mars gravity is applied on Mars-centred segments; it is omitted on Earth/Ceres-centred cruise halves.",
+  "model_qualification": "Both trajectories use ICRF axes. GMAT body orientation and integration-origin dynamics may differ from the native SSB equations and interpolated Mars J2. The position comparison shifts target states linearly to GMAT reported epochs. This is a numerical comparison, not navigation accuracy.",
+  "limits": {
+    "epoch_s": 0.002,
+    "initial_position_m": 100.0,
+    "initial_velocity_m_s": 0.0002,
+    "event_position_m": 200.0,
+    "event_velocity_m_s": 0.0003
+  },
+  "records": [
+    {
+      "phase": 0,
+      "kind": "event",
+      "node": 0,
+      "leg": null,
+      "side": "after",
+      "epoch_offset_s": 0.0,
+      "position_difference_m": 6.103515625e-05,
+      "velocity_difference_m_s": 8.185452315956354e-12
+    },
+    {
+      "phase": 0,
+      "kind": "midpoint",
+      "node": null,
+      "leg": 0,
+      "side": null,
+      "epoch_offset_s": 0.0014910697937011719,
+      "position_difference_m": 3167.5938872159354,
+      "velocity_difference_m_s": 0.001060111351251288
+    },
+    {
+      "phase": 0,
+      "kind": "event",
+      "node": 1,
+      "leg": null,
+      "side": "before",
+      "epoch_offset_s": 0.0013833045959472656,
+      "position_difference_m": 5745.820027293683,
+      "velocity_difference_m_s": 1.3357241615580804
+    },
+    {
+      "phase": 0,
+      "kind": "midpoint",
+      "node": null,
+      "leg": 1,
+      "side": null,
+      "epoch_offset_s": -0.0015974044799804688,
+      "position_difference_m": 73263398.74445048,
+      "velocity_difference_m_s": 2.846346558504621
+    },
+    {
+      "phase": 0,
+      "kind": "event",
+      "node": 2,
+      "leg": null,
+      "side": "before",
+      "epoch_offset_s": 0.0009474754333496094,
+      "position_difference_m": 335193520.289415,
+      "velocity_difference_m_s": 20.373114032353286
+    },
+    {
+      "phase": 1,
+      "kind": "event",
+      "node": 3,
+      "leg": null,
+      "side": "after",
+      "epoch_offset_s": 0.0,
+      "position_difference_m": 0.00012947511862546645,
+      "velocity_difference_m_s": 1.543463690584498e-11
+    },
+    {
+      "phase": 1,
+      "kind": "midpoint",
+      "node": null,
+      "leg": 2,
+      "side": null,
+      "epoch_offset_s": 0.0008671283721923828,
+      "position_difference_m": 3469.8908676008305,
+      "velocity_difference_m_s": 0.00027782992433610353
+    },
+    {
+      "phase": 1,
+      "kind": "event",
+      "node": 4,
+      "leg": null,
+      "side": "before",
+      "epoch_offset_s": 0.0014934539794921875,
+      "position_difference_m": 22415.634630522523,
+      "velocity_difference_m_s": 5.690667562838518
+    },
+    {
+      "phase": 1,
+      "kind": "midpoint",
+      "node": null,
+      "leg": 3,
+      "side": null,
+      "epoch_offset_s": -0.0004496574401855469,
+      "position_difference_m": 54806229.54412294,
+      "velocity_difference_m_s": 4.6649482685724735
+    },
+    {
+      "phase": 1,
+      "kind": "event",
+      "node": 5,
+      "leg": null,
+      "side": "before",
+      "epoch_offset_s": -0.0016171932220458984,
+      "position_difference_m": 96734018.74176823,
+      "velocity_difference_m_s": 3981.8687256310245
+    }
+  ],
+  "gmat_executable_sha256": "f7cf5b3188902353ed4245bb21c22c1afa0451efdd221b7e19f6a74dc7ed1d93",
+  "gmat_script_sha256": "78f9c3777a03ccf781b1f4606cacbcd8e9e38b56083573fc789e9065ed8aee2c",
+  "mars_j2_cof_sha256": "ba486ccca48c7850f8696948b96bddeb2d0fe99bbcf59a03f1b9335fddb07a3f",
+  "source_result_sha256": "b6c950c751a1c8e451b9cd27378c283337759b9a245df727e0a64bf920f2a9c9",
+  "source_ephemeris_sha256": "a7159f1a9207bbf5ac868e3ce39ee036841a7f1dc5251a892084e8d25708b6e7"
+}

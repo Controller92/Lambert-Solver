@@ -1,0 +1,26 @@
+{
+  "ballistic": {
+    "status": "failed_gmat_complete_mission_numerical_comparison",
+    "first_midpoint_position_difference_m": 3167.5938872159354,
+    "first_mars_position_difference_m": 5745.820027293683,
+    "ceres_arrival_position_difference_m": 335193520.289415,
+    "second_mars_position_difference_m": 22415.634630522523,
+    "earth_return_position_difference_m": 96734018.74176823,
+    "maximum_epoch_offset_s": 0.0016171932220458984,
+    "source_comparison_sha256": "bf7c18b0d4d624ab09ba7eefeea85179596e6d323b2f4021cc867abb5f7ce49d",
+    "source_script_sha256": "78f9c3777a03ccf781b1f4606cacbcd8e9e38b56083573fc789e9065ed8aee2c"
+  },
+  "powered": {
+    "status": "failed_gmat_complete_mission_numerical_comparison",
+    "first_midpoint_position_difference_m": 27080.57289636789,
+    "first_mars_position_difference_m": 126078.66941187257,
+    "ceres_arrival_position_difference_m": 8748023978.113369,
+    "second_mars_position_difference_m": 225898.99643475885,
+    "earth_return_position_difference_m": 1042611455.0720524,
+    "maximum_epoch_offset_s": 0.003290891647338867,
+    "source_comparison_sha256": "2ac60255c33fe94db4b94adfaf0a0f11bd2a6bc4c4d1d20cb2c71e499f368352",
+    "source_script_sha256": "a9e49f6aa31eb8b819e8cb47a840fdb3b11a2d545faeebc3d345af2b889b936f"
+  },
+  "plot_sha256": "687de59868ea6cd4a0c0f1bae695325518e28d2014854be2d05f2911619a4ff5",
+  "scope": "Two continuous GMAT flight sequences per candidate, separated by a prescribed Ceres surface stay. The saved N-body corrections remain numerically validated within their native/direct-SPICE models; GMAT does not confirm them at the declared limits."
+}
