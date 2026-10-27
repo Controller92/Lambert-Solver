@@ -6,6 +6,9 @@ batches, C3 grids, minimum tables and porkchop figures. Launch `python run.py` o
 use `python run.py --help`. The interface adapts Simple-Lambert-Solver's
 Flyby-Solver branch; no PyKEP dependency is needed for the runtime. Four EMC
 paper-window presets and a real multi-revolution smoke preset are included.
+The [bounded EMC survey](docs/emc-sweep.md) adds four-leg porkchops, complete
+branch-chain sampling, separate Mars flyby atlases and CPU/GPU stress measurements
+through `python run.py mission-sweep`.
 The [custom flyby encounter engine](docs/flyby-solver.md) now supplies unpowered
 propagation, inverse matching and tangential powered encounters in Python, C++
 and CUDA, with saved CLI batches and a Juno Earth-flyby validation. Run

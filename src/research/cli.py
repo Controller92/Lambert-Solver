@@ -48,6 +48,13 @@ def parser():
     mission.add_argument('--outdir',type=Path,default='results')
     mission.add_argument('--resume',type=Path,help='Warm continuation of one saved run')
     mission.add_argument('--dry-run',action='store_true')
+    sweep=sub.add_parser('mission-sweep',help='Bounded EMC survey, flyby atlas and CPU/GPU stress test')
+    sweep.add_argument('--config',type=Path,required=True)
+    sweep.add_argument('--outdir',type=Path,default=Path('results'))
+    sweep.add_argument('--seconds',type=float,default=900.)
+    sweep.add_argument('--max-candidates',type=int,default=1048576)
+    sweep.add_argument('--grid-step',type=float,default=2.)
+    sweep.add_argument('--batch-size',type=int,default=1024)
     validate = sub.add_parser('mission-validate',help='Independently check an exported mission candidate')
     validate.add_argument('candidate',type=Path)
     validate.add_argument('--config',type=Path)
@@ -265,6 +272,11 @@ def main(argv=None):
             for check in report['checks']:
                 if not check['passed']: print(json.dumps(check))
             return 0 if report['status']=='passed_patched_conic' else 2
+        if args.command=='mission-sweep':
+            from .mission_config import load_mission
+            from .mission_sweep import run_sweep
+            path,summary=run_sweep(load_mission(args.config),args.outdir,args.seconds,args.max_candidates,args.grid_step,args.batch_size)
+            print(json.dumps(dict(run=str(path.resolve()),**summary),indent=2));return 0
         if args.command in ('mission-search','mission-evaluate'):
             from .mission_config import load_mission
             config = load_mission(args.config)
