@@ -1,0 +1,20 @@
+test_cli_help_menu_exit_and_dry_run_without_ephemerides (test_workflow.ConfigTests.test_cli_help_menu_exit_and_dry_run_without_ephemerides) ... ok
+test_closed_fractional_grid_and_legacy_roundtrip (test_workflow.ConfigTests.test_closed_fractional_grid_and_legacy_roundtrip) ... ok
+test_reject_invalid_or_misleading_specs (test_workflow.ConfigTests.test_reject_invalid_or_misleading_specs) ... ok
+test_failures_do_not_create_zero_energy_minima (test_workflow.CudaGridTests.test_failures_do_not_create_zero_energy_minima) ... skipped 'explicit GPU opt-in required'
+test_fixed_axis_orientation_is_not_short_long (test_workflow.CudaGridTests.test_fixed_axis_orientation_is_not_short_long) ... skipped 'explicit GPU opt-in required'
+test_native_reduction_matches_reference_all_candidates (test_workflow.CudaGridTests.test_native_reduction_matches_reference_all_candidates) ... skipped 'explicit GPU opt-in required'
+test_postprocessing_overflow_retains_explicit_failure (test_workflow.CudaGridTests.test_postprocessing_overflow_retains_explicit_failure) ... skipped 'explicit GPU opt-in required'
+test_real_cache_integrity_and_owned_kernel_lifetime (test_workflow.EphemerisTests.test_real_cache_integrity_and_owned_kernel_lifetime) ... skipped 'explicit SPICE kernel directory required'
+test_failures_do_not_create_zero_energy_minima (test_workflow.GridTests.test_failures_do_not_create_zero_energy_minima) ... ok
+test_fixed_axis_orientation_is_not_short_long (test_workflow.GridTests.test_fixed_axis_orientation_is_not_short_long) ... ok
+test_native_reduction_matches_reference_all_candidates (test_workflow.GridTests.test_native_reduction_matches_reference_all_candidates) ... ok
+test_postprocessing_overflow_retains_explicit_failure (test_workflow.GridTests.test_postprocessing_overflow_retains_explicit_failure) ... ok
+test_saved_plot_regeneration_and_hash_validation (test_workflow.PlotTests.test_saved_plot_regeneration_and_hash_validation) ... /home/josh/.config/matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /tmp/matplotlib-k44mxymj because there was an issue with the default path (/home/josh/.config/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 4.786s
+
+OK (skipped=5)

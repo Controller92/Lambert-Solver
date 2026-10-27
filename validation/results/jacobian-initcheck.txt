@@ -1,0 +1,16 @@
+========= COMPUTE-SANITIZER
+test_fixed_branch_finite_difference_and_taylor (test_jacobian.CudaJacobianTests.test_fixed_branch_finite_difference_and_taylor) ... ok
+test_fold_failures_empty_and_noncontiguous (test_jacobian.CudaJacobianTests.test_fold_failures_empty_and_noncontiguous) ... ok
+test_optional_buffer_lifecycle_tail_and_cpu_agreement (test_jacobian.CudaJacobianTests.test_optional_buffer_lifecycle_tail_and_cpu_agreement) ... ok
+test_rotation_units_reversal_and_kepler_scaling (test_jacobian.CudaJacobianTests.test_rotation_units_reversal_and_kepler_scaling) ... ok
+test_tiny_arc_arbitrary_plane_regression (test_jacobian.CudaJacobianTests.test_tiny_arc_arbitrary_plane_regression) ... ok
+test_fixed_branch_finite_difference_and_taylor (test_jacobian.JacobianTests.test_fixed_branch_finite_difference_and_taylor) ... ok
+test_fold_failures_empty_and_noncontiguous (test_jacobian.JacobianTests.test_fold_failures_empty_and_noncontiguous) ... ok
+test_rotation_units_reversal_and_kepler_scaling (test_jacobian.JacobianTests.test_rotation_units_reversal_and_kepler_scaling) ... ok
+test_tiny_arc_arbitrary_plane_regression (test_jacobian.JacobianTests.test_tiny_arc_arbitrary_plane_regression) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.478s
+
+OK
+========= ERROR SUMMARY: 0 errors

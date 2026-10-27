@@ -32,6 +32,9 @@ TOF_DTYPE = np.dtype([(n, 'i4') for n in ('status', 'method', 'terms', 'reserved
                     + [('time', 'f8'), ('y', 'f8')], align=True)
 DERIVATIVE_DTYPE = np.dtype([(n, 'i4') for n in ('status', 'method', 'terms', 'reserved')]
                            + [(n, 'f8') for n in ('time', 'y', 'first', 'second', 'third')], align=True)
+JACOBIAN_DTYPE = np.dtype([('status', 'i4'), ('reserved', 'i4'), ('root_condition', 'f8'),
+                           ('slope_ratio', 'f8'), ('estimated_relative_slope_error', 'f8'),
+                           ('values', 'f8', (6, 7))], align=True)
 
 
 class _Options(ct.Structure):
@@ -195,6 +198,44 @@ class NativeEngine:
             raise RuntimeError('Invalid native batch arguments')
         return output
 
+    def cpu_with_jacobian(self, rows, options=RootOptions(), *, minimum_options=MinimumOptions()):
+        """Return (solutions, sensitivities) for fixed mu, direction and branch.
+
+        values has rows [v1xyz,v2xyz], columns [r1xyz,r2xyz,tof]; SI units
+        are s^-1 for position columns and m/s^2 for time. Check both statuses:
+        Jacobian 0=valid, 1=velocity solve failed, 2=root ill-conditioned,
+        3=nonfinite derivative arithmetic. Failure matrices contain NaNs.
+        This is a local two-body derivative, not a date/mission-cost gradient.
+        """
+        self._jacobian_abi()
+        rows, opt, mopt = _inputs(rows), _options(options), _minimum_options(minimum_options)
+        output = np.empty(len(rows), dtype=RESULT_DTYPE)
+        jacobian = np.empty(len(rows), dtype=JACOBIAN_DTYPE)
+        function = self.lib.lb_cpu_jacobian
+        function.argtypes = [ct.c_void_p, ct.c_void_p, ct.c_void_p, ct.c_size_t,
+                             ct.POINTER(_Options), ct.POINTER(_MinimumOptions)]
+        function.restype = ct.c_int
+        if function(rows.ctypes.data, output.ctypes.data, jacobian.ctypes.data, len(rows),
+                    ct.byref(opt), ct.byref(mopt)):
+            raise RuntimeError('Invalid native Jacobian arguments')
+        return output, jacobian
+
+    def _jacobian_abi(self):
+        try:
+            function = self.lib.lb_jacobian_size
+        except AttributeError as exc:
+            raise RuntimeError('Native Jacobian unavailable; rebuild native libraries') from exc
+        function.argtypes, function.restype = [], ct.c_uint32
+        if function() != JACOBIAN_DTYPE.itemsize:
+            raise RuntimeError('Native Jacobian ABI mismatch; rebuild native libraries')
+        if self.backend == 'cuda':
+            error_args = [ct.c_char_p, ct.c_size_t]
+            self.lib.lb_cuda_run_jacobian.argtypes = [ct.c_void_p, ct.POINTER(_Options),
+                ct.POINTER(_MinimumOptions), ct.c_int, ct.POINTER(ct.c_float)]+error_args
+            self.lib.lb_cuda_run_jacobian.restype = ct.c_int
+            self.lib.lb_cuda_download_jacobian.argtypes = [ct.c_void_p,ct.c_void_p,ct.c_size_t]+error_args
+            self.lib.lb_cuda_download_jacobian.restype = ct.c_int
+
     def probe(self, kind, triples, options=RootOptions(), *, minimum_options=MinimumOptions()):
         """CPU validation probes. NaN q means infer q from lambda.
 
@@ -252,6 +293,7 @@ class CudaBatch:
         self.engine, self.capacity = engine, capacity
         self._handle, self._lock = ct.c_void_p(), RLock()
         self._count, self._ready, self._uploaded = 0, False, False
+        self._jacobian_ready = False
         engine._cuda_call('lb_cuda_create', capacity, device, threads, ct.byref(self._handle))
 
     def _open(self):
@@ -265,16 +307,24 @@ class CudaBatch:
             if len(rows) > self.capacity:
                 raise ValueError('Batch exceeds device buffer capacity')
             self._ready = False
+            self._jacobian_ready = False
             self._uploaded = False
             self.engine._cuda_call('lb_cuda_upload', self._handle, rows.ctypes.data, len(rows))
             self._count = len(rows)
             self._uploaded = True
 
-    def run(self, options=RootOptions(), repetitions=1, *, minimum_options=MinimumOptions()):
+    def run(self, options=RootOptions(), repetitions=1, *, minimum_options=MinimumOptions(), jacobian=False):
         """Return CUDA-event milliseconds per batch solve, excluding upload/download.
 
-        A mixed M=0/M>0 solve includes both kernel launches."""
+        A mixed M=0/M>0 solve includes both kernel launches. jacobian=True
+        allocates an optional device buffer on first use, then differentiates
+        the stored solutions in a separate kernel; timing includes that kernel.
+        Allocation and transfers are excluded. Default solves need no Jacobian buffer."""
         opt, mopt = _options(options), _minimum_options(minimum_options)
+        if type(jacobian) is not bool:
+            raise TypeError('jacobian must be bool')
+        if jacobian:
+            self.engine._jacobian_abi()
         if type(repetitions) is not int or not 1 <= repetitions < 2**31:
             raise ValueError('repetitions must be a positive int32')
         with self._lock:
@@ -282,10 +332,23 @@ class CudaBatch:
             if not self._uploaded:
                 raise RuntimeError('Upload inputs before running')
             self._ready = False
+            self._jacobian_ready = False
             milliseconds = ct.c_float()
-            self.engine._cuda_call('lb_cuda_run', self._handle, ct.byref(opt), ct.byref(mopt), repetitions, ct.byref(milliseconds))
+            self.engine._cuda_call('lb_cuda_run_jacobian' if jacobian else 'lb_cuda_run',
+                                  self._handle, ct.byref(opt), ct.byref(mopt), repetitions, ct.byref(milliseconds))
             self._ready = True
+            self._jacobian_ready = jacobian
             return milliseconds.value
+
+    def download_jacobian(self):
+        """Return JACOBIAN_DTYPE rows after the latest run(jacobian=True)."""
+        with self._lock:
+            self._open()
+            if not self._jacobian_ready:
+                raise RuntimeError('Run the uploaded inputs with jacobian=True before downloading sensitivities')
+            output = np.empty(self._count, dtype=JACOBIAN_DTYPE)
+            self.engine._cuda_call('lb_cuda_download_jacobian',self._handle,output.ctypes.data,self._count)
+            return output
 
     def download(self):
         with self._lock:

@@ -1,0 +1,21 @@
+test_context_lifecycle_and_reupload (test_native.CUDA.test_context_lifecycle_and_reupload) ... skipped 'explicit GPU opt-in'
+test_empty_tail_and_invalid_layout (test_native.CUDA.test_empty_tail_and_invalid_layout) ... skipped 'explicit GPU opt-in'
+test_reference_physics_and_status_parity (test_native.CUDA.test_reference_physics_and_status_parity) ... skipped 'explicit GPU opt-in'
+test_empty_tail_and_invalid_layout (test_native.Native.test_empty_tail_and_invalid_layout) ... ok
+test_reference_physics_and_status_parity (test_native.Native.test_reference_physics_and_status_parity) ... ok
+test_actual_numerical_two_body_integration_through_encounter (test_physics.Physics.test_actual_numerical_two_body_integration_through_encounter) ... ok
+test_declared_speed_tolerance_preserves_incoming_energy (test_physics.Physics.test_declared_speed_tolerance_preserves_incoming_energy) ... ok
+test_energy_angular_momentum_and_conic_asymptotes (test_physics.Physics.test_energy_angular_momentum_and_conic_asymptotes) ... ok
+test_failures_never_publish_velocities (test_physics.Physics.test_failures_never_publish_velocities) ... ok
+test_inclusive_bounds_and_extreme_turns (test_physics.Physics.test_inclusive_bounds_and_extreme_turns) ... ok
+test_inverse_and_tangential_powered_recover_periapsis (test_physics.Physics.test_inverse_and_tangential_powered_recover_periapsis) ... ok
+test_rotation_units_and_time_reversal (test_physics.Physics.test_rotation_units_and_time_reversal) ... ok
+test_small_dimensionless_parameter_without_intermediate_overflow (test_physics.Physics.test_small_dimensionless_parameter_without_intermediate_overflow) ... ok
+test_cuda_saved_batch (test_workflow.Workflow.test_cuda_saved_batch) ... skipped 'explicit GPU opt-in'
+test_inertial_transform_and_saved_batch (test_workflow.Workflow.test_inertial_transform_and_saved_batch) ... ok
+test_invalid_provenance_and_schema (test_workflow.Workflow.test_invalid_provenance_and_schema) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.212s
+
+OK (skipped=4)

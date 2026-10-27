@@ -1,5 +1,5 @@
 #pragma once
-#include "multirev.hpp"
+#include "jacobian.hpp"
 #include <cstddef>
 
 // ABI version and size checks protect ctypes clients against stale libraries.
@@ -18,6 +18,10 @@ extern "C" {
 LambertAbi lb_abi();
 LambertMultiAbi lb_multi_abi();
 int lb_cpu(const lambert::Input *, lambert::Result *, size_t, const lambert::Options *, const lambert::MinimumOptions *);
+// Independent optional ABI; existing velocity-only structs stay version 2.
+uint32_t lb_jacobian_size();
+int lb_cpu_jacobian(const lambert::Input *, lambert::Result *, lambert::Jacobian *, size_t,
+                    const lambert::Options *, const lambert::MinimumOptions *);
 // Validation probes: triples [x or target, lambda, q]; NaN q requests scalar lambda.
 int lb_roots(const double *, lambert::Root *, size_t, const lambert::Options *);
 // Scalar M>0 probes: rows [x/target, lambda, q, M, branch].
@@ -31,5 +35,7 @@ int lb_cuda_create(size_t, int, int, void **, char *, size_t);
 int lb_cuda_destroy(void *, char *, size_t);
 int lb_cuda_upload(void *, const lambert::Input *, size_t, char *, size_t);
 int lb_cuda_run(void *, const lambert::Options *, const lambert::MinimumOptions *, int, float *, char *, size_t);
+int lb_cuda_run_jacobian(void *, const lambert::Options *, const lambert::MinimumOptions *, int, float *, char *, size_t);
 int lb_cuda_download(void *, lambert::Result *, size_t, char *, size_t);
+int lb_cuda_download_jacobian(void *, lambert::Jacobian *, size_t, char *, size_t);
 }

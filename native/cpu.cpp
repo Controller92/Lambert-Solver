@@ -16,6 +16,18 @@ extern "C" LambertAbi lb_abi() {
 extern "C" LambertMultiAbi lb_multi_abi() {
     return {sizeof(lambert::Minimum), sizeof(lambert::MinimumOptions)};
 }
+extern "C" uint32_t lb_jacobian_size() { return sizeof(lambert::Jacobian); }
+extern "C" int lb_cpu_jacobian(const lambert::Input *input, lambert::Result *output,
+    lambert::Jacobian *jacobian, size_t n, const lambert::Options *options,
+    const lambert::MinimumOptions *minimum_options) {
+    if (!options || !minimum_options || (n && (!input || !output || !jacobian)) ||
+        n > SIZE_MAX / sizeof(lambert::Result) || n > SIZE_MAX / sizeof(lambert::Jacobian)) return 1;
+    for (size_t i = 0; i < n; ++i) {
+        output[i] = lambert::solve_selected(input[i], *options, *minimum_options);
+        jacobian[i] = lambert::terminal_jacobian(input[i], output[i]);
+    }
+    return 0;
+}
 extern "C" int lb_cpu(const lambert::Input *input, lambert::Result *output, size_t n,
                       const lambert::Options *options, const lambert::MinimumOptions *minimum_options) {
     if (!options || !minimum_options || (n && (!input || !output)) || n > SIZE_MAX / sizeof(lambert::Result))

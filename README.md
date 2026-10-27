@@ -34,6 +34,9 @@ search kernel time by 17.9% and includes a reproducible baseline comparison.
 The Python mathematical implementation remains the independently validated
 reference. The [native multi-revolution port](docs/eleventh-increment.md) adds explicit
 left/right branch rows, minimum diagnostics and complete velocities on the GPU.
+The optional [terminal-velocity Jacobian](docs/lambert-jacobian.md) adds a
+6-by-7 sensitivity matrix on C++ CPU and CUDA, with separate conditioning
+statuses and independent multiprecision/variational-equation validation.
 Legacy GUI integration remains subsequent work.
 
 The [multi-revolution preparation increment](docs/ninth-increment.md) adds Python

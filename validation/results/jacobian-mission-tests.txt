@@ -1,0 +1,12 @@
+test_pairwise_branch_dp_matches_exhaustive_chains (test_mission.Contracts.test_pairwise_branch_dp_matches_exhaustive_chains) ... ok
+test_parking_hyperbolas_and_capture_sign (test_mission.Contracts.test_parking_hyperbolas_and_capture_sign) ... ok
+test_rotating_surface_conics_and_signed_burns (test_mission.Contracts.test_rotating_surface_conics_and_signed_burns) ... ok
+test_strict_config (test_mission.Contracts.test_strict_config) ... ok
+test_checkpoint_completed_resume_and_reject_changed_config (test_mission.Integration.test_checkpoint_completed_resume_and_reject_changed_config) ... skipped 'explicit local-kernel opt-in'
+test_cpu_cuda_complete_branch_and_pair_cost_parity (test_mission.Integration.test_cpu_cuda_complete_branch_and_pair_cost_parity) ... skipped 'explicit local-kernel opt-in'
+test_shared_ephemeris_ownership_and_export_acceptance (test_mission.Integration.test_shared_ephemeris_ownership_and_export_acceptance) ... skipped 'explicit local-kernel opt-in'
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.003s
+
+OK (skipped=3)
