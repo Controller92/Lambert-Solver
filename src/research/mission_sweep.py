@@ -17,7 +17,7 @@ import numpy as np
 from scipy.optimize import brentq
 from scipy.stats import qmc
 from .mission_dynamics import MissionEvaluator, dynamic_path, DAY, AU
-from .mission_search import write_json, fingerprint, digest, refine
+from .mission_search import write_json, fingerprint, digest
 from .mission_config import load_mission
 from .mission_local import length
 from ..lambert_native import NativeEngine, INPUT_DTYPE
@@ -112,7 +112,8 @@ class Atlas:
         self.metric_hist[key]=self.metric_hist.get(key,0)+histogram
         # Weighted reservoir: preserve an unbiased bounded set for scatter/3D
         # highlights; histograms and on-disk records include EVERY accepted row.
-        ranks=self.rng.random(len(n));take=np.argpartition(ranks,min(511,len(n)-1))[:512]
+        ranks=self.rng.random(len(n));keep=min(2048,len(n))
+        take=np.argpartition(ranks,keep-1)[:keep]
         sample=dict(rank=ranks[take],**{k:v[take] for k,v in metrics.items()})
         for leg,indices in ((node-1,a),(node,b)):
             sample[f'r{leg}']=block['inputs']['r1'][n[take],leg,indices[take]]
@@ -150,8 +151,29 @@ class Atlas:
                 result=self.record(block,node,model,native,mask)
                 data.update({f'{model}_{node}_{k}':v for k,v in result.items()})
         path=self.run/'chunks'/f'{self.serial:06d}.npz'
-        np.savez_compressed(path,**data);self.serial+=1;self.rows+=len(block['decisions']);self.bytes+=path.stat().st_size
+        temporary=path.with_suffix('.tmp.npz')
+        np.savez_compressed(temporary,**data);temporary.replace(path)
+        self.serial+=1;self.rows+=len(block['decisions']);self.bytes+=path.stat().st_size
         return path
+
+    def export(self):
+        """Atomic aggregate snapshots; complete chunks remain the source data."""
+        arrays={f'metric_{k}':v for k,v in self.metric_hist.items()}
+        arrays.update({f'track_{k}':v for k,v in self.track_hist.items()})
+        arrays.update(metric_plane_edges=self.metric_edges[0],metric_gain_edges=self.metric_edges[1],track_edges=self.track_edges)
+        path=self.run/'atlas.tmp.npz';np.savez_compressed(path,**arrays);path.replace(self.run/'atlas.npz')
+        for k,v in self.reservoir.items():
+            path=self.run/f'highlights-{k}.tmp.npz';np.savez_compressed(path,**v);path.replace(self.run/f'highlights-{k}.npz')
+        write_json(self.run/'counts.json',self.counts)
+
+
+def select_root_seeds(records,limit=160):
+    """Preserve both Mars encounters rather than letting one dominate."""
+    selected=[]
+    for node in (1,3):
+        rows=sorted((r for r in records if r['node']==node),key=lambda r:r['gap'])
+        selected.extend(rows[:limit//2])
+    return selected
 
 
 def porkchops(e,run,step=2.):
@@ -232,14 +254,21 @@ def benchmarks(rows,flyby_rows,budget=30.):
                 limitation='Identical rows; failed/infeasible branch attempts included. CPU is wall time; GPU is resident event time, excluding transfers.')
 
 
-def run_sweep(config,outdir,seconds=900.,max_candidates=1048576,grid_step=2.,batch_size=1024):
-    if seconds<30 or seconds>86400 or max_candidates<1 or grid_step<=0 or not 1<=batch_size<=4096:
+def run_sweep(config,outdir,seconds=900.,max_candidates=1048576,grid_step=2.,batch_size=1024,
+              *,seed=958720,max_storage_gib=8.,benchmark_seconds=30.):
+    if (not all(math.isfinite(v) for v in (seconds,grid_step,max_storage_gib,benchmark_seconds)) or
+        seconds<30 or seconds>86400 or max_candidates<1 or grid_step<=0 or not 1<=batch_size<=4096 or
+        not 0<=seed<2**32 or max_storage_gib<=0 or not 0<benchmark_seconds<=3600):
         raise ValueError('Invalid sweep limits')
     if [v['body'] for v in config.visits]!=['399','499','20000001','499','399']:
         raise ValueError('This survey requires the five-visit EMC return sequence')
     config=deepcopy(config);config.backend='cuda';config.model='powered';config.batch_candidates=batch_size;config.validate()
     run=Path(outdir)/datetime.now(timezone.utc).strftime('emc-sweep-%Y%m%dT%H%M%S');run.mkdir(parents=True,exist_ok=False)
     started=time.perf_counter();deadline=started+seconds
+    reserve=min(max(150,benchmark_seconds+120),seconds*.35)
+    root_reserve=min(max(85,benchmark_seconds+55),seconds*.2)
+    write_json(run/'sweep-parameters.json',dict(seconds=seconds,max_candidates=max_candidates,grid_step=grid_step,
+        batch_size=batch_size,seed=seed,max_storage_gib=max_storage_gib,benchmark_seconds=benchmark_seconds))
     write_json(run/'config.json',config.to_dict())
     monitor=None
     done=threading.Event()
@@ -275,14 +304,14 @@ def run_sweep(config,outdir,seconds=900.,max_candidates=1048576,grid_step=2.,bat
             write_json(run/'policies.json',e.policy_list)
             atlas=Atlas(run,e.policy_list,e.e.mu)
             timings['porkchops']=porkchops(e,run,grid_step)
-            generator=qmc.Sobol(len(e.bounds),scramble=True,seed=958720)
+            generator=qmc.Sobol(len(e.bounds),scramble=True,seed=seed)
             # Known validated basins are labelled anchors, not new discoveries.
             anchors=[]
             for model in ('ballistic','powered'):
                 p=Path(__file__).resolve().parents[3]/'Mission-planner-runs/accepted'/f'validated-{model}'/'best.json'
                 if p.exists():anchors.append(json.loads(p.read_text())['decisions_days'])
             anchors_used=False;bulk_started=time.perf_counter();native_seconds=0.;storage_seconds=0.;blocks=0
-            while sampled<max_candidates and time.perf_counter()<deadline-min(150,seconds*.35) and atlas.bytes<8*1024**3:
+            while sampled<max_candidates and time.perf_counter()<deadline-reserve and atlas.bytes<max_storage_gib*1024**3:
                 u=generator.random_base2(int(math.log2(batch_size))) if blocks==0 and batch_size&(batch_size-1)==0 else generator.random(batch_size)
                 x=qmc.scale(u,e.bounds[:,0],e.bounds[:,1])
                 if not anchors_used:
@@ -323,23 +352,30 @@ def run_sweep(config,outdir,seconds=900.,max_candidates=1048576,grid_step=2.,bat
                     if len(n):
                         gap=np.abs(block['nodes'][node-1]['speed_difference'][n,a,b]);ids=np.argsort(gap)[:12]
                         for k in ids:near.append(dict(gap=float(gap[k]),node=node,x=x[n[k]].tolist(),a=int(a[k]),b=int(b[k])))
-                near=sorted(near,key=lambda r:r['gap'])[:160]
+                near=select_root_seeds(near)
                 t=time.perf_counter();atlas.save(block,matches);storage_seconds+=time.perf_counter()-t
                 if blocks%4==0:
                     progress=dict(stage='joined_sweep',candidates=sampled,lambert_attempts=sampled*4*e.K,flyby_attempts=sampled*4*e.K*e.K,
                         connections=atlas.counts,elapsed_seconds=time.perf_counter()-started)
                     write_json(run/'progress.json',progress);print(json.dumps(progress),flush=True)
+                    write_json(run/'ballistic-root-seeds.json',near)
+                    for model,candidate in best.items():write_json(run/f'checkpoint-best-{model}.json',candidate)
+                if blocks%32==0:
+                    atlas.export()
+                    write_json(run/'checkpoint.json',dict(stage='joined_sweep',completed_chunks=atlas.serial,
+                        sobol_generated=int(generator.num_generated),candidates=sampled,elapsed_seconds=time.perf_counter()-started,
+                        data_bytes=atlas.bytes,counts=atlas.counts))
             timings['sweep']=dict(candidates=sampled,blocks=blocks,wall_seconds=time.perf_counter()-bulk_started,
                 evaluation_seconds=native_seconds,storage_atlas_seconds=storage_seconds,duration_rejected=rejected_duration,
                 lambert_attempts=sampled*4*e.K,flyby_attempts=sampled*4*e.K*e.K)
             write_json(run/'ballistic-root-seeds.json',near)
             root_started=time.perf_counter();roots=0;root_attempts=0
-            for seed in near:
-                if time.perf_counter()>deadline-min(85,seconds*.2):break
+            for root_seed in near:
+                if time.perf_counter()>deadline-root_reserve:break
                 cfg=deepcopy(config);cfg.backend='cpu';cfg.model='ballistic'
-                choices=[e.policy_list[0]]*4;node=seed['node'];choices[node-1]=e.policy_list[seed['a']];choices[node]=e.policy_list[seed['b']]
+                choices=[e.policy_list[0]]*4;node=root_seed['node'];choices[node-1]=e.policy_list[root_seed['a']];choices[node]=e.policy_list[root_seed['b']]
                 with MissionEvaluator(cfg,run/'state-cache',choices,ephemeris=e.e) as local:
-                    x=np.array(seed['x']);col=node+1;lo,hi=local.bounds[col]
+                    x=np.array(root_seed['x']);col=node+1;lo,hi=local.bounds[col]
                     def value(t):
                         y=x.copy();y[col]=t;b=local.block(y[None,:])
                         if np.any(b['legs']['status'][0,[node-1,node]]):return math.nan
@@ -347,7 +383,7 @@ def run_sweep(config,outdir,seconds=900.,max_candidates=1048576,grid_step=2.,bat
                     ticks=np.unique(np.r_[np.linspace(lo,hi,17),x[col]])
                     values=[value(t) for t in ticks]
                     for i in range(len(ticks)-1):
-                        if time.perf_counter()>deadline-min(85,seconds*.2):break
+                        if time.perf_counter()>deadline-root_reserve:break
                         if not np.isfinite(values[i:i+2]).all() or values[i]*values[i+1]>0:continue
                         root_attempts+=1
                         try:t=brentq(value,ticks[i],ticks[i+1],xtol=1e-10,rtol=1e-14)
@@ -360,7 +396,8 @@ def run_sweep(config,outdir,seconds=900.,max_candidates=1048576,grid_step=2.,bat
                         path=run/'ballistic-roots'/f'{roots:05d}';path.mkdir(parents=True,exist_ok=True)
                         native=b['nodes'][node-1]['native'];metrics=encounter_metrics(b['arrival_states'][0,node,:3],b['arrival_states'][0,node,3:],
                             b['legs']['v2'][0,node-1,0]-b['arrival_states'][0,node,3:],b['legs']['v1'][0,node,0]-b['departure_states'][0,node,3:],
-                            np.cross(b['arrival_states'][0,2,:3],b['arrival_states'][0,2,3:]))
+                            np.cross((b['arrival_states'] if node==1 else b['departure_states'])[0,2,:3],
+                                     (b['arrival_states'] if node==1 else b['departure_states'])[0,2,3:]))
                         write_json(path/'connection.json',dict(node=node,decisions_days=y,policies=choices,metrics=metrics,
                             native={k:native[k][0,0,0] for k in native.dtype.names},complete_mission=False))
                         np.savez_compressed(path/'data.npz',decisions=y,arrivals=b['arrivals'],departures=b['departures'],arrival_states=b['arrival_states'],
@@ -376,19 +413,16 @@ def run_sweep(config,outdir,seconds=900.,max_candidates=1048576,grid_step=2.,bat
             fbrows['vout']=np.broadcast_to(vo[:,None,:,:],(len(vo),e.K,e.K,3)).reshape(-1,3)[:len(fbrows)]
             fbrows['reference']=[0,0,1];fbrows['mu']=e.mu[1];fbrows['rp_min']=3596200.;fbrows['rp_max']=3e8
             fbrows['speed_atol']=config.speed_atol_m_s;fbrows['speed_rtol']=config.speed_rtol;fbrows['mode']=int(Mode.POWERED)
-            timings['benchmarks']=benchmarks(benchmark_rows,fbrows,budget=min(30,max(2,deadline-time.perf_counter()-40)))
+            timings['benchmarks']=benchmarks(benchmark_rows,fbrows,budget=min(benchmark_seconds,max(2,deadline-time.perf_counter()-40)))
             for model,candidate in best.items():
                 cfg=deepcopy(config);cfg.model=model;modelrun=run/model;modelrun.mkdir()
                 write_json(modelrun/'config.json',cfg.to_dict());candidate['fingerprint']=fingerprint(cfg,e)
                 write_json(modelrun/'best.json',candidate)
-            write_json(run/'counts.json',atlas.counts)
-            arrays={f'metric_{k}':v for k,v in atlas.metric_hist.items()};arrays.update({f'track_{k}':v for k,v in atlas.track_hist.items()})
-            arrays.update(metric_plane_edges=atlas.metric_edges[0],metric_gain_edges=atlas.metric_edges[1],track_edges=atlas.track_edges)
-            np.savez_compressed(run/'atlas.npz',**arrays)
-            for k,v in atlas.reservoir.items():np.savez_compressed(run/f'highlights-{k}.npz',**v)
+            atlas.export()
             write_json(run/'timings.json',timings)
             summary=dict(status='completed_bounded_sweep',seconds_budget=seconds,elapsed_seconds=time.perf_counter()-started,
                 candidates=sampled,anchors=len(anchors),counts=atlas.counts,ballistic_refined_connections=roots,solar_mu_m3_s2=e.e.mu,
+                seed=seed,max_storage_gib=max_storage_gib,
                 best_delta_v_m_s={k:v['total_delta_v_m_s'] for k,v in best.items()},data_bytes=atlas.bytes,
                 track_points_outside_display=atlas.clipped,scope='two-body impulsive patched conics; finite sampled survey, not exhaustive or N-body validated',
                 graph_scope='All accepted sampled connections in metrics; all participating leg loci sampled uniformly in true anomaly, not time; 3D highlights are a subset.')
@@ -403,6 +437,14 @@ def run_sweep(config,outdir,seconds=900.,max_candidates=1048576,grid_step=2.,bat
                 summary.setdefault('independent_best_validation',{})[model]=result['status']
         summary['elapsed_seconds']=time.perf_counter()-started;write_json(run/'summary.json',summary)
         return run,summary
+    except BaseException as error:
+        import traceback
+        write_json(run/'failure.json',dict(error=str(error),type=type(error).__name__,traceback=traceback.format_exc(),
+            elapsed_seconds=time.perf_counter()-started,candidates=sampled))
+        if 'atlas' in locals():
+            atlas.export()
+            for model,candidate in best.items():write_json(run/f'checkpoint-best-{model}.json',candidate)
+        raise
     finally:
         done.set();watcher.join(timeout=3)
         if monitor is not None:monitor.terminate();monitor.wait(timeout=5)
@@ -413,5 +455,8 @@ if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--config',type=Path,required=True);p.add_argument('--outdir',type=Path,required=True)
     p.add_argument('--seconds',type=float,default=900);p.add_argument('--max-candidates',type=int,default=1048576)
     p.add_argument('--grid-step',type=float,default=2);p.add_argument('--batch-size',type=int,default=1024)
-    a=p.parse_args();run,summary=run_sweep(load_mission(a.config),a.outdir,a.seconds,a.max_candidates,a.grid_step,a.batch_size)
+    p.add_argument('--seed',type=int,default=958720);p.add_argument('--max-storage-gib',type=float,default=8.)
+    p.add_argument('--benchmark-seconds',type=float,default=30.)
+    a=p.parse_args();run,summary=run_sweep(load_mission(a.config),a.outdir,a.seconds,a.max_candidates,a.grid_step,a.batch_size,
+        seed=a.seed,max_storage_gib=a.max_storage_gib,benchmark_seconds=a.benchmark_seconds)
     print(json.dumps(dict(run=str(run),**summary)),flush=True)

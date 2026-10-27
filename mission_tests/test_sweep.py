@@ -1,12 +1,32 @@
 """Independent geometry/metric contracts for the EMC survey."""
 import unittest
+import json
+from pathlib import Path
+import tempfile
 import numpy as np
-from src.research.mission_sweep import angle,encounter_metrics,sample_arc
+from src.research.mission_sweep import angle,encounter_metrics,sample_arc,select_root_seeds,Atlas
 from src.lambert_native import NativeEngine,pack_problems
 from src.lambert_geometry import LambertInput
 
 
 class SweepContracts(unittest.TestCase):
+    def test_ballistic_seeds_preserve_both_encounters(self):
+        records=[dict(node=1,gap=100+i) for i in range(200)]+[dict(node=3,gap=i) for i in range(200)]
+        selected=select_root_seeds(records)
+        self.assertEqual(len(selected),160)
+        self.assertEqual(sum(r['node']==1 for r in selected),80)
+        self.assertEqual(max(r['gap'] for r in selected if r['node']==3),79)
+
+    def test_atomic_atlas_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            atlas=Atlas(directory,[],1.)
+            atlas.counts={'ballistic-1':3};atlas.metric_hist['ballistic-1']=np.ones((360,400))
+            atlas.export()
+            with np.load(Path(directory)/'atlas.npz') as saved:
+                self.assertEqual(saved['metric_ballistic-1'].shape,(360,400))
+            self.assertEqual(json.loads((Path(directory)/'counts.json').read_text()),atlas.counts)
+            self.assertFalse(list(Path(directory).glob('*.tmp.npz')))
+
     def test_speed_gain_and_plane_rotation_are_different_quantities(self):
         result=encounter_metrics(np.array((1.,0,0)),np.array((0,1.,0)),np.array((0,1.,0)),
             np.array((0,0,1.)),np.array((0.,-1.,1.)))

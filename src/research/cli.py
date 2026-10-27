@@ -55,6 +55,9 @@ def parser():
     sweep.add_argument('--max-candidates',type=int,default=1048576)
     sweep.add_argument('--grid-step',type=float,default=2.)
     sweep.add_argument('--batch-size',type=int,default=1024)
+    sweep.add_argument('--seed',type=int,default=958720)
+    sweep.add_argument('--max-storage-gib',type=float,default=8.)
+    sweep.add_argument('--benchmark-seconds',type=float,default=30.)
     validate = sub.add_parser('mission-validate',help='Independently check an exported mission candidate')
     validate.add_argument('candidate',type=Path)
     validate.add_argument('--config',type=Path)
@@ -275,7 +278,8 @@ def main(argv=None):
         if args.command=='mission-sweep':
             from .mission_config import load_mission
             from .mission_sweep import run_sweep
-            path,summary=run_sweep(load_mission(args.config),args.outdir,args.seconds,args.max_candidates,args.grid_step,args.batch_size)
+            path,summary=run_sweep(load_mission(args.config),args.outdir,args.seconds,args.max_candidates,args.grid_step,args.batch_size,
+                seed=args.seed,max_storage_gib=args.max_storage_gib,benchmark_seconds=args.benchmark_seconds)
             print(json.dumps(dict(run=str(path.resolve()),**summary),indent=2));return 0
         if args.command in ('mission-search','mission-evaluate'):
             from .mission_config import load_mission

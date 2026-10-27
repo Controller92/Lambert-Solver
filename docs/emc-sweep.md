@@ -17,6 +17,21 @@ Stages check the remaining time between blocks. An individual block or final
 validation may finish slightly after the requested budget. Dense independent
 grids run first; use a larger `--grid-step` for a shorter preflight. Output is
 bounded by one million sampled mission tuples and an 8 GiB chunk-storage limit.
+Both limits can be raised explicitly with `--max-candidates` and
+`--max-storage-gib`. `--seed` selects a reproducible Sobol realization, and
+`--benchmark-seconds` controls the combined CPU/GPU stress interval. Complete
+NPZ chunks are committed atomically. Every 32 blocks, an aggregate atlas
+snapshot and Sobol-position checkpoint are saved; best candidates and local
+ballistic seeds are saved more frequently. Checkpoints preserve evidence for
+recovery, rather than promising bitwise automatic restart.
+
+`tools/run_emc_overnight.py --job-dir /absolute/output/folder --finish-by
+2026-10-27T05:00:00-06:00` supervises a longer survey with an absolute deadline.
+It targets computation completion 35 minutes early, reserves a five-minute
+stress test, and writes a report after checking saved connection counts. A
+hard child-process timeout leaves ten minutes before the deadline. The
+supervisor never targets unrelated processes and preserves partial outputs
+on failure. Use a new job directory for every launch.
 
 ## What is searched and saved
 
@@ -39,6 +54,7 @@ bounded by one million sampled mission tuples and an 8 GiB chunk-storage limit.
   incoming/outgoing v-infinity magnitudes. Bracketed roots are re-solved and
   must pass the normal native ballistic and solar-clearance checks. Finite
   bracket sampling is not an exhaustive search and can miss tangencies.
+  The seed archive reserves space for both Mars encounters.
 * Previously validated mission tuples, when present in the local workspace,
   are explicitly included as anchors. Counts include these anchors; retaining
   one does not constitute a new trajectory discovery.
