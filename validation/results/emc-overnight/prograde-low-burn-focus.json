@@ -1,0 +1,26 @@
+{
+  "burn_limit_km_s": 5.0,
+  "scope": "Filtered highlight set, not a complete population count or an optimality bound",
+  "groups": {
+    "ballistic-1": {
+      "input_highlights": 73,
+      "selected": 65,
+      "source_sha256": "9f9889c67ea2b1a2ce84c471dbca613b3b445226f65773070561a5417ecb0d52"
+    },
+    "powered-1": {
+      "input_highlights": 2048,
+      "selected": 12,
+      "source_sha256": "c2dc42aa7294784eb0c041160dc92c95750a920e7c08720527e7d69136c95688"
+    },
+    "ballistic-3": {
+      "input_highlights": 77,
+      "selected": 75,
+      "source_sha256": "5a6f7a008ec9d942017d2a42828a85cf3640833bd23dad685d50b4193ab6aca0"
+    },
+    "powered-3": {
+      "input_highlights": 2048,
+      "selected": 29,
+      "source_sha256": "7056882dcd61bed84bb4add91d49ebb6171187c3d91edbea9502fee0da3a88b9"
+    }
+  }
+}

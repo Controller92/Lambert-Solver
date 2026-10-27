@@ -1,0 +1,138 @@
+{
+  "ballistic-1": {
+    "count": 73,
+    "plane_at_least_8deg_positive_gain_ceres_alignment_within_2deg": 0,
+    "ranges": {
+      "plane_change_deg": [
+        0.009858015377703781,
+        3.7184427045662822
+      ],
+      "heliocentric_speed_gain_km_s": [
+        -0.8756406455679535,
+        0.9839005912302091
+      ],
+      "vinf_speed_gain_km_s": [
+        -1.939042704179883e-12,
+        1.822627382352948e-12
+      ],
+      "ceres_plane_before_deg": [
+        0.5048557342937776,
+        170.96561192728845
+      ],
+      "ceres_plane_after_deg": [
+        0.16115180649003755,
+        172.07944678038234
+      ],
+      "burn_km_s": [
+        0.0,
+        0.0
+      ],
+      "altitude_km": [
+        200.00000000013364,
+        39161.00799494415
+      ]
+    }
+  },
+  "ballistic-3": {
+    "count": 77,
+    "plane_at_least_8deg_positive_gain_ceres_alignment_within_2deg": 0,
+    "ranges": {
+      "plane_change_deg": [
+        0.01737546251074629,
+        4.251726237597966
+      ],
+      "heliocentric_speed_gain_km_s": [
+        -1.9664064771783305,
+        1.17763392401041
+      ],
+      "vinf_speed_gain_km_s": [
+        -2.406522980891168e-12,
+        9.367795428261161e-13
+      ],
+      "ceres_plane_before_deg": [
+        8.035815305784183,
+        170.88518455794303
+      ],
+      "ceres_plane_after_deg": [
+        7.7828169020839555,
+        170.56751139033233
+      ],
+      "burn_km_s": [
+        0.0,
+        0.0
+      ],
+      "altitude_km": [
+        200.0,
+        18375.853585865865
+      ]
+    }
+  },
+  "powered-1": {
+    "count": 4887315,
+    "plane_at_least_8deg_positive_gain_ceres_alignment_within_2deg": 46787,
+    "ranges": {
+      "plane_change_deg": [
+        0.00013753931146129865,
+        179.99999572293106
+      ],
+      "heliocentric_speed_gain_km_s": [
+        -11.23203120422727,
+        26.89399853591311
+      ],
+      "vinf_speed_gain_km_s": [
+        -16.519639880373887,
+        57.98817412336422
+      ],
+      "ceres_plane_before_deg": [
+        0.04260511667838045,
+        179.80920578453222
+      ],
+      "ceres_plane_after_deg": [
+        0.00010036089054987918,
+        179.99999637301548
+      ],
+      "burn_km_s": [
+        7.44252552398255e-14,
+        57.09039266072451
+      ],
+      "altitude_km": [
+        200.00000000045216,
+        296594.34493263764
+      ]
+    }
+  },
+  "powered-3": {
+    "count": 5112183,
+    "plane_at_least_8deg_positive_gain_ceres_alignment_within_2deg": 0,
+    "ranges": {
+      "plane_change_deg": [
+        1.7364886712715123e-05,
+        179.99999700124366
+      ],
+      "heliocentric_speed_gain_km_s": [
+        -24.0558434011183,
+        13.165639274598503
+      ],
+      "vinf_speed_gain_km_s": [
+        -54.99045194854057,
+        20.194321964607234
+      ],
+      "ceres_plane_before_deg": [
+        4.272243692197504e-06,
+        179.99999460240568
+      ],
+      "ceres_plane_after_deg": [
+        0.08396498650577014,
+        179.84466727109657
+      ],
+      "burn_km_s": [
+        1.4344737118816257e-13,
+        53.653331644941005
+      ],
+      "altitude_km": [
+        200.00000000045216,
+        296553.80303093314
+      ]
+    }
+  }
+}

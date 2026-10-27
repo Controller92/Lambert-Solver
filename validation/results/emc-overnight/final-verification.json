@@ -1,0 +1,52 @@
+{
+  "status": "passed",
+  "completed_utc": "2026-10-27T09:25:55.674056+00:00",
+  "counts_match_saved_atlas": true,
+  "all_record_statistics_match_counts": true,
+  "source_snapshot_checks": {
+    "src/research/mission_config.py": true,
+    "src/research/mission_local.py": true,
+    "src/research/mission_dynamics.py": true,
+    "src/research/mission_search.py": true,
+    "src/research/ephemeris.py": true,
+    "src/lambert_native.py": true,
+    "src/flyby_native.py": true,
+    "src/flyby.py": true,
+    "src/research/mission_sweep.py": true,
+    "src/research/mission_sweep_plot.py": true,
+    "src/research/cli.py": true
+  },
+  "best_equals_prior_anchor": {
+    "ballistic": true,
+    "powered": true
+  },
+  "full_chain_independent_check_counts": {
+    "ballistic": 177,
+    "powered": 173
+  },
+  "local_root_checks": 148,
+  "maximum_asymptote_error_m_s": 2.402882788696715e-09,
+  "maximum_gooding_velocity_error_m_s": 2.700732287272869e-10,
+  "supervisor_processes_exited": true,
+  "temporary_sleep_inhibitor_released": true,
+  "scope": "Finite patched-conic survey; no new N-body correction or global optimality certification",
+  "artifact_sha256": {
+    "report.md": "2cc9c76a4324aa073609bc3a1d7f819e12e34d64915f3afc2462398f1a22bc8b",
+    "connection-statistics.json": "365210d31a463201c733d4480eca39b6f96980ddde17f2f1f93e0f76a3121dde",
+    "resource-statistics.json": "4a335866a362cbe0eb4c30d79e4c354c3d18cddcc15fd9bc9b1852be66ef13e0",
+    "survey/emc-sweep-20261027T020542/summary.json": "e253f4a2d5cc3fe9de00f2d91a19160a4712869651bee0ac962f0acf7d282b96",
+    "survey/emc-sweep-20261027T020542/timings.json": "ed48cd0a0e26b8097b9a20bda31cbf44635a8b3e43c0c34421a47fb16718e8ea",
+    "survey/emc-sweep-20261027T020542/fingerprint.json": "7dcca6d9db69ecdaec192b3553fc6ad4eefe2a21c9ae10527acdcdafc0b59927",
+    "survey/emc-sweep-20261027T020542/ballistic-root-independent-checks.json": "9b37af9c3cbbdc9c1e3d0de658ca9853e36519bf0c48654a3b6f7f9917332b48",
+    "survey/emc-sweep-20261027T020542/prograde-low-burn-focus.json": "57bafc9ae0bb4225b5f941158822c37c35d1926e82f760a371084a7450b209d7",
+    "survey/emc-sweep-20261027T020542/ballistic-3d-highlights.png": "5a9f918fce72279535c70ef946c336f539038dcaf9c93d8427e9f6976f8d786f",
+    "survey/emc-sweep-20261027T020542/ballistic-all-trajectory-coverage.png": "8b58112581157d1fe0cac99d7ab1799aa47439ae52604e29068763d64575120d",
+    "survey/emc-sweep-20261027T020542/ballistic-plane-change-speed-gain.png": "01168b8c26c744674014349e024043f92b538272675d1dff24b083b7ace467e7",
+    "survey/emc-sweep-20261027T020542/cpu-gpu-throughput.png": "06ef13617d7b70e3977f3b407195f3cc63483b89b196ed5b0290dfa2af9131b9",
+    "survey/emc-sweep-20261027T020542/four-leg-porkchops.png": "95e4f35061c06575b5b6caa9f088cb2b3e0e5073982584f139726d585a02aafd",
+    "survey/emc-sweep-20261027T020542/powered-3d-highlights.png": "a78a748ca7001cccad5775c558c896db69fdafcd3b2506900249203c4ba12b25",
+    "survey/emc-sweep-20261027T020542/powered-all-trajectory-coverage.png": "c033d57262bdaa999c999f78e91237f24f52ff74fb170b5024b1eb413fafc0ee",
+    "survey/emc-sweep-20261027T020542/powered-plane-change-speed-gain.png": "9535ee50626b284cce7e8433765480628eb04515ad96f7a3614c51f6a596f979",
+    "survey/emc-sweep-20261027T020542/prograde-low-burn-focus.png": "cddf92121b8093a4217f55e4712fcba22829955528ac9276a9130aceea930ac2"
+  }
+}

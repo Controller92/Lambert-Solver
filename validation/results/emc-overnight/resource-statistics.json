@@ -1,0 +1,30 @@
+{
+  "process_equivalent_cores": {
+    "mean": 1.1728619691947748,
+    "peak": 15.9936
+  },
+  "system_busy_percent": {
+    "mean": 7.8213599922012085,
+    "peak": 100.0
+  },
+  "rss_mb": {
+    "mean": 1255.2494263209203,
+    "peak": 1871.266
+  },
+  "gpu_utilization_percent": {
+    "mean": 7.125214408233276,
+    "peak": 100.0
+  },
+  "gpu_memory_mib": {
+    "mean": 225.38117885544986,
+    "peak": 261.0
+  },
+  "gpu_power_w": {
+    "mean": 10.429441758927178,
+    "peak": 44.15
+  },
+  "gpu_temperature_c": {
+    "mean": 43.19043349446437,
+    "peak": 73.0
+  }
+}

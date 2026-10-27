@@ -1,0 +1,1314 @@
+{
+  "schema_version": 1,
+  "status": "passed_patched_conic",
+  "candidate_sha256": "dae86aed8dbca10a97c87f4e084e2b5c83ebf908e6f2088142163e109b30870e",
+  "config_sha256": "56d09483873d2c49c9302cc7b750e83df9194d3be1a0b2dfb8b474e236df7bee",
+  "checks": [
+    {
+      "name": "candidate explicitly feasible",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "schema",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "configuration fingerprint",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "model matches configuration",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "frame and time scale",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "recorded kernels match",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "solar GM",
+      "value": 0.0,
+      "limit": 1327124.400412794,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 0 body sequence",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 0 native statuses",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 0 precision",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 0 TOF below minimum",
+      "value": -26.60083811717729,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "leg 0 TOF above maximum",
+      "value": -323.3991618828227,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "leg 0 departure body state",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "SI",
+      "passed": true
+    },
+    {
+      "name": "leg 0 arrival body state",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "SI",
+      "passed": true
+    },
+    {
+      "name": "leg 0 departure date label",
+      "value": 4.76837158203125e-07,
+      "limit": 2e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "leg 0 arrival date label",
+      "value": 4.76837158203125e-07,
+      "limit": 2e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "leg 0 configured revolutions",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 0 configured orientation",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 0 orientation identity",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 0 branch index",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 0 independent Gooding velocities",
+      "value": 3.092281986027956e-11,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "leg 0 DOP853 termination",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 0 independent propagation position",
+      "value": 0.0003689228417039465,
+      "limit": 500.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "leg 0 independent propagation velocity",
+      "value": 4.6493330013607324e-11,
+      "limit": 0.001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "leg 0 revolution count from propagation",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 0 solar clearance",
+      "value": -61714452515.817535,
+      "limit": 1.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "leg 0 recorded perihelion",
+      "value": 0.0,
+      "limit": 1.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "leg 1 body sequence",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 1 native statuses",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 1 precision",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 1 TOF below minimum",
+      "value": -803.9348522954875,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "leg 1 TOF above maximum",
+      "value": -596.0651477045125,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "leg 1 departure body state",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "SI",
+      "passed": true
+    },
+    {
+      "name": "leg 1 arrival body state",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "SI",
+      "passed": true
+    },
+    {
+      "name": "leg 1 departure date label",
+      "value": 4.76837158203125e-07,
+      "limit": 2e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "leg 1 arrival date label",
+      "value": 2.384185791015625e-07,
+      "limit": 2e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "leg 1 configured revolutions",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 1 configured orientation",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 1 orientation identity",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 1 branch index",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 1 independent Gooding velocities",
+      "value": 1.6370904631912708e-11,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "leg 1 DOP853 termination",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 1 independent propagation position",
+      "value": 0.004526179699682358,
+      "limit": 500.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "leg 1 independent propagation velocity",
+      "value": 1.9403745610662856e-10,
+      "limit": 0.001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "leg 1 revolution count from propagation",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 1 solar clearance",
+      "value": -70140947720.35434,
+      "limit": 1.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "leg 1 recorded perihelion",
+      "value": 0.0,
+      "limit": 1.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "leg 2 body sequence",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 2 native statuses",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 2 precision",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 2 TOF below minimum",
+      "value": -465.7704249022514,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "leg 2 TOF above maximum",
+      "value": -934.2295750977486,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "leg 2 departure body state",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "SI",
+      "passed": true
+    },
+    {
+      "name": "leg 2 arrival body state",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "SI",
+      "passed": true
+    },
+    {
+      "name": "leg 2 departure date label",
+      "value": 4.76837158203125e-07,
+      "limit": 2e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "leg 2 arrival date label",
+      "value": 0.0,
+      "limit": 2e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "leg 2 configured revolutions",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 2 configured orientation",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 2 orientation identity",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 2 branch index",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 2 independent Gooding velocities",
+      "value": 6.558459564010244e-12,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "leg 2 DOP853 termination",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 2 independent propagation position",
+      "value": 0.002989841989602308,
+      "limit": 500.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "leg 2 independent propagation velocity",
+      "value": 2.69226394458267e-10,
+      "limit": 0.001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "leg 2 revolution count from propagation",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 2 solar clearance",
+      "value": -81858085482.62129,
+      "limit": 1.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "leg 2 recorded perihelion",
+      "value": 0.0,
+      "limit": 1.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "leg 3 body sequence",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 3 native statuses",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 3 precision",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 3 TOF below minimum",
+      "value": -61.961927579812425,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "leg 3 TOF above maximum",
+      "value": -338.0380724201876,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "leg 3 departure body state",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "SI",
+      "passed": true
+    },
+    {
+      "name": "leg 3 arrival body state",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "SI",
+      "passed": true
+    },
+    {
+      "name": "leg 3 departure date label",
+      "value": 0.0,
+      "limit": 2e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "leg 3 arrival date label",
+      "value": 2.384185791015625e-07,
+      "limit": 2e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "leg 3 configured revolutions",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 3 configured orientation",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 3 orientation identity",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 3 branch index",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 3 independent Gooding velocities",
+      "value": 1.3116919128020487e-11,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "leg 3 DOP853 termination",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 3 independent propagation position",
+      "value": 0.0005341196538040008,
+      "limit": 500.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "leg 3 independent propagation velocity",
+      "value": 1.620847403361504e-10,
+      "limit": 0.001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "leg 3 revolution count from propagation",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "leg 3 solar clearance",
+      "value": -70503267830.16858,
+      "limit": 1.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "leg 3 recorded perihelion",
+      "value": 0.0,
+      "limit": 1.0,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "launch before window",
+      "value": -94848056.21357441,
+      "limit": 2e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "launch after window",
+      "value": -62831943.78642559,
+      "limit": 2e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "maximum mission duration",
+      "value": -1544.352905857566,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "recorded duration",
+      "value": 0.0,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "recorded launch C3",
+      "value": 5.684341886080802e-14,
+      "limit": 1e-08,
+      "unit": "km2/s2",
+      "passed": true
+    },
+    {
+      "name": "recorded arrival speed",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 0 identity",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 0 GM",
+      "value": 0.0,
+      "limit": 3.9860043550702264,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 0 parking radius",
+      "value": 9.313225746154785e-10,
+      "limit": 1e-05,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 0 circular speed squared",
+      "value": 2.9802322387695312e-08,
+      "limit": 0.0001,
+      "unit": "m2/s2",
+      "passed": true
+    },
+    {
+      "name": "visit 0 circular tangency",
+      "value": 7.338985376390987e-17,
+      "limit": 1e-10,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 0 local asymptote",
+      "value": 2.7661201467245607e-12,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 0 burn vector",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 0 burn magnitude",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 1 identity",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 1 GM",
+      "value": 0.0,
+      "limit": 0.42828373620699084,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 1 arrival epoch",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "visit 1 departure epoch",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "visit 1 required incoming asymptote",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 1 required outgoing asymptote",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 1 flyby model",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 1 shared epoch",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "visit 1 shared body state",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "SI",
+      "passed": true
+    },
+    {
+      "name": "visit 1 native status",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 1 minimum radius",
+      "value": -1.3457611203193665e-07,
+      "limit": 0.0001,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 1 maximum radius",
+      "value": -296403799.9999999,
+      "limit": 0.0001,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 1 recorded radius",
+      "value": 9.313225746154785e-10,
+      "limit": 0.0001,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 1 incoming conic",
+      "value": 4.570154315443183e-12,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 1 outgoing conic",
+      "value": 7.4402281244314e-11,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 1 incoming periapsis tangency",
+      "value": 1.2266986554960616e-17,
+      "limit": 1e-10,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 1 outgoing periapsis tangency",
+      "value": 1.2266986554960616e-17,
+      "limit": 1e-10,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 1 tangential powered geometry",
+      "value": 0.0,
+      "limit": 1e-10,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 1 impulse magnitude",
+      "value": 0.0,
+      "limit": 1e-05,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 1 unpowered velocity continuity",
+      "value": 0.0,
+      "limit": 1e-05,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 1 unpowered speed matching",
+      "value": 7.275957614183426e-11,
+      "limit": 1.0021060042048898e-05,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 2 identity",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 2 GM",
+      "value": 0.0,
+      "limit": 0.0006262888864440992,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 2 arrival epoch",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "visit 2 departure epoch",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "visit 2 required incoming asymptote",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 2 required outgoing asymptote",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 2 body frame",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 2 recorded surface radius",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 2 minimum stay",
+      "value": -119.87905124770546,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "visit 2 maximum stay",
+      "value": -215.12094875229454,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "visit 2 incoming rotation",
+      "value": 0.0,
+      "limit": 1e-12,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 2 outgoing rotation",
+      "value": 0.0,
+      "limit": 1e-12,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 2 spherical surface radius",
+      "value": 1.1641532182693481e-10,
+      "limit": 0.0001,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 2 same site at arrival",
+      "value": 1.4551915228366852e-11,
+      "limit": 0.0001,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 2 same site at departure",
+      "value": 7.275957614183426e-12,
+      "limit": 0.0001,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 2 ground arrival rotation velocity",
+      "value": 0.0,
+      "limit": 1e-07,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 2 ground departure rotation velocity",
+      "value": 0.0,
+      "limit": 1e-07,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 2 incoming conic",
+      "value": 3.756829674298002e-12,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 2 outgoing conic",
+      "value": 1.8189894035458565e-12,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 2 landing tangency",
+      "value": 2.1581132855617724e-15,
+      "limit": 1e-10,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 2 departure tangency",
+      "value": 2.1006969188924e-15,
+      "limit": 1e-10,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 2 landing burn",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 2 departure burn",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 3 identity",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 3 GM",
+      "value": 0.0,
+      "limit": 0.42828373620699084,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 3 arrival epoch",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "visit 3 departure epoch",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "visit 3 required incoming asymptote",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 3 required outgoing asymptote",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 3 flyby model",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 3 shared epoch",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "s",
+      "passed": true
+    },
+    {
+      "name": "visit 3 shared body state",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "SI",
+      "passed": true
+    },
+    {
+      "name": "visit 3 native status",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 3 minimum radius",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 3 maximum radius",
+      "value": -296403800.0,
+      "limit": 0.0001,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 3 recorded radius",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 3 incoming conic",
+      "value": 1.8256524160744382e-12,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 3 outgoing conic",
+      "value": 1.474442462856853e-10,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 3 incoming periapsis tangency",
+      "value": 8.472406204115043e-18,
+      "limit": 1e-10,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 3 outgoing periapsis tangency",
+      "value": 8.472406204115043e-18,
+      "limit": 1e-10,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 3 tangential powered geometry",
+      "value": 0.0,
+      "limit": 1e-10,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 3 impulse magnitude",
+      "value": 0.0,
+      "limit": 1e-05,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 3 unpowered velocity continuity",
+      "value": 0.0,
+      "limit": 1e-05,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 3 unpowered speed matching",
+      "value": 1.4733814168721437e-10,
+      "limit": 1.0014869755141143e-05,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 4 identity",
+      "value": 0.0,
+      "limit": 0.0,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 4 GM",
+      "value": 0.0,
+      "limit": 3.9860043550702264,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 4 parking radius",
+      "value": 9.313225746154785e-10,
+      "limit": 1e-05,
+      "unit": "m",
+      "passed": true
+    },
+    {
+      "name": "visit 4 circular speed squared",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "m2/s2",
+      "passed": true
+    },
+    {
+      "name": "visit 4 circular tangency",
+      "value": 1.3760597580733108e-17,
+      "limit": 1e-10,
+      "unit": "",
+      "passed": true
+    },
+    {
+      "name": "visit 4 local asymptote",
+      "value": 1.016845989170083e-12,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 4 burn vector",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "visit 4 burn magnitude",
+      "value": 0.0,
+      "limit": 1e-06,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "decision vector reconstructs timeline",
+      "value": 2.1150793776472546e-12,
+      "limit": 1e-08,
+      "unit": "days",
+      "passed": true
+    },
+    {
+      "name": "full maneuver budget",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    },
+    {
+      "name": "each maneuver budget item",
+      "value": 0.0,
+      "limit": 0.0001,
+      "unit": "m/s",
+      "passed": true
+    }
+  ],
+  "legs": [
+    {
+      "index": 0,
+      "gooding_velocity_error_m_s": 3.092281986027956e-11,
+      "ode_position_error_m": 0.0003689228417039465,
+      "ode_velocity_error_m_s": 4.6493330013607324e-11,
+      "propagated_revolutions": 0,
+      "solar_perihelion_m": 91634026655.81754
+    },
+    {
+      "index": 1,
+      "gooding_velocity_error_m_s": 1.6370904631912708e-11,
+      "ode_position_error_m": 0.004526179699682358,
+      "ode_velocity_error_m_s": 1.9403745610662856e-10,
+      "propagated_revolutions": 0,
+      "solar_perihelion_m": 100060521860.35434
+    },
+    {
+      "index": 2,
+      "gooding_velocity_error_m_s": 6.558459564010244e-12,
+      "ode_position_error_m": 0.002989841989602308,
+      "ode_velocity_error_m_s": 2.69226394458267e-10,
+      "propagated_revolutions": 0,
+      "solar_perihelion_m": 111777659622.62129
+    },
+    {
+      "index": 3,
+      "gooding_velocity_error_m_s": 1.3116919128020487e-11,
+      "ode_position_error_m": 0.0005341196538040008,
+      "ode_velocity_error_m_s": 1.620847403361504e-10,
+      "propagated_revolutions": 0,
+      "solar_perihelion_m": 100422841970.16858
+    }
+  ],
+  "encounters": [
+    {
+      "index": 1,
+      "kind": "flyby",
+      "periapsis_altitude_m": 200000.00000013458,
+      "delta_v_m_s": 0.0,
+      "vinf_speed_difference_m_s": 7.275957614183426e-11
+    },
+    {
+      "index": 2,
+      "kind": "surface",
+      "stay_days": 149.87905124770546,
+      "landing_delta_v_m_s": 11716.830073368106,
+      "launch_delta_v_m_s": 11590.891504037761
+    },
+    {
+      "index": 3,
+      "kind": "flyby",
+      "periapsis_altitude_m": 200000.0,
+      "delta_v_m_s": 0.0,
+      "vinf_speed_difference_m_s": 1.4733814168721437e-10
+    }
+  ],
+  "validator_sha256": "aa64a189963c4ea27a0d4d9c4154481bc4d91010f332bb0ee64a51eef76a0892",
+  "versions": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "lamberthub": "1.0.0",
+    "spiceypy": "8.3.0"
+  },
+  "maximum_ode_position_error_m": 0.004526179699682358,
+  "maximum_gooding_velocity_error_m_s": 3.092281986027956e-11,
+  "scope": "Independent two-body leg propagation and local conic/rotation/budget checks. Not N-body/finite-burn/terrain/flight validation."
+}

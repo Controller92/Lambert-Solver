@@ -1,0 +1,40 @@
+{
+  "status": "completed_bounded_sweep",
+  "seconds_budget": 29958.138231,
+  "elapsed_seconds": 25663.889849568,
+  "candidates": 50000000,
+  "anchors": 2,
+  "counts": {
+    "powered_complete_count": 349602,
+    "ballistic_complete_count": 1,
+    "powered-1": 4887315,
+    "ballistic-1": 73,
+    "powered-3": 5112183,
+    "ballistic-3": 77
+  },
+  "ballistic_refined_connections": 148,
+  "solar_mu_m3_s2": 1.3271244004127939e+20,
+  "seed": 958720,
+  "max_storage_gib": 64.0,
+  "best_delta_v_m_s": {
+    "powered": 26999.33631874196,
+    "ballistic": 52739.0124325204
+  },
+  "data_bytes": 66500856199,
+  "track_points_outside_display": {
+    "powered-1-1": 0,
+    "powered-1-2": 0,
+    "ballistic-1-1": 0,
+    "ballistic-1-2": 0,
+    "powered-3-1": 0,
+    "powered-3-2": 0,
+    "ballistic-3-1": 0,
+    "ballistic-3-2": 0
+  },
+  "scope": "two-body impulsive patched conics; finite sampled survey, not exhaustive or N-body validated",
+  "graph_scope": "All accepted sampled connections in metrics; all participating leg loci sampled uniformly in true anomaly, not time; 3D highlights are a subset.",
+  "independent_best_validation": {
+    "powered": "passed_patched_conic",
+    "ballistic": "passed_patched_conic"
+  }
+}

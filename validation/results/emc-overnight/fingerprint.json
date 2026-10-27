@@ -1,0 +1,66 @@
+{
+  "config_sha256": "fa5e3160f0cb82ffe5ef9064207c80e5eb5196ca9b26c3c2a0994c1f052a627c",
+  "kernels": [
+    {
+      "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/naif0012.tls",
+      "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
+    },
+    {
+      "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/de440s.bsp",
+      "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
+    },
+    {
+      "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/gm_de440.tpc",
+      "sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140"
+    },
+    {
+      "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/20000001.bsp",
+      "sha256": "a00a5d6e014e06b5f7888d035522909b67fcd50f129cb871c836a289a8bde9f5"
+    },
+    {
+      "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/mar099s.bsp",
+      "sha256": "997dc93ba640e476da7a494d2237dcdeb145e528db37be8ccee588c615e4e1ff"
+    },
+    {
+      "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/Lambert-Solver/data/kernels/pck00011.tpc",
+      "sha256": "3dff7b1dbeceaa01f25467767d3fa25816051c85d162d1edf04acb310ee28bb1"
+    }
+  ],
+  "libraries": {
+    "liblambert_cpu.so": "4e546a1285123430c4a290c9819a523ed827afceccf0fc899b0e0d711e44132d",
+    "libflyby_cpu.so": "cde9b041c2ed3028283c56d2f91348926705e0ba6b8cef6ed2d391f67c6033cd",
+    "liblambert_cuda.so": "0be91e68f749dda995e4f27836d172db1879c72091f57956ab7b6a9e96d1e199",
+    "libflyby_cuda.so": "51e835e07caf0c5a4c617368f867bdbc963c9fef57b1795809388a013ae1c69f"
+  },
+  "modules": {
+    "src/research/mission_config.py": "3cb99910c5df76881135ffc9ea38cc3c76e291ee3205485383070f6732daf11b",
+    "src/research/mission_local.py": "08eb9691dee5a645a00b4758d258782251e1a124b584cc04658dcb6aef25aa76",
+    "src/research/mission_dynamics.py": "5147af3b29480066b6e0e57dd34ccd9d3c8d969d0adaa955e0c52e79193d34d0",
+    "src/research/mission_search.py": "36272251b45edf28fb702f96062ffd93a9ecebbb04efd8e9387b39c465e9f7f0",
+    "src/research/ephemeris.py": "5662032b65069860df22728180d8cca36ccdcafebb65aad7a38a3e41d7999d85",
+    "src/lambert_native.py": "cc8a0cbcec26bb52ff24bc6e220ce38dd39c2c52749b41ec6921987bcfc26772",
+    "src/flyby_native.py": "d568e3702bfda1ef05a0d2635ea7d7e7508566b617be068a6458499eb98bf44d",
+    "src/flyby.py": "6817babbf866535481bbcc5f352572b0c1176491669e3ca35d0998a40be24a32"
+  },
+  "versions": {
+    "python": "3.12.3",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "spiceypy": "8.3.0",
+    "spice": "CSPICE_N0067"
+  },
+  "sweep_sources": {
+    "src/research/mission_config.py": "3cb99910c5df76881135ffc9ea38cc3c76e291ee3205485383070f6732daf11b",
+    "src/research/mission_local.py": "08eb9691dee5a645a00b4758d258782251e1a124b584cc04658dcb6aef25aa76",
+    "src/research/mission_dynamics.py": "5147af3b29480066b6e0e57dd34ccd9d3c8d969d0adaa955e0c52e79193d34d0",
+    "src/research/mission_search.py": "36272251b45edf28fb702f96062ffd93a9ecebbb04efd8e9387b39c465e9f7f0",
+    "src/research/ephemeris.py": "5662032b65069860df22728180d8cca36ccdcafebb65aad7a38a3e41d7999d85",
+    "src/lambert_native.py": "cc8a0cbcec26bb52ff24bc6e220ce38dd39c2c52749b41ec6921987bcfc26772",
+    "src/flyby_native.py": "d568e3702bfda1ef05a0d2635ea7d7e7508566b617be068a6458499eb98bf44d",
+    "src/flyby.py": "6817babbf866535481bbcc5f352572b0c1176491669e3ca35d0998a40be24a32",
+    "src/research/mission_sweep.py": "9dc455c38f008fcaa1fdabe54d76862e85aada1b51cdbde645267e57760812d4",
+    "src/research/mission_sweep_plot.py": "cf98cfc0d9be6770d42b87b614f0b7e25b4abb9f14c4c37cd5fcc48e5075509e",
+    "src/research/cli.py": "3ea8dd989dad71e781bed02c89ddea533a5e4de4ef6e04f8b2980694cb59ac5e"
+  },
+  "base_commit": "5f825f8441c9c98e31fe767973bdf711d6b210af"
+}

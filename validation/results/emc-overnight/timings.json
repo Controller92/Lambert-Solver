@@ -1,0 +1,367 @@
+{
+  "porkchops": {
+    "grids": [
+      {
+        "leg": 1,
+        "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/EMC-sweep-runs/overnight-2026-10-26/survey/emc-sweep-20261027T020542/leg-1-grid.npz",
+        "cells": 640926,
+        "kernel_ms": 773.6693421602249,
+        "candidate_solves": 6409260,
+        "policies": [
+          [
+            0,
+            -1,
+            "short"
+          ],
+          [
+            0,
+            -1,
+            "long"
+          ],
+          [
+            1,
+            0,
+            "short"
+          ],
+          [
+            1,
+            0,
+            "long"
+          ],
+          [
+            1,
+            1,
+            "short"
+          ],
+          [
+            1,
+            1,
+            "long"
+          ],
+          [
+            2,
+            0,
+            "short"
+          ],
+          [
+            2,
+            0,
+            "long"
+          ],
+          [
+            2,
+            1,
+            "short"
+          ],
+          [
+            2,
+            1,
+            "long"
+          ]
+        ],
+        "wall_seconds": 4.642772702000002
+      },
+      {
+        "leg": 2,
+        "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/EMC-sweep-runs/overnight-2026-10-26/survey/emc-sweep-20261027T020542/leg-2-grid.npz",
+        "cells": 3048576,
+        "kernel_ms": 3652.1710352301598,
+        "candidate_solves": 30485760,
+        "policies": [
+          [
+            0,
+            -1,
+            "short"
+          ],
+          [
+            0,
+            -1,
+            "long"
+          ],
+          [
+            1,
+            0,
+            "short"
+          ],
+          [
+            1,
+            0,
+            "long"
+          ],
+          [
+            1,
+            1,
+            "short"
+          ],
+          [
+            1,
+            1,
+            "long"
+          ],
+          [
+            2,
+            0,
+            "short"
+          ],
+          [
+            2,
+            0,
+            "long"
+          ],
+          [
+            2,
+            1,
+            "short"
+          ],
+          [
+            2,
+            1,
+            "long"
+          ]
+        ],
+        "wall_seconds": 21.994528181999954
+      },
+      {
+        "leg": 3,
+        "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/EMC-sweep-runs/overnight-2026-10-26/survey/emc-sweep-20261027T020542/leg-3-grid.npz",
+        "cells": 5479311,
+        "kernel_ms": 6582.05615323782,
+        "candidate_solves": 54793110,
+        "policies": [
+          [
+            0,
+            -1,
+            "short"
+          ],
+          [
+            0,
+            -1,
+            "long"
+          ],
+          [
+            1,
+            0,
+            "short"
+          ],
+          [
+            1,
+            0,
+            "long"
+          ],
+          [
+            1,
+            1,
+            "short"
+          ],
+          [
+            1,
+            1,
+            "long"
+          ],
+          [
+            2,
+            0,
+            "short"
+          ],
+          [
+            2,
+            0,
+            "long"
+          ],
+          [
+            2,
+            1,
+            "short"
+          ],
+          [
+            2,
+            1,
+            "long"
+          ]
+        ],
+        "wall_seconds": 36.292098087
+      },
+      {
+        "leg": 4,
+        "path": "/home/josh/Documents/Coding/Codex/2026-10-19/files-mentioned-by-the-user-s10569/outputs/EMC-sweep-runs/overnight-2026-10-26/survey/emc-sweep-20261027T020542/leg-4-grid.npz",
+        "cells": 1944048,
+        "kernel_ms": 2351.4328392744064,
+        "candidate_solves": 19440480,
+        "policies": [
+          [
+            0,
+            -1,
+            "short"
+          ],
+          [
+            0,
+            -1,
+            "long"
+          ],
+          [
+            1,
+            0,
+            "short"
+          ],
+          [
+            1,
+            0,
+            "long"
+          ],
+          [
+            1,
+            1,
+            "short"
+          ],
+          [
+            1,
+            1,
+            "long"
+          ],
+          [
+            2,
+            0,
+            "short"
+          ],
+          [
+            2,
+            0,
+            "long"
+          ],
+          [
+            2,
+            1,
+            "short"
+          ],
+          [
+            2,
+            1,
+            "long"
+          ]
+        ],
+        "wall_seconds": 13.536736837000035
+      }
+    ],
+    "total_seconds": 76.94459355000004
+  },
+  "sweep": {
+    "candidates": 50000000,
+    "blocks": 25286,
+    "wall_seconds": 25261.27463598,
+    "evaluation_seconds": 20256.88103574822,
+    "storage_atlas_seconds": 4441.049344978329,
+    "duration_rejected": 1784872,
+    "lambert_attempts": 2000000000,
+    "flyby_attempts": 20000000000
+  },
+  "ballistic_refinement": {
+    "accepted_local_connections": 148,
+    "brackets": 280,
+    "wall_seconds": 7.3579111990002275
+  },
+  "benchmarks": {
+    "records": [
+      {
+        "backend": "cpu",
+        "threads": 1,
+        "rows": 79200,
+        "wall_seconds": 0.41307718600000953,
+        "rows_per_second": 191731.72153835234
+      },
+      {
+        "backend": "cpu",
+        "threads": 2,
+        "rows": 79200,
+        "wall_seconds": 0.2055312660013442,
+        "rows_per_second": 385342.83148668014
+      },
+      {
+        "backend": "cpu",
+        "threads": 4,
+        "rows": 79200,
+        "wall_seconds": 0.10333876100048656,
+        "rows_per_second": 766411.356525042
+      },
+      {
+        "backend": "cpu",
+        "threads": 8,
+        "rows": 79200,
+        "wall_seconds": 0.05610835500192479,
+        "rows_per_second": 1411554.4823455089
+      },
+      {
+        "backend": "cpu",
+        "threads": 16,
+        "rows": 79200,
+        "wall_seconds": 0.029493202000594465,
+        "rows_per_second": 2685364.5798921273
+      },
+      {
+        "backend": "cuda_resident",
+        "rows": 79200,
+        "kernel_ms": 16.18450164794922,
+        "rows_per_second": 4893570.51102254
+      },
+      {
+        "backend": "cuda_concurrent_stress",
+        "rows": 79200,
+        "repetitions": 18130,
+        "kernel_ms": 296318.90228271484,
+        "rows_per_second": 4845779.290279722,
+        "max_scaled_velocity_error": 6.481294776035032e-14
+      },
+      {
+        "backend": "cpu_concurrent_stress",
+        "threads": 16,
+        "rows": 915299550,
+        "wall_seconds": 296.6270601520009,
+        "rows_per_second": 3085691.3375703893
+      },
+      {
+        "backend": "flyby_cpu",
+        "rows": 65536,
+        "wall_seconds": 0.006945134002307896,
+        "rows_per_second": 9436247.015280357
+      },
+      {
+        "backend": "flyby_cuda_resident",
+        "rows": 65536,
+        "kernel_ms": 0.7755616307258606,
+        "rows_per_second": 84501343.80508716
+      }
+    ],
+    "gpu": {
+      "name": "NVIDIA RTX PRO 2000 Blackwell Generation Laptop GPU",
+      "major": 12,
+      "minor": 0,
+      "driver": 13040,
+      "runtime": 12080,
+      "multiprocessors": 26,
+      "registers": 197,
+      "local_bytes": 32,
+      "active_blocks": 2,
+      "threads_per_sm": 1536,
+      "max_threads_per_block": 256,
+      "predicted_occupancy": 0.16666666666666666
+    },
+    "cpu_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "limitation": "Identical rows; failed/infeasible branch attempts included. CPU is wall time; GPU is resident event time, excluding transfers."
+  }
+}
